@@ -1,0 +1,45 @@
+@startuml
+
+participant Guard
+participant Clock
+participant ProxyConnectionManager
+participant Protocol
+participant DispatcherAOP
+
+activate PostmanAOP
+activate DispatcherAOP
+
+DispatcherAOP -> PostmanAOP : readMessage(HEADER_SIZE)
+
+PostmanAOP --> DispatcherAOP : header
+
+DispatcherAOP -> Protocol : decodeHeader(header)
+activate Protocol
+Protocol --> DispatcherAOP : decodedHeader
+deactivate Protocol
+
+DispatcherAOP -> PostmanAOP : readMessage(decodedHeader.size)
+PostmanAOP --> DispatcherAOP : msg
+
+DispatcherAOP -> DispatcherAOP : dispatch(header, msg)
+
+DispatcherAOP -> Protocol : decode(msg)
+activate Protocol
+Protocol --> DispatcherAOP : decodedMessage
+deactivate Protocol
+
+DispatcherAOP -> Guard : askCheckPass(decodedMessage.args[0])
+activate Guard  
+
+Guard -> ProxyConnectionManager : validatePass(true)
+activate ProxyConnectionManager
+
+Guard -> DispatcherAOP : setConnected(true);
+
+ProxyConnectionManager -> Protocol : encode(VALIDATE_PASS, 1, True)
+Protocol --> ProxyConnectionManager : encodedMessage
+
+ProxyConnectionManager -> PostmanAOP : sendMessage(encodedMessage)
+
+
+@enduml

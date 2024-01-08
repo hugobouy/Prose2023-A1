@@ -1,0 +1,234 @@
+<script>
+	// @ts-check
+	/**
+	 * @type {import("./Model.d.ts").Model<false>}
+	 */	
+	const model =
+		{
+			name: "SoftPorte",
+			classes: String.raw`
+
+				class Starter <<active>>{
+					+main()
+					-run()
+				}
+
+				class UISP{
+					-signalAppState()
+					+launchSP()
+				}
+
+				class DoorManager <<active>>{
+					-doorState : bool
+					-unlockDoor()
+					askOpenDoor()
+					askDoorState()
+				}
+				
+				class DispatcherSS <<medium>>{
+                    +dispatch(encodedMessage : byte[*])
+				}
+                
+				class PostmanSS <<active>><<medium>>{
+					-read()
+					-run()
+					+send()                    
+				}
+
+                class ProxyGUI <<medium>>{
+					+updateDoorState(doorState : bool)
+				}
+
+                class ProxyUISS <<medium>>{
+					+updateDoorState(doorState : bool)
+				}
+				
+			`,
+			objects: [
+				{
+					name: "starter",
+					class: "Starter",
+					behavior: String.raw`
+									
+					`,
+					packagePath: [
+                        "SoftPorte",
+					],
+                    
+				},
+				{
+					name: "uisp",
+					class: "UISP",
+					behavior: String.raw`
+									
+					`,
+					stereotypes: [
+						"active",
+					],
+					packagePath: [
+                        "SoftPorte",
+					],
+                    
+				},
+                {
+					name: "doorManager",
+					class: "DoorManager",
+					behavior: String.raw`
+									
+					`,
+					stereotypes: [
+						"active",
+					],
+					packagePath: [
+                        "SoftPorte",
+					],
+				},
+                {
+					name: "dispatcherSS",
+					class: "DispatcherSS",
+					behavior: String.raw`
+									
+					`,
+                    stereotypes: [
+						"medium",
+					],
+					packagePath: [
+                        "Communication","SoftPorte",
+					],
+				},
+		
+				{
+					name: "postmanSS",
+					class: "PostmanSS",
+					behavior: String.raw`						
+						
+					`,
+					stereotypes: [
+						"active","medium",
+					],
+					packagePath: [
+                        "Communication","SoftPorte",
+					],
+				},
+                {
+					name: "proxyGui",
+					class: "ProxyGui",
+					behavior: String.raw`						
+						
+					`,
+                    stereotypes: [
+						"medium",
+					],
+					packagePath: [
+                        "Communication","SoftPorte",
+					],
+				},
+                {
+					name: "proxyUISS",
+					class: "ProxyUISS",
+					behavior: String.raw`						
+						
+					`,
+                    stereotypes: [
+						"medium",
+					],
+					packagePath: [
+                        "Communication","SoftPorte",
+					],
+				},
+			],
+			connectorByName: {
+				C1: {
+					ends: [
+						"doorManager",
+						"proxyGui",
+					],
+					possibleMessages: {
+						forward: [
+                            "updateDoorState(doorState : bool)",
+						],
+					}
+				},
+				C2: {
+					ends: [
+						"doorManager",
+						"proxyUISS",
+					],
+					possibleMessages: {
+						forward: [
+                            "updateDoorState(doorState : bool)",
+						],
+					}
+				},
+				C3: {
+					ends: [
+						"proxyGui",
+						"postmanSS",
+					],
+					possibleMessages: {
+						forward: [
+                            "send()",
+						],
+					}
+				},
+				C4: {
+					ends: [
+						"proxyUISS",
+						"postmanSS",
+					],
+					possibleMessages: {
+						forward: [
+                            "send()",
+						],
+					}
+				},
+				C5: {
+					ends: [
+						"postmanSS",
+						"dispatcherSS",
+					],
+					possibleMessages: {
+						forward: [
+                            "dispatch()",
+						],
+					}
+				},
+				C6: {
+					ends: [
+						"dispatcherSS",
+						"doorManager",
+					],
+					possibleMessages: {
+						forward: [
+                            "askOpenDoor()",
+							"askDoorState()",
+						],
+					}
+				},
+				C7: {
+					ends: [
+						"dispatcherSS",
+						"uisp",
+					],
+					possibleMessages: {
+						forward: [
+                            "launchSP()",
+						],
+					}
+				},
+			},
+
+			interactions: {
+            },
+			settings: {
+				semantics: {
+					checkEvents: false,
+					considerguardsTrue: true,
+				},
+			},
+		}
+	;
+	document.write(`
+		<iframe width="100%" height="100%" src='http://172.24.2.1/AnimUML.html#${encodeURIComponent(JSON.stringify(model)).replace(/'/g, '%27')}'></iframe>
+	`);
+</script>

@@ -1,0 +1,92 @@
+@startuml
+
+hide fields
+hide methods
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+allowmixing
+
+package AOP
+{
+    package gui 
+    {
+        class MainActivity <<active>>
+
+        package fragments
+        {
+            class FragmentCalendar
+            class FragmentDoor
+            class FragmentVideo
+            class FragmentListEmployee
+            class FragmentAddEmployee
+            class FragmentConnection
+            class FragmentHome
+        }
+    }
+
+    package communication #A9D0F5
+    {
+        class Communication <<active>> <<medium>>
+        class Protocol
+        class Dispatcher <<medium>>
+        class PostmanSoftSonnette <<active>> <<medium>>
+    }
+    class PostmanVideo <<active>> <<medium>> 
+
+    package model
+    {
+        class CacheEmployeeManager <<medium>> 
+        class WeeklyCalendar
+        class ConnectionManager
+        class CacheCameraman <<active>>  <<medium>> 
+        class Door
+    }
+}
+
+Communication -up-> Protocol
+Communication -down-> Dispatcher
+Communication -right-> PostmanSoftSonnette
+
+Communication <-right- CacheEmployeeManager
+Communication <-right- Door
+Communication <-right- ConnectionManager
+
+CacheEmployeeManager <-left- Dispatcher
+ConnectionManager <-right- Dispatcher
+Door <-right- Dispatcher
+
+WeeklyCalendar -down-> CacheEmployeeManager
+
+CacheCameraman <-down- PostmanVideo
+
+FragmentConnection -right-> ConnectionManager
+FragmentCalendar -right-> WeeklyCalendar
+FragmentListEmployee -right-> CacheEmployeeManager
+FragmentAddEmployee -right-> CacheEmployeeManager
+FragmentDoor -right-> Door
+FragmentVideo -right-> CacheCameraman
+FragmentListEmployee -down-> FragmentAddEmployee
+
+MainActivity <-up-> FragmentHome
+MainActivity -up-> FragmentConnection
+MainActivity -up-> FragmentCalendar
+MainActivity -right-> FragmentListEmployee
+MainActivity -down-> FragmentAddEmployee
+MainActivity -down-> FragmentDoor
+MainActivity -down-> FragmentVideo
+
+ConnectionManager --> FragmentHome
+
+FragmentHome -[#ffffff]down-> FragmentConnection
+FragmentConnection -[#ffffff]down-> FragmentCalendar
+FragmentCalendar -[#ffffff]down-> FragmentListEmployee
+'FragmentListEmployee -[#transparent]down-> FragmentAddEmployee
+FragmentAddEmployee -[#ffffff]down-> FragmentDoor
+FragmentDoor -[#ffffff]down-> FragmentVideo
+ConnectionManager -[#ffffff]down- WeeklyCalendar
+'WeeklyCalendar -[#transparent]down- CacheEmployeeManager
+CacheEmployeeManager -[#ffffff]down- Door
+Door -[#ffffff]down- CacheCameraman
+
+@enduml

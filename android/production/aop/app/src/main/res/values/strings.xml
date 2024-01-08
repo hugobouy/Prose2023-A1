@@ -1,0 +1,159 @@
+<resources>
+    <string name="app_name">AOP</string>
+
+    <string name="Ecran_accueil">AOP</string>
+    <string name="Ecran_connexion">Connexion de l\'AOP</string>
+
+    <string name="ConnectionTextIP">IP :</string>
+    <string name="ConnectionTextPassword">Mot de passe :</string>
+    <string name="ConnectionButton">Connexion</string>
+    <string name="ConnectionIp">192.168.72.1</string>
+
+    <string name="PopUpWaitingConnection">Connexion en cours ...</string>
+    <string name="PopUpWrongPass">Mauvais mot de passe</string>
+    <string name="PopUpErrorConnection">Erreur de connexion</string>
+
+    <string name="ToastMissingInfo">Information manquante</string>
+    <string name="ToastWrongIP">L\'adresse Ip n\'est pas au bon format</string>
+
+    <string name="BoutonReturn">Return</string>
+
+
+    <string name="homeTitle"> AOP </string>
+    <string name="homeImageCalendar"> Calendrier </string>
+    <string name="homeImageEmployee"> Employés </string>
+    <string name="homeImageVideo"> Vidéo </string>
+    <string name="homeImageDoor"> Contrôle porte </string>
+    <string name="homeButtonQuit"> Quitter </string>
+    <string name="homeSpeakableCalendar"> Affichage du calendrier </string>
+    <string name="homeSpeakableVideo"> Affichage de la vidéo </string>
+    <string name="homeSpeakableEmployee"> Affichage de la liste des employées </string>
+    <string name="homeSpeakableDoor"> Affiche du contrôle de la porte </string>
+
+    <string name="CalendarMenuTitle"> Calendrier : </string>
+    <string name="CalendarButtonReturn"> Return </string>
+
+    <string name="VideoTitle">Vidéo</string>
+
+    <string name="VideoLost">Affichage de la vidéo Indisponible</string>
+
+
+    <string name="hello_blank_fragment">Hello calendar</string>
+    <string name="listEmployes">Liste Employés</string>
+    <string name="return_button">Return</string>
+    <string name="ajouter_item">Ajouter nouvel employé</string>
+    <string name="x">x</string>
+    <string name="nom_employe">Nom</string>
+    <string name="prenom_employe">Prénom</string>
+    <string name="name_new_employe">Nom</string>
+    <string name="firstname_new_employe">Prénom</string>
+    <string name="button_add_new_employe">Confirmer</string>
+    <string name="select_role"> Rôle : </string>
+    <string name="title_nouvel_employe">Ajouter un nouvel employé</string>
+    <string name="text_photo">Photo : </string>
+    <string name="button_import_photo">Importer une image</string>
+    <string name="de_print">De :</string>
+    <string name="a_print">à :</string>
+    <string name="avatar_icon_description">Icône d\'un employé</string>
+    <string name="description_h_crénaux">Créneaux d\'entrée pour l\'employé :</string>
+
+    <string name="monday">Lundi</string>
+    <string name="h_start_monday">Sélectionnez l\'horaire de début pour le lundi</string>
+    <string name="h_end_monday">Sélectionnez l\'horaire de fin pour le lundi</string>
+
+    <string name="tuesday">Mardi</string>
+    <string name="h_start_tuesday">Sélectionnez l\'horaire de début pour le mardi</string>
+    <string name="h_end_tuesday">Sélectionnez l\'horaire de fin pour le mardi</string>
+
+    <string name="wednesday">Mercredi</string>
+    <string name="h_start_wednesday">Sélectionnez l\'horaire de début pour le mercredi</string>
+    <string name="h_end_wednesday">Sélectionnez l\'horaire de fin pour le mercredi</string>
+
+    <string name="thursday">Jeudi</string>
+    <string name="h_start_thursday">Sélectionnez l\'horaire de début pour le jeudi</string>
+    <string name="h_end_thursday">Sélectionnez l\'horaire de fin pour le jeudi</string>
+
+    <string name="friday">Vendredi</string>
+    <string name="h_start_friday">Sélectionnez l\'horaire de début pour le vendredi</string>
+    <string name="h_end_friday">Sélectionnez l\'horaire de fin pour le vendredi</string>
+
+    <string name="saturday">Samedi</string>
+    <string name="h_start_saturday">Sélectionnez l\'horaire de début pour le samedi</string>
+    <string name="h_end_saturday">Sélectionnez l\'horaire de fin pour le samedi</string>
+
+    <string name="sunday">Dimanche</string>
+    <string name="h_start_sunday">Sélectionnez l\'horaire de début pour le dimanche</string>
+    <string name="h_end_sunday">Sélectionnez l\'horaire de fin pour le dimanche</string>
+    <string name="cancel_button">Annuler</string>
+    <string name="showPopupImportPhoto_title">Fonctionnalité non développée actuellement</string>
+    <string name="popUp_title_delete">Supprimer un employé</string>
+    <string name="popup_mess_delete">\"Êtes-vous sûr de vouloir supprimer l\'employé : \"</string>
+    <string name="popup_delete_p_b">Continuer</string>
+    <string name="popup_delete_n_b">Return</string>
+    <string name="toast_open_door_mess">La porte est déjà ouverte.</string>
+    <string name="return_button_door">Return</string>
+    <string name="title_door_control">Contrôle de la porte</string>
+    <string name="button_open_door">Déverrouiller la porte</string>
+    <string name="state_door_mess">État de la porte :</string>
+
+
+    <string-array name="roles">
+        <item>Employé Matin</item>
+        <item>Employé Journée</item>
+        <item>Employé Soir</item>
+        <item>Employé Sécurité</item>
+        <item>Employé Spécial</item>
+    </string-array>
+
+    <string-array name="heures_une_journee">
+        <item>RIEN</item>
+        <item>00h 00</item>
+        <item>00h 30</item>
+        <item>01h 00</item>
+        <item>01h 30</item>
+        <item>02h 00</item>
+        <item>02h 30</item>
+        <item>03h 00</item>
+        <item>03h 30</item>
+        <item>04h 00</item>
+        <item>04h 30</item>
+        <item>05h 00</item>
+        <item>05h 30</item>
+        <item>06h 00</item>
+        <item>06h 30</item>
+        <item>07h 00</item>
+        <item>07h 30</item>
+        <item>08h 00</item>
+        <item>08h 30</item>
+        <item>09h 00</item>
+        <item>09h 30</item>
+        <item>10h 00</item>
+        <item>10h 30</item>
+        <item>11h 00</item>
+        <item>11h 30</item>
+        <item>12h 00</item>
+        <item>12h 30</item>
+        <item>13h 00</item>
+        <item>13h 30</item>
+        <item>14h 00</item>
+        <item>14h 30</item>
+        <item>15h 00</item>
+        <item>15h 30</item>
+        <item>16h 00</item>
+        <item>16h 30</item>
+        <item>17h 00</item>
+        <item>17h 30</item>
+        <item>18h 00</item>
+        <item>18h 30</item>
+        <item>19h 00</item>
+        <item>19h 30</item>
+        <item>20h 00</item>
+        <item>20h 30</item>
+        <item>21h 00</item>
+        <item>21h 30</item>
+        <item>22h 00</item>
+        <item>22h 30</item>
+        <item>23h 00</item>
+        <item>23h 30</item>
+    </string-array>
+</resources>

@@ -1,0 +1,24 @@
+@startuml
+
+/' Acteurs '/
+actor Testeur as Testeur2
+actor Testeur as Testeur3
+actor Démonstrateur as Démonstrateur2
+actor Porte
+
+/' Agents '/
+agent "<u>SàE</u>" as SaE
+agent "<u>E_Ecran</u>" as E_Ecran
+agent "<u>E_Camera</u>" as E_Camera
+
+/' Liens '/
+Porte -left- SaE : \n> déverrouiller()
+Testeur2 -down- E_Ecran : \n> sonner() \n< afficheEcranSoftSonnette()
+Démonstrateur2 -down- E_Ecran : \n> démarrerSoftSonnette() \n< afficheEcranSoftSonnette() \n> quitterSoftSonnette()
+SaE -up- Testeur3 : \n< signalerVisageNonReconnu()
+SaE -left- E_Camera
+SaE -up- E_Ecran
+SaE -down- Démonstrateur : \n< démarrerAOP() \n< entrerInfoConnexion(IP, mdp) \n< seConnecter() \n< demanderAjoutEmployé() \n< importerImage(photo) \n< entrerInfosEmployé(caractéristiques_employé)\n< demanderSuppressionEmployé(employeID) \n< quitterAOP()  \n< return() \n< confirmer() \n< annuler() \n< demanderOuverturePorte() \n< <u> demanderEcran() \n>  <u> afficherEcran() \n>  <u> afficherPopUp() \n> signalerLancementSoftPorte()
+E_Camera -left- Testeur : \n> présenterVisage(photoTesteur)
+
+@enduml

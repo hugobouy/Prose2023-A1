@@ -1,0 +1,260 @@
+% Auteur : Camille Constant
+
+\section{Périmètre de test}
+\label{sec:perimetre}
+
+Cette section a pour objet l’élaboration d’un tableau des fonctionnalités et/ou composants / traitements / données du système mentionnant pour chacun l’effort de test à mener.
+Cet effort est fonction de la pondération des exigences, risques et criticité retenus.
+
+\subsection{Caractéristiques du projet}
+\label{sec:peri:caract}
+
+Le produit \produit~permet au client \client~d'étudier la faisabilité d'un système utilisant la reconnaissance faciale afin de l'utiliser lors de démonstrations à destination de ses différents clients.
+L’objectif est de montrer les capacités de la STM32MP15 et de prouver qu'une telle application est possible.\\
+Il se décompose en 2 lots/incréments~:
+\begin{itemize}
+    \item [\textbf{-}] lot 1~: 
+        \begin {itemize}
+            \item [\textbf{§}] L'application \appliA~doit établir une connexion avec \appliLin, afficher le flux vidéo provenant de la webcam et pouvoir consulter le calendrier d'un employé.
+            \item [\textbf{§}] L'application \appliLin~doit pouvoir autoriser ou refuser un Testeur, envoyer le flux vidéo à \appliA~et l'afficher sur son écran.
+            \item [\textbf{§}] L'application \appliPo~doit allumer un voyant signalant son bon démarrage.
+        \end{itemize}
+    \item [\textbf{-}] En plus des fonctionnalités du lot 1, dans le lot 2~: 
+        \begin {itemize}
+            \item [\textbf{§}] L'application \appliA~doit gérer la liste des employés qu'elle synchronise avec l'application \appliLin, afficher l'état de la Porte et pouvoir se connecter à l'application \appliLin~de manière sécurisée avec un mot de passe.
+            \item [\textbf{§}] L'application \appliLin~doit pouvoir gérer l'autorisation d'un Testeur en fonction de ses horaires, stocker les données persistantes des employés et communiquer avec \appliPo.
+            \item [\textbf{§}] L'application \appliPo~doit communiquer avec \appliLin~et simuler l'ouverture de la Porte.\\
+        \end{itemize}
+\end{itemize}
+
+\client~souhaite connaître la qualité globale de \produit~après chaque lot afin d'éventuellement redéfinir chacun des lots. 
+
+%Ce plan de test concerne le niveau de test système pour l'incrément 1. 
+Pour information, des tests d’intégration (lots 1 et 2) et des tests unitaires (lot 2) auront été réalisés par \equipe.
+
+
+
+\subsection{Éléments à tester}
+\label{sec:peri:elements} 
+
+
+Cette partie s'appuie sur la section 2.2.1 Architecture matérielle et logicielle du document de spécifications \refSpec. 
+
+\medskip
+
+
+\pagebreak
+
+{\bf Logiciels développés :}\\
+\begin{itemize}
+    \item [\textbf{-}] Applications C : \appliC
+    \item [\textbf{-}] Application Java : \appliA\\
+\end{itemize}
+
+
+{\bf Support d'exécution :}\\
+\begin{itemize}
+    \item [\textbf{-}] \appliLin~s'exécutera sous OpenSTLinux (OSTL) version 4.1 sur la Board STM32MP15
+    \item [\textbf{-}] \appliA~s'exécutera sous Android version 9.0 sur le smartphone Samsung Galaxy A20e\\
+\end{itemize}
+
+
+{\bf Support de communication :}\\
+\begin{itemize}
+    \item [\textbf{-}] Communication WiFi (Pile TCP/IP)
+\end{itemize}
+
+
+\subsubsection{Éléments concernés par les tests}
+\label{sec:peri:comp:test}
+          
+Cette section désigne ce qui est testé (composant, logiciel, sous-système).\\
+          
+Seront concernés par l'activité de test les composants logiciels développés durant le projet \projet~: 
+\begin{itemize}
+    \item \appliLin
+    \item \appliPo
+    \item \appliA
+    \item Communication entre \appliA~et \appliLin
+\end{itemize}
+
+\subsubsection{Éléments non concernés par les tests}
+\label{sec:peri:comp:nontest}
+
+Cette section désigne ce qui ne va pas être testé (composant, logiciel, sous-système).\\
+
+Ne seront pas concernés par les tests :
+\begin{itemize}
+    \item Le support logiciel Cube FW Package étant une bibliothèque
+    \item Les supports d'exécution logiciels (Linux, Android)
+    \item Les supports d'exécution matériels (carte STM32MP15, Samsung Galaxy A20e, Webcam)
+    \item Les supports de communication matériels (Borne WiFi, etc.)
+    \item Les supports de communication logiciels (Pile TCP/IP)
+\end{itemize}
+
+\subsection{Spécifications fonctionnelles ou techniques à tester}
+\label{sec:peri:spec}
+
+
+Cette section s'appuie sur la section 2.3 Fonctions principales développées du document de spécifications \refSpec. 
+%Toutes les fonctionnalités ne seront pas testées car ce document se limite à l'incrément 1.\\
+
+\subsubsection{Fonctionnalités à tester}
+\label{sec:peri:fct:test}
+
+%{\it Tenir compte des incréments $\Rightarrow$ lors de l'incrément 1, valider en priorité les fonctionnalités basiques permettant de valider la communication dans les 2 sens (C vers A et A vers C).}\\
+
+\medskip
+
+Les fonctionnalités suivantes sont à tester~:
+\noindent\begin{longtable}[c]{|p{.38\textwidth}|p{.1\textwidth}|p{.38\textwidth}|}
+    \hline
+        \bf Fonctionnalité & \bf \centering Priorité & \bf Commentaire\\[-1ex]
+                            & \centering (P0 : priorité max) & \\
+    \hline
+    \endhead
+    Initialisation de la Board & \centering P0 & RaS \\
+    \hline
+    Initialisation de la Board - Webcam non connectée & \centering P1 & Initialisation réussie sans Webcam \\
+    \hline
+    Établissement de la connexion entre \appliA~et \appliLin & \centering P0 & \appliA~vers \appliLin~et inversement \\
+    \hline
+    Échec de l'authentification lors de l'établissement de la connexion & \centering P0 & Mot de passe incorrect lors de l'entrée des informations de connexion \\
+    \hline
+    Échec de l'établissement la connexion entre \appliA~et \appliLin & \centering P1 & \appliA~et \appliLin~ne parvienne pas à communiquer \\
+    \hline
+    Autorisation du Testeur qui souhaite entrer pendant ses horaires & \centering P0 & Le Testeur est reconnu et y accède lors de ses horaires \\
+    \hline
+    Refus du Testeur inconnu qui souhaite entrer & \centering P0 & Le Testeur n'est pas reconnu \\
+    \hline
+    Refus du Testeur reconnu qui souhaite entrer & \centering P0 & Le Testeur est reconnu mais essaie d'entrer hors de ses horaires \\
+    \hline
+    Ouverture de la Porte et mise à jour de son état & \centering P0 & Demande d'ouverture en local \\
+    \hline
+    Transmission et affichage du flux vidéo de \appliLin~à \appliA & \centering P0 & RaS \\
+    \hline
+    Échec de la transmission du flux vidéo de \appliLin~à \appliA & \centering P0 & RaS \\
+    \hline
+    Consultation du calendrier employé & \centering P0 & L'affichage doit se faire suivant l'employé sélectionné \\
+    \hline 
+    Ouverture de la Porte à distance et mise à jour de son état & \centering P0 & Demande d'ouverture depuis l'application \\
+    \hline
+    Consultation de la liste des employés &\centering P0 & Seulement l'affichage des données persistantes, permet la vérification des modifications effectuées \\
+    \hline
+    Ajout d'un employé standard dans la liste des employés & \centering P0 & RaS \\
+    \hline
+    Ajout d'un employé spécial dans la liste des employés & \centering P0 & Sélection du rôle "spécial" et de ses horaires personnalisables \\
+    \hline
+    Suppression d'un employé dans la liste des employés & \centering P0 & RaS \\
+    \hline
+    Annulation d'une action dans la liste des employés & \centering P2 & RaS \\
+    \hline           
+    Fermeture \appliA~et \appliLin &\centering P0 & RaS \\
+    \hline
+\end{longtable}
+
+% Pour plus de détails, voici la matrice de conformité de l'incrément 1 : 
+% \href{
+% https://docs.google.com/spreadsheets/d/1aaes5xD0STobJdoepx0t9ATB4pgT6jGYcr2hy5ju8Fo/edit#gid=0
+% }{ici}
+
+\noindent Pour plus de détails, voici la matrice de conformité du \projet: 
+\href{https://docs.google.com/spreadsheets/d/1xq-QIusS_guV91z53ERgtteP4NOb_qmYkGOM_DKjgew/edit?usp=sharing
+}{ici}
+
+
+\subsubsection{Caractéristiques techniques à tester}
+\label{sec:peri:tech:test}
+%Peut être tout ce qui est lié à des demandes de responsiveness/robustesse
+Le cahier des charges de \client~ne contient aucune caractéristique technique à tester.\\
+
+\subsection{Spécifications fonctionnelles ou techniques non testées}
+\label{sec:peri:nontest}
+
+%{\it Fonctionnalités non critiques, non prioritaires ou cas d’exception dans CU. \\}
+
+Les fonctionnalités suivantes sont considérées comme non testées car elles représentent une variante d'une fonctionnalité déjà testée au-dessus :
+
+\noindent\begin{longtable}[c]{|p{.35\textwidth}|p{.15\textwidth}|p{.35\textwidth}|}
+    \hline
+        \bf Fonctionnalité & \bf \centering Priorité & \bf Commentaire\\[-1ex]
+                            & (P0 : priorité max) & \\
+    \hline
+    \endhead
+    \hline
+    Échec de l'initialisation de la Board & \centering P2 & Cas où \appliPo~ne communique pas avec \appliLin \\
+    \hline 
+    Abandon de l'établissement de la connexion &\centering P3 & Démonstrateur quitte \appliA \\
+    \hline
+    Enchaînement de plusieurs Testeurs & \centering P2 & Cas où plusieurs Testeurs veulent rentrer \\
+    \hline    
+    \appliA~non utilisé &\centering P3 & - Ne pas envoyer de notification vers \appliA~lors de l'ouverture de la Porte. \\
+    & & - Pas de fermeture d'\appliA~lors de la fonctionnalité "Fermeture d'\appliA~et \appliLin". \\
+    \hline
+\end{longtable}
+
+L'ergonomie ainsi que la conformité de l'emplacement des éléments de l'IHM aux spécifications ne sera pas testée. 
+L'IHM ne sera validée qu'au travers des tests fonctionnels. 
+
+\subsection{Criticité}
+\label{sec:peri:criticite}
+
+Seul l'envoi de données entre \appliLin~et \appliA~est considéré comme critique.
+
+\newpage
+
+\subsection{Risques}
+\label{sec:peri:risques}
+
+\noindent Id~: identifiant du risque\\
+Description~: description du risque\\
+Effet~: effet du risque\\
+P~: probabilité (3 – très probable, 2 – probable, 1 – peu probable)\\
+I~: impact (3 – impact fort, 2 – impact moyen, 1 – impact faible)\\
+EI (élément impacté)~: coût / qualité / délai\\
+Action~: description de l’action pour maîtriser le risque
+
+\subsubsection{Risques projet}
+\label{sec:peri:risques:projet}
+
+\noindent\begin{longtable}[c]{|p{1.4cm}|p{3cm}|p{3cm}|p{0.4cm}|p{0.4cm}|p{1.2cm}|p{3.5cm}|}
+\hline
+\bf Id & \bf Intitulé & \bf Effet & \bf \centering P & \bf \centering I & \bf \centering EI & \bf Action\\
+\hline
+\endhead
+RPRJ1 & Pas de test unitaire & Instabilité de l’application lors des tests système & \centering 1 & \centering 2 & \centering C/Q/D & Faire une phase de smoke tests sur l’application avant de réaliser les tests système.\\
+\hline
+RPRJ2 & Pas de test d’intégration & Instabilité de l’application lors des tests système & \centering 1 & \centering 2 & \centering C/Q/D & Faire une phase de smoke tests sur l’application avant de réaliser les tests système.\\
+\hline
+RPRJ3 & Pas de test unitaire ou de test d’intégration & Instabilité de l’application lors de tests d’acceptation & \centering 1 & \centering 2 & \centering C/Q/D & Réaliser des tests système sur toutes les fonctionnalités système\\
+\hline
+RPRJ4 & Problème de disponibilité des intervenants & Dérive dans le planning des tests & \centering 1 & \centering 1 & \centering D & Planifier au plus tôt les actions des différents intervenants\\
+\hline
+RPRJ5 & Spécifications du produit \produit~non à jour & Déviations entre les spécifications et le système d’où une difficulté pour concevoir des tests pertinents & \centering 2 & \centering 2 & \centering Q & Analyse des spécifications pour identifier des écarts. Poser toutes les questions nécessaires à une bonne compréhension des spécifications.\\
+\hline
+\end{longtable}
+
+\pagebreak
+\subsubsection{Risques produit}
+\label{sec:peri:risques:produit}
+
+\noindent\begin{longtable}[c]{|p{1.4cm}|p{3cm}|p{3cm}|p{0.4cm}|p{0.4cm}|p{1.2cm}|p{3.5cm}|}
+\hline
+\bf Id & \bf Intitulé & \bf Effet & \bf \centering P & \bf \centering I & \bf \centering EI & \bf Action\\
+\hline
+\endhead
+RPRD1 & Mauvaise implémentation de la communication & Système non fonctionnel & \centering 2 & \centering 3 & \centering C/Q/D & Tester la communication en priorité par des tests d'intégration (voir unitaires) avant de faire les tests système.\\
+\hline
+RPRD2 & Reconnaissance faciale échoue & Système non fonctionnel & \centering 3 & \centering 3 & \centering C/Q/D & Si le script IA ne fonctionne pas, l'équipe \equipe~peut demander l'API de reconnaissance faciale dont dispose \client .\\
+\hline
+\end{longtable}
+
+\subsection{Effort de test}
+\label{sec:peri:effort}
+
+L’effort de test sera priorisé de la façon suivante~:
+\begin{itemize}
+    \item Phase de \og Smoke test \fg pour vérifier la stabilité de l’application avant de réaliser la campagne de tests fonctionnels système ;
+    \item Campagne de tests fonctionnels système selon les priorités ;
+    \item Campagne de tests non fonctionnels système par priorité.
+\end{itemize}

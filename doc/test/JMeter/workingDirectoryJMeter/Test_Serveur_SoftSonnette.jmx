@@ -1,0 +1,872 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test_Serveur_SoftSonnette" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Variables pré-définies" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ConfigTestElement guiclass="TCPConfigGui" testclass="ConfigTestElement" testname="Paramètres TCP - Serveur" enabled="true">
+        <stringProp name="TCPSampler.server">192.168.72.1</stringProp>
+        <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+        <stringProp name="TCPSampler.port">1253</stringProp>
+        <boolProp name="TCPSampler.nodelay">false</boolProp>
+        <stringProp name="TCPSampler.timeout">1000</stringProp>
+        <stringProp name="TCPSampler.request"></stringProp>
+        <boolProp name="TCPSampler.closeConnection">false</boolProp>
+        <stringProp name="TCPSampler.ctimeout">1000</stringProp>
+        <stringProp name="TCPSampler.classname">perso.LengthPrefixedBinaryTCPClientCustom</stringProp>
+      </ConfigTestElement>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="CMD" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="ERR" elementType="Argument">
+            <stringProp name="Argument.name">ERR</stringProp>
+            <stringProp name="Argument.value">00</stringProp>
+            <stringProp name="Argument.desc">Trame réservée à la mention d’une erreur de réception</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="SUBSCRIBE_VIDEO" elementType="Argument">
+            <stringProp name="Argument.name">SUBSCRIBE_VIDEO</stringProp>
+            <stringProp name="Argument.value">01</stringProp>
+            <stringProp name="Argument.desc">GUI demande à recevoir la vidéo de SoftSonnette</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ASK_CHECK_PASS" elementType="Argument">
+            <stringProp name="Argument.name">ASK_CHECK_PASS</stringProp>
+            <stringProp name="Argument.value">02</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">ConnectionManager demande à Guard si le mot de passe entré sur l’application est correct</stringProp>
+          </elementProp>
+          <elementProp name="VALIDATE_PASS" elementType="Argument">
+            <stringProp name="Argument.name">VALIDATE_PASS</stringProp>
+            <stringProp name="Argument.value">03</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Réponse de Guard si le mot de passe est valide</stringProp>
+          </elementProp>
+          <elementProp name="SET_TIME" elementType="Argument">
+            <stringProp name="Argument.name">SET_TIME</stringProp>
+            <stringProp name="Argument.value">04</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">ConnectionManager modifie l’heure cou- rante sur Clock</stringProp>
+          </elementProp>
+          <elementProp name="ASK_OPEN_DOOR" elementType="Argument">
+            <stringProp name="Argument.name">ASK_OPEN_DOOR</stringProp>
+            <stringProp name="Argument.value">05</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Demande d’ouverture de la Porte depuis AOP vers DoorManager</stringProp>
+          </elementProp>
+          <elementProp name="ASK_DOOR_STATE" elementType="Argument">
+            <stringProp name="Argument.name">ASK_DOOR_STATE</stringProp>
+            <stringProp name="Argument.value">06</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Demande si la Porte est ouverte ou fermée</stringProp>
+          </elementProp>
+          <elementProp name="UPDATE_DOOR_STATE" elementType="Argument">
+            <stringProp name="Argument.name">UPDATE_DOOR_STATE</stringProp>
+            <stringProp name="Argument.value">07</stringProp>
+            <stringProp name="Argument.desc">DoorManager met à jour l’état de la porte sur l’écran d’AOP</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ADD_EMPLOYEE" elementType="Argument">
+            <stringProp name="Argument.name">ADD_EMPLOYEE</stringProp>
+            <stringProp name="Argument.value">08</stringProp>
+            <stringProp name="Argument.desc">AOP demande à ajouter un employé dans les données persistantes situées sur la carte</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="DELETE_EMPLOYEE" elementType="Argument">
+            <stringProp name="Argument.name">DELETE_EMPLOYEE</stringProp>
+            <stringProp name="Argument.value">09</stringProp>
+            <stringProp name="Argument.desc">AOP demande à supprimer un employé des données persistantes situées sur la carte</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ASK_EMPLOYEE_LIST" elementType="Argument">
+            <stringProp name="Argument.name">ASK_EMPLOYEE_LIST</stringProp>
+            <stringProp name="Argument.value">0a</stringProp>
+            <stringProp name="Argument.desc">AOP demande la liste des employés à SoftSonnette</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="SET_EMPLOYEE_LIST" elementType="Argument">
+            <stringProp name="Argument.name">SET_EMPLOYEE_LIST</stringProp>
+            <stringProp name="Argument.value">0b</stringProp>
+            <stringProp name="Argument.desc">Réponse d’EmployeeManager sur la liste d’employés</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="N_ARGS" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="NO_ARGS" elementType="Argument">
+            <stringProp name="Argument.name">NO_ARGS</stringProp>
+            <stringProp name="Argument.value">00</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="N_ARG1" elementType="Argument">
+            <stringProp name="Argument.name">N_ARG1</stringProp>
+            <stringProp name="Argument.value">01</stringProp>
+            <stringProp name="Argument.desc">1 argument envoyé</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="N_ARG2" elementType="Argument">
+            <stringProp name="Argument.name">N_ARG2</stringProp>
+            <stringProp name="Argument.value">02</stringProp>
+            <stringProp name="Argument.desc">2 arguments envoyés</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="N_ARG3" elementType="Argument">
+            <stringProp name="Argument.name">N_ARG3</stringProp>
+            <stringProp name="Argument.value">03</stringProp>
+            <stringProp name="Argument.desc">3 arguments envoyés</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="N_ARG4" elementType="Argument">
+            <stringProp name="Argument.name">N_ARG4</stringProp>
+            <stringProp name="Argument.value">04</stringProp>
+            <stringProp name="Argument.desc">4 arguments envoyés</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="N_ARG5" elementType="Argument">
+            <stringProp name="Argument.name">N_ARG5</stringProp>
+            <stringProp name="Argument.value">05</stringProp>
+            <stringProp name="Argument.desc">5 arguments envoyés</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="ARGS - CU Se Connecter" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="PASSWORD_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">PASSWORD_SIZE</stringProp>
+            <stringProp name="Argument.value">0004</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="PASSWORD_OK" elementType="Argument">
+            <stringProp name="Argument.name">PASSWORD_OK</stringProp>
+            <stringProp name="Argument.value">31323334</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">1234</stringProp>
+          </elementProp>
+          <elementProp name="PASSWORD_KO" elementType="Argument">
+            <stringProp name="Argument.name">PASSWORD_KO</stringProp>
+            <stringProp name="Argument.value">30303030</stringProp>
+            <stringProp name="Argument.desc">0000</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="PASS_ANSWER_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">PASS_ANSWER_SIZE</stringProp>
+            <stringProp name="Argument.value">0001</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="PASS_VALIDATED" elementType="Argument">
+            <stringProp name="Argument.name">PASS_VALIDATED</stringProp>
+            <stringProp name="Argument.value">31</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="PASS_NOT_VALIDATED" elementType="Argument">
+            <stringProp name="Argument.name">PASS_NOT_VALIDATED</stringProp>
+            <stringProp name="Argument.value">30</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="TIME_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">TIME_SIZE</stringProp>
+            <stringProp name="Argument.value">0007</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="TIME" elementType="Argument">
+            <stringProp name="Argument.name">TIME</stringProp>
+            <stringProp name="Argument.value">07E706090A143A</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">09/06/2023 10h20 58s</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="ARGS - CU Consulter Liste Employés" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="EMPLOYEE_ID_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_ID_SIZE</stringProp>
+            <stringProp name="Argument.value">0001</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_ROLE_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_ROLE_SIZE</stringProp>
+            <stringProp name="Argument.value">0001</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_HOURS_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_HOURS_SIZE</stringProp>
+            <stringProp name="Argument.value">000e</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_PICTURE_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_PICTURE_SIZE</stringProp>
+            <stringProp name="Argument.value">0001</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_0_ID" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_0_ID</stringProp>
+            <stringProp name="Argument.value">31</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">ID 1</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_0_NAME_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_0_NAME_SIZE</stringProp>
+            <stringProp name="Argument.value">0006</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_0_NAME" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_0_NAME</stringProp>
+            <stringProp name="Argument.value">436869726f6e</stringProp>
+            <stringProp name="Argument.desc">Chiron</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_0_FIRST_NAME_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_0_FIRST_NAME_SIZE</stringProp>
+            <stringProp name="Argument.value">0004</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_0_FIRST_NAME" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_0_FIRST_NAME</stringProp>
+            <stringProp name="Argument.value">5061756c</stringProp>
+            <stringProp name="Argument.desc">Paul</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_0_ROLE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_0_ROLE</stringProp>
+            <stringProp name="Argument.value">31</stringProp>
+            <stringProp name="Argument.desc">Employé jour</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_0_HOURS" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_0_HOURS</stringProp>
+            <stringProp name="Argument.value">1128112811281128112801010101</stringProp>
+            <stringProp name="Argument.desc">Horaires jour</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_1_ID" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_1_ID</stringProp>
+            <stringProp name="Argument.value">32</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">ID 2</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_1_NAME_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_1_NAME_SIZE</stringProp>
+            <stringProp name="Argument.value">0006</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_1_NAME" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_1_NAME</stringProp>
+            <stringProp name="Argument.value">436173736172</stringProp>
+            <stringProp name="Argument.desc">Cassar</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_1_FIRST_NAME_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_1_FIRST_NAME_SIZE</stringProp>
+            <stringProp name="Argument.value">0007</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_1_FIRST_NAME" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_1_FIRST_NAME</stringProp>
+            <stringProp name="Argument.value">4261737469656e</stringProp>
+            <stringProp name="Argument.desc">Bastien</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_1_ROLE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_1_ROLE</stringProp>
+            <stringProp name="Argument.value">33</stringProp>
+            <stringProp name="Argument.desc">Employé sécurité</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_1_HOURS" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_1_HOURS</stringProp>
+            <stringProp name="Argument.value">0131013101310131013101310131</stringProp>
+            <stringProp name="Argument.desc">Horaires sécurité</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_2_ID" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_2_ID</stringProp>
+            <stringProp name="Argument.value">33</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">ID 3</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_2_NAME_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_2_NAME_SIZE</stringProp>
+            <stringProp name="Argument.value">0009</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_2_NAME" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_2_NAME</stringProp>
+            <stringProp name="Argument.value">4c6574656e6e657572</stringProp>
+            <stringProp name="Argument.desc">Letenneur</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_2_FIRST_NAME_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_2_FIRST_NAME_SIZE</stringProp>
+            <stringProp name="Argument.value">0007</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_2_FIRST_NAME" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_2_FIRST_NAME</stringProp>
+            <stringProp name="Argument.value">4c617572656e74</stringProp>
+            <stringProp name="Argument.desc">Laurent</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_2_ROLE" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_2_ROLE</stringProp>
+            <stringProp name="Argument.value">32</stringProp>
+            <stringProp name="Argument.desc">Employé soir</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_2_HOURS" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_2_HOURS</stringProp>
+            <stringProp name="Argument.value">1a2e1a2e1a2e1a2e1a2e01010101</stringProp>
+            <stringProp name="Argument.desc">Horaires soir</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="NULL" elementType="Argument">
+            <stringProp name="Argument.name">NULL</stringProp>
+            <stringProp name="Argument.value">00</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EMPLOYEE_ID_0" elementType="Argument">
+            <stringProp name="Argument.name">EMPLOYEE_ID_0</stringProp>
+            <stringProp name="Argument.value">30</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">ID 0</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="ARGS - CU Contrôler Porte à Distance" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="DOOR_STATE_SIZE" elementType="Argument">
+            <stringProp name="Argument.name">DOOR_STATE_SIZE</stringProp>
+            <stringProp name="Argument.value">0001</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="DOOR_OPEN" elementType="Argument">
+            <stringProp name="Argument.name">DOOR_OPEN</stringProp>
+            <stringProp name="Argument.value">31</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="DOOR_CLOSE" elementType="Argument">
+            <stringProp name="Argument.name">DOOR_CLOSE</stringProp>
+            <stringProp name="Argument.value">30</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Groupe d&apos;unités" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Contrôleur Boucle" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="CU - Se Connecter" enabled="true"/>
+        <hashTree>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="ASK_CHECK_PASS [Mdp KO]" enabled="true">
+            <stringProp name="TestPlan.comments">Prérequis : Le mot de passe de la board est 1234</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${ASK_CHECK_PASS}${N_ARG1}${PASSWORD_SIZE}${PASSWORD_KO}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="PASS_NOT_VALIDATED" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1896338496">${VALIDATE_PASS}${N_ARG1}${PASS_ANSWER_SIZE}${PASS_NOT_VALIDATED}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="ASK_CHECK_PASS [Mdp OK]" enabled="true">
+            <stringProp name="TestPlan.comments">Prérequis : Le mot de passe de la board est 1234</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${ASK_CHECK_PASS}${N_ARG1}${PASSWORD_SIZE}${PASSWORD_OK}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="PASS_VALIDATED" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="376315188">${VALIDATE_PASS}${N_ARG1}${PASS_ANSWER_SIZE}${PASS_VALIDATED}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="SET_TIME" enabled="true">
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${SET_TIME}${N_ARG1}${TIME_SIZE}${TIME}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree/>
+        </hashTree>
+        <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="CU - Consulter Liste Employés" enabled="true">
+          <stringProp name="TestPlan.comments">Test du CU Consulter Liste Employé avec ajout puis suppression d&apos;un employé</stringProp>
+        </TestFragmentController>
+        <hashTree>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="ASK_EMPLOYEE_LIST [Employee 0]" enabled="true">
+            <stringProp name="TestPlan.comments">Prérequis : Deux employés sont présents dans la base de donnée avec les caractéristiques données dans ARGS - CU Consulter Liste Employés.
+Cette requête attend 3 réponses TCP différentes (voir requêtes suivantes)</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${ASK_EMPLOYEE_LIST}${NO_ARGS}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="SET_EMPLOYEE_LIST [Employee 0]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="1662261169">${SET_EMPLOYEE_LIST}${N_ARG5}${EMPLOYEE_ID_SIZE}${EMPLOYEE_0_ID}${EMPLOYEE_0_NAME_SIZE}${EMPLOYEE_0_NAME}${EMPLOYEE_0_FIRST_NAME_SIZE}${EMPLOYEE_0_FIRST_NAME}${EMPLOYEE_ROLE_SIZE}${EMPLOYEE_0_ROLE}${EMPLOYEE_HOURS_SIZE}${EMPLOYEE_0_HOURS}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="VIDE [Employee 1]" enabled="true">
+            <stringProp name="TestPlan.comments">Fausse requête pour recevoir la deuxième réponse</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="SET_EMPLOYEE_LIST [Employee 1]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1340713744">${SET_EMPLOYEE_LIST}${N_ARG5}${EMPLOYEE_ID_SIZE}${EMPLOYEE_1_ID}${EMPLOYEE_1_NAME_SIZE}${EMPLOYEE_1_NAME}${EMPLOYEE_1_FIRST_NAME_SIZE}${EMPLOYEE_1_FIRST_NAME}${EMPLOYEE_ROLE_SIZE}${EMPLOYEE_1_ROLE}${EMPLOYEE_HOURS_SIZE}${EMPLOYEE_1_HOURS}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="VIDE [End list]" enabled="true">
+            <stringProp name="TestPlan.comments">Fausse requête pour recevoir la troisème réponse</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="SET_EMPLOYEE_LIST [End list]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1705000015">${SET_EMPLOYEE_LIST}${N_ARG1}${EMPLOYEE_ID_SIZE}${EMPLOYEE_ID_0}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">500</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="ADD_EMPLOYEE" enabled="true">
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${ADD_EMPLOYEE}${N_ARG5}${EMPLOYEE_2_NAME_SIZE}${EMPLOYEE_2_NAME}${EMPLOYEE_2_FIRST_NAME_SIZE}${EMPLOYEE_2_FIRST_NAME}${EMPLOYEE_PICTURE_SIZE}${NULL}${EMPLOYEE_ROLE_SIZE}${EMPLOYEE_2_ROLE}${EMPLOYEE_HOURS_SIZE}${EMPLOYEE_2_HOURS}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree/>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="ASK_EMPLOYEE_LIST [Employee 0]" enabled="true">
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${ASK_EMPLOYEE_LIST}${NO_ARGS}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assertion Réponse - SET_EMPLOYEE_LIST" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="1662261169">${SET_EMPLOYEE_LIST}${N_ARG5}${EMPLOYEE_ID_SIZE}${EMPLOYEE_0_ID}${EMPLOYEE_0_NAME_SIZE}${EMPLOYEE_0_NAME}${EMPLOYEE_0_FIRST_NAME_SIZE}${EMPLOYEE_0_FIRST_NAME}${EMPLOYEE_ROLE_SIZE}${EMPLOYEE_0_ROLE}${EMPLOYEE_HOURS_SIZE}${EMPLOYEE_0_HOURS}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+              <stringProp name="TestPlan.comments">Vérification que l&apos;employé à bien été ajouté à la base de données</stringProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="VIDE [Employee 1]" enabled="true">
+            <stringProp name="TestPlan.comments">Fausse requête pour recevoir la deuxième réponse</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="SET_EMPLOYEE_LIST [Employee 1]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1340713744">${SET_EMPLOYEE_LIST}${N_ARG5}${EMPLOYEE_ID_SIZE}${EMPLOYEE_1_ID}${EMPLOYEE_1_NAME_SIZE}${EMPLOYEE_1_NAME}${EMPLOYEE_1_FIRST_NAME_SIZE}${EMPLOYEE_1_FIRST_NAME}${EMPLOYEE_ROLE_SIZE}${EMPLOYEE_1_ROLE}${EMPLOYEE_HOURS_SIZE}${EMPLOYEE_1_HOURS}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="VIDE [Employee 2]" enabled="true">
+            <stringProp name="TestPlan.comments">Fausse requête pour recevoir la troisième réponse</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="SET_EMPLOYEE_LIST [Employee 2]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-48721361">${SET_EMPLOYEE_LIST}${N_ARG5}${EMPLOYEE_ID_SIZE}${EMPLOYEE_2_ID}${EMPLOYEE_2_NAME_SIZE}${EMPLOYEE_2_NAME}${EMPLOYEE_2_FIRST_NAME_SIZE}${EMPLOYEE_2_FIRST_NAME}${EMPLOYEE_ROLE_SIZE}${EMPLOYEE_2_ROLE}${EMPLOYEE_HOURS_SIZE}${EMPLOYEE_2_HOURS}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="VIDE [End list]" enabled="true">
+            <stringProp name="TestPlan.comments">Fausse requête pour recevoir la troisème réponse</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="SET_EMPLOYEE_LIST [End list]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1705000015">${SET_EMPLOYEE_LIST}${N_ARG1}${EMPLOYEE_ID_SIZE}${EMPLOYEE_ID_0}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="DELETE_EMPLOYEE" enabled="true">
+            <stringProp name="TestPlan.comments">On supprime l&apos;employé que l&apos;on vient d&apos;ajouter</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${DELETE_EMPLOYEE}${N_ARG1}${EMPLOYEE_ID_SIZE}${EMPLOYEE_2_ID}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree/>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="ASK_EMPLOYEE_LIST [Employee 0]" enabled="true">
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${ASK_EMPLOYEE_LIST}${NO_ARGS}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="SET_EMPLOYEE_LIST [Employee 0]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="1662261169">${SET_EMPLOYEE_LIST}${N_ARG5}${EMPLOYEE_ID_SIZE}${EMPLOYEE_0_ID}${EMPLOYEE_0_NAME_SIZE}${EMPLOYEE_0_NAME}${EMPLOYEE_0_FIRST_NAME_SIZE}${EMPLOYEE_0_FIRST_NAME}${EMPLOYEE_ROLE_SIZE}${EMPLOYEE_0_ROLE}${EMPLOYEE_HOURS_SIZE}${EMPLOYEE_0_HOURS}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="VIDE [Employee 1]" enabled="true">
+            <stringProp name="TestPlan.comments">Fausse requête pour recevoir la deuxième réponse</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="SET_EMPLOYEE_LIST [Employee 1]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1340713744">${SET_EMPLOYEE_LIST}${N_ARG5}${EMPLOYEE_ID_SIZE}${EMPLOYEE_1_ID}${EMPLOYEE_1_NAME_SIZE}${EMPLOYEE_1_NAME}${EMPLOYEE_1_FIRST_NAME_SIZE}${EMPLOYEE_1_FIRST_NAME}${EMPLOYEE_ROLE_SIZE}${EMPLOYEE_1_ROLE}${EMPLOYEE_HOURS_SIZE}${EMPLOYEE_1_HOURS}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="VIDE [End list]" enabled="true">
+            <stringProp name="TestPlan.comments">Fausse requête pour recevoir la troisème réponse</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="SET_EMPLOYEE_LIST [End list]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1705000015">${SET_EMPLOYEE_LIST}${N_ARG1}${EMPLOYEE_ID_SIZE}${EMPLOYEE_ID_0}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="CU - Contrôler Porte à Distance" enabled="true"/>
+        <hashTree>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="ASK_DOOR_STATE" enabled="true">
+            <stringProp name="TestPlan.comments">Prérequis : La porte est fermée</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${ASK_DOOR_STATE}${NO_ARGS}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname=" UPDATE_DOOR_STATE [False]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="778852751">${UPDATE_DOOR_STATE}${N_ARG1}${DOOR_STATE_SIZE}${DOOR_CLOSE}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Délai" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="ASK_OPEN_DOOR" enabled="true">
+            <stringProp name="TestPlan.comments">Demande à SoftSonnette d&apos;ouvrir la porte. Première réponse attendu pour ouverture immédiate de la porte, puis deuxième réponse 10s plus tard pour indiquer la fermeture de la porte</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout"></stringProp>
+            <stringProp name="TCPSampler.request">${ASK_OPEN_DOOR}${NO_ARGS}</stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="UPDATE_DOOR_STATE [True]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-240778679">${UPDATE_DOOR_STATE}${N_ARG1}${DOOR_STATE_SIZE}${DOOR_OPEN}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="VIDE [Door close]" enabled="true">
+            <stringProp name="TestPlan.comments">Requête vide pour attendre le message de fermeture de la porte envoyé 10 secodes plus tard</stringProp>
+            <stringProp name="TCPSampler.server"></stringProp>
+            <boolProp name="TCPSampler.reUseConnection">true</boolProp>
+            <stringProp name="TCPSampler.port"></stringProp>
+            <boolProp name="TCPSampler.nodelay">false</boolProp>
+            <stringProp name="TCPSampler.timeout">11000</stringProp>
+            <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
+            <stringProp name="ConfigTestElement.username"></stringProp>
+            <stringProp name="ConfigTestElement.password"></stringProp>
+          </TCPSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="UPDATE_DOOR_STATE [False]" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="778852751">${UPDATE_DOOR_STATE}${N_ARG1}${DOOR_STATE_SIZE}${DOOR_CLOSE}</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Arbre de résultats" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>true</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename">/Users/hugobouy/Documents/ESEO/E4e_LOCAL/S8_PROSE/REPO/se2024-a1.doc/test/JMeter/workingDirectoryJMeter/output/result.xml</stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ConfigTestElement guiclass="PropertyControlGui" testclass="ConfigTestElement" testname="Property Display" enabled="true"/>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

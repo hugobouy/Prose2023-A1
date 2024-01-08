@@ -1,0 +1,67 @@
+@startuml
+
+hide fields
+hide methods
+
+
+package SoftSonnette {
+
+    package Communication #A9D0F5 {
+        package AOP #ADD1B2{
+            class DispatcherAOP <<medium>> <<active>>
+            {
+                -dispatch()
+                +setConnected(state : bool)
+            }
+            class ProtocolSS{
+                encode(cmd_id : int, nbargs : int, data : char*) : char*
+                decode(frame : char*) : Decoded_Frame 
+		    }
+        }
+        package SP#B4A7E5{
+            class DispatcherSP <<medium>> <<active>>
+            {
+                +dispatcherUISS_dispatch()
+                +dispatcherGUI_dispatch()
+            }
+            class ProtocolSP{
+                encode()
+                decode()
+            }
+        }
+
+
+        class ProxyUISP <<medium>>
+        {
+            +launch()
+        }
+        class ProxyDoorManager <<medium>>
+        {
+            +askOpenDoor()
+            +askDoorState()
+        }
+
+        class ProxyConnectionManager <<medium>>
+        {
+            +validatePass(passValidated : bool)
+        }
+        class ProxyGUI <<medium>>
+        {
+            +updateDoorState()
+        }
+        ProtocolSS <-right- DispatcherAOP
+        ProtocolSS <-- ProxyGUI
+        ProtocolSS <-- ProxyConnectionManager
+
+        ' Protocol SP
+        ProtocolSP <-- ProxyUISP
+        ProtocolSP <-- ProxyDoorManager
+        ProtocolSP <-right- DispatcherSP
+
+        DispatcherSP --> ProxyGUI
+
+        DispatcherAOP --> ProxyDoorManager
+    }
+}
+
+@enduml

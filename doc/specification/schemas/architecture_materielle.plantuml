@@ -1,0 +1,38 @@
+@startuml
+skinparam componentStyle uml1
+
+/' Logicels '/
+[AOP]
+[SoftSonnette]
+[SoftPorte]
+
+/' Artéfacts '/
+artifact Données_Testeurs <<entity>>
+
+/' Matériels '/
+node Téléphone
+node E_Caméra
+node E_Ecran
+rectangle Board{
+    node Microprocesseur
+    node Microcontrôleur
+}
+
+/' Microprocesseur '/
+Microprocesseur -left0- Microcontrôleur : "VUART"
+Microprocesseur -right0- Téléphone : "Wifi"
+Microprocesseur <.down.  [SoftSonnette] : "<<deploy>>"
+Microprocesseur <.down. [Données_Testeurs] : "<<deploy>>"
+Microprocesseur -up0- E_Caméra : "USB"
+Microprocesseur -up0- E_Ecran : "MIPI DSISM"
+
+/' Microcontrôleur '/
+Microcontrôleur <.down. [SoftPorte] : "<<deploy>>"
+
+/' Téléphone '/
+Téléphone <-right-. [AOP] : "<<deploy>>"
+
+/'Autres'/
+[SoftSonnette] .> [Données_Testeurs] : "<<call>>"
+
+@enduml

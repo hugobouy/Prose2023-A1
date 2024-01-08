@@ -1,0 +1,47 @@
+@startuml
+
+actor Démonstrateur
+participant GUI
+participant ConnectionManager
+participant Communication
+participant Protocol
+participant Dispatcher
+participant PostmanSoftSonnette
+
+activate Communication
+activate GUI
+activate ConnectionManager
+
+Démonstrateur -> GUI : setIp(ip)
+Démonstrateur -> GUI : setPass(pass)
+Démonstrateur -> GUI : connect()
+GUI -> GUI : displayPopUp(WAITING_ID)
+
+GUI -> ConnectionManager : askConnection(myIp, myPass)
+
+ConnectionManager -> Communication : askCheckPass(myPass)
+
+Communication -> Protocol : encodeMessage(cmd_askCheckPass, 1, myPass)
+activate Protocol
+Protocol --> Communication : encodedMessage
+deactivate Protocol
+
+Communication -> PostmanSoftSonnette : sendMsg(encodedMessage)
+activate PostmanSoftSonnette
+... Attente de la réponse ...
+Communication -> PostmanSoftSonnette : readMsg(MESSAGE_SIZE)
+PostmanSoftSonnette --> Communication : encodedMessage
+
+Communication -> Protocol : decodeMessage(encodedMessage)
+activate Protocol
+Protocol --> Communication : decodedMessage
+deactivate Protocol
+
+Communication -> Dispatcher : dispatch(MESSAGE_SIZE, decodedMessage)
+activate Dispatcher
+
+Dispatcher -> ConnectionManager : validatePass(true)
+
+ConnectionManager -> GUI : setConnectionStatus(PASS_OK)
+
+@enduml

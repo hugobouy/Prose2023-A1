@@ -1,0 +1,812 @@
+\newpage
+\subsection{Fonctions principales développées}
+
+Ce chapitre présente les fonctionnalités principales développées dans le cadre du PSC en utilisant une démarche par cas d'usage et par Cas d’Utilisation (CU).
+
+\subsubsection{Rappel sur les cas d'usage}
+
+Les cas d'usage recensent les étapes essentielles du cycle de vie d'un produit depuis la fabrication du produit jusqu'à l'élimination ou recyclage de ce produit.
+À chaque étape du cycle de vie correspond un cas d'usage (si cette étape induit des fonctionnalités à définir pour le produit considéré). 
+Pour chaque cas d'usage, plusieurs cas d'utilisation distincts peuvent être définis.
+Parmi les cas d'usage, on retrouve généralement ceux de fabrication du produit (comprenant ou non les activités de test du produit fabriqué), de conditionnement (paramétrage éventuel, expédition et transport), de commercialisation (paramétrage éventuel, mode de démonstration, installation sur site...), d'utilisation (par le ou les utilisateurs), de maintenance (SAV ou diagnostique), de désinstallation et de recyclage (élimination ou valorisation).
+
+\subsubsection{Rappel sur les cas d'utilisation}
+
+Un Cas d’Utilisation (CU) représente un ensemble d’interactions entre un ou des acteurs et le système à spécifier.
+Ce cas d'utilisation est souvent lié à un ou parfois plusieurs cas d'usage.
+Un CU est principalement décrit par un scénario d’utilisation (nommé scénario nominal), scénario d’une utilisation représentative du système.
+Ces CU sont ensuite détaillés jusqu’à un niveau de décomposition suffisant pour décrire les fonctions attendues du système.
+
+\paragraph{Représentation graphique des CUs}
+
+Les CU peuvent être représentés sous forme graphique, voir la figure \ref{representation_graphique_CU} (voir page \pageref{representation_graphique_CU}) pour une illustration.
+Les acteurs directs sont représentés sous forme de petits personnages.
+Dans les bulles sont représentés les cas d’utilisation.
+Un trait entre un acteur et un CU indique que l’acteur participe à ce CU. 
+Les liens hachurés entre CU, préfixés par le mot <<use>> (ou <<include>>), indique que ce CU fait appel à l’autre CU - on parle alors de sous-cas d’utilisation. 
+Les liens hachurés entre CU, préfixés par le mot <<extend>>, indique qu’il s’agit d’une extension d’un CU : un CU qui ne se déclenche que sous certaines conditions.
+
+\begin{figure} [H]
+  \centering
+  \includegraphics[scale=0.5]{representation_graphique_CU}
+  \caption{Légende explicative d'un diagramme de cas d'utilisation UML}
+  \label{representation_graphique_CU}
+\end{figure}
+
+\paragraph{Représentation textuelle des CUs}
+
+La description textuelle des cas d’utilisation est souvent présentée sous forme d’un tableau, constitué des champs suivants :
+\newline
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & 
+    Rappelle en quelques mots l’objectif principal du cas d’utilisation.\\
+    \hline
+    Résumé &
+    Décrit brièvement le comportement du cas d’utilisation.\\
+    \hline
+    Portée &
+    Définit la portée de conception du CU (étendue spatiale).\\
+    \hline
+    Niveau &
+    Niveau de granularité du cas d’utilisation (Stratégique, utilisateur ou sous-fonction).\\
+    \hline
+    Acteurs directs &
+    Acteurs qui participent au CU.\\
+    \hline
+    Préconditions &
+    Ensemble des conditions qui doivent être vérifiées avant le déroulement du CU. 
+    Les préconditions, sans mention contraire explicite, des CU parents au CU doivent toujours être vérifiées.\\
+    \hline
+    Garanties minimales &
+    Définit ce qui est garanti par le système à l’étude même en cas d’échec du cas d’utilisation.\\
+    \hline
+    Garanties en cas de succès &
+    Définit les garanties en cas de succès (par le scénario nominal ou par ses variantes).\\
+    \hline
+    Scénario nominal &
+    C’est un scénario représentatif de l’utilisation du système où tout se passe bien.
+    Il se termine par la réussite des objectifs.
+
+    Il peut être constitué d’une condition déclenchant le scénario, d’un ensemble d’étapes, d’une condition de fin, et éventuellement d’extensions ou de variantes.
+    Une étape peut être une interaction entre acteurs, une étape de validation, ou un changement interne.\\
+    \hline
+    Variantes &
+    Lorsqu’il y a plusieurs façons de procéder à une même étape sans remise en cause du scénario nominal.\\
+    \hline
+    Extensions &
+    Définissent les autres scénarios que le scénario nominal (par exemple ceux qui se terminent par un échec).
+    Ils se déclenchent sur des conditions spécifiques détectées par le SàE.\\
+    \hline
+    Informations complémentaires &
+    Informations diverses nécessaires à la compréhension du CU.\\
+    \hline
+  \end{tabularx}
+  \caption{Description des champs d'un cas d'utilisation}
+  \label{tableau-exemple-cu}
+\end{table}
+
+Toutes les expressions en italiques représentent des liens symboliques \\
+
+\subsubsection{Résumé des cas d'usage considérés}
+
+Dans le cadre du document de spécification et compte tenu du fait que ce projet est un prototype, seul le cas d'usage nominal par le Démonstrateur et le Testeur est considéré.
+Le présent dossier de spécification concerne le développement d'un prototype, par conséquent, les autres cas d'usage comme celui de l'installation/désinstallation des logiciels ou de la maintenance de second niveau ne sont pas pris en compte. 
+Concernant le cas d'usage de la maintenance du SàE, les activités classiques de développement et de débogage (par l'intermédiaire d'une sonde de programmation) sont par conséquent ignorées. \\
+
+\subsubsection{CU Présenter les capacités de la STM32MP15 au travers d'une application de Sonnette Connectée}
+
+\paragraph{Représentation graphique}
+
+\begin{figure} [H]
+  \centering
+  \includegraphics[width=1\textwidth]{CU_Strategique_utiliser_systeme}
+  \caption{Représentation graphique du CU Stratégique}
+  \label{cu_stratégique}
+\end{figure}
+
+\paragraph{Représentation textuelle}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Présenter les capacités de la STM32MP15 au travers d'une application de Sonnette Connectée \\
+    \hline
+    Résumé & Démonstrateur fait la démonstration du PSC : il démarre le SàE, un Testeur se fait reconnaître et l'ouverture de la Porte est simulée \\  
+    \hline
+    Portée & AOP, SoftSonnette, SoftPorte \\
+    \hline
+    Niveau & Stratégique \\
+    \hline
+    Acteurs directs & Démonstrateur, Testeur, Porte \\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions
+    & \hyperlink{install}{\textit{SàE correctement installé}} \\
+    & \hyperlink{bd}{\textit{Board}} diffuse son propre hotspot WiFi \\
+    & Téléphone est connecté au hotspot de la \hyperlink{bd}{\textit{Board}} \\
+    \hline
+    Garanties  minimales & \\
+    \hline
+    Garanties en cas de succès & La démonstration du prototype sonnette est fonctionnelle \\
+    \hline
+    Scénario nominal & \\
+    &    1. Démonstrateur lance SoftSonnette \\
+    &    2. SoftSonnette \hyperlink{CU_initialise}{\underline{initialise Board}} \\ 
+    &    3. Démonstrateur démarre AOP \\
+    &    4. AOP affiche \hyperlink{EcranDemarrage}{Écran\_Demarrage} \\
+    &    5. Démonstrateur \hyperlink{CU_connecte}{\underline{se connecte}} \\
+    &    6. AOP affiche \hyperlink{EcranAccueil}{Écran\_Accueil} \\
+    &    7. Testeur \hyperlink{CU_entrer}{\underline{demande à entrer}} \\
+    &    8. Démonstrateur \hyperlink{CU_quitter}{\underline{quitte SàE}} \\
+    & \\
+    \hline
+  \end{tabularx}
+\end{table}
+\newpage
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Variantes & \\
+    & \textbf{3-6: [AOP non utilisé]} \\
+    & 3-6.a.1. Va en 7 \\
+    & \\
+    & \textbf{2: [Initialisation Board échec]} \hypertarget{initBoardEchec}{}\\ 
+    & 2.a.1. Va en 8 \\
+    & \\
+    & \textbf{7: [Regarder vidéo]} \\
+    & 7.a.1. Démonstrateur \hyperlink{CU_Regarder_video}{\underline{regarde la vidéo}} \\
+    & 7.a.2. Retour en 6 \\
+    & \\
+    & \textbf{7: [Consulter calendrier]} \\
+    & 7.b.1. Démonstrateur \hyperlink{CU_Consulter_calendrier}{\underline{consulte le calendrier}} \\
+    & 7.b.2. Retour en 6 \\
+    & \\
+    & \textbf{7: [Contrôler Porte à distance]} \\
+    & 7.c.1. Démonstrateur \hyperlink{CU_Controler_Porte}{\underline{contrôle la Porte à distance}} \\
+    & 7.c.2. Retour en 6 \\
+    & \\
+    & \textbf{7: [Consulter liste employés]} \\
+    & 7.d.1. Démonstrateur \hyperlink{CU_modifier}{\underline{consulte la liste des employés}} \\
+    & 7.d.2. Retour en 6 \\
+    & \\
+    & \textbf{7: [Perte de connexion AOP]} \\
+    & 7.e.1. AOP affiche \hyperlink{popUpErreurConnexion}{PopUp\_Erreur\_Connexion} \\
+    & 7.e.2. Démonstrateur valide le message \\
+    & 7.e.3 . Retour en 4 \\
+    & \\
+    & \textbf{8: [Démonstration non terminée]} \\
+    & 8.a.1. Retour en 7 \\
+    & \\
+    & \textbf{3-7: [Quitter AOP]} \\
+    & 3-7.e.1. Démonstrateur quitte AOP \\
+    & 3-7.e.2. Retour en 3 \\
+    & \\
+    & \textbf{3-7: [Fin prématurée de la démonstration]} \\
+    & 3-7.a.1. Va en 8 \\
+    & \\
+    & \textbf{2-8: [Rafraîchissement Écran avec une fréquence \hyperlink{fr}{FR}]} \\
+    & 2-8.a.1. SoftSonnette met à jour \hyperlink{EcranWebcamConnec}{Écran\_SoftSonnette} avec le \hyperlink{video}{\textit{flux vidéo}} \\
+    & \\
+    \hline
+    Extensions & \\
+    \hline
+    Informations complémentaires & N.A. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Présenter les capacités de la STM32MP15 au travers d'une application de Sonnette Connectée}
+  \label{tableau-cu-demontrer-fonctionnement}
+\end{table}
+
+\subsubsection{CU Initialiser Board}
+
+\paragraph{Représentation graphique}
+
+N.A.
+
+\paragraph{Représentation textuelle}
+\hypertarget{CU_initialise}{}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Initialiser Board \\
+    \hline
+    Résumé & SoftSonnette s'initialise, lance SoftPorte et affiche son écran principal \\
+    \hline
+    Portée & SoftSonnette, SoftPorte \\
+    \hline
+    Niveau & Fonctionnel \\
+    \hline
+    Acteurs directs & \\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions & \\
+    \hline
+    Garanties minimales & \\
+    \hline
+    Garanties en cas de succès & Un des \hyperlink{EcranWebcamConnec}{Écran\_SoftSonnette} s'affiche \\
+    \hline
+    Scénario nominal & \\
+    & 1. SoftSonnette charge les \hyperlink{donneesPersistantes}{\textit{données persistantes}} en mémoire vive \\ 
+    & 2. SoftSonnette lance SoftPorte \\
+    & 3. SoftPorte \hyperlink{initComBoard}{\textit{initialise la communication avec SoftSonnette}} \\
+    & 4. SoftSonnette confirme l'initialisation de la communication à SoftPorte \\
+    & 5. SoftPorte signale \hyperlink{EcranSoftPorte}{\textit{son bon démarrage}} \\
+    & 6. SoftSonnette détecte la présence de E\_Caméra \\
+    & 7. SoftSonnette affiche \hyperlink{EcranWebcamConnec}{Écran\_SoftSonnette} \\
+    & \\
+    \hline
+    Variantes & \\
+    & \textbf{4: [Pas de communication après \hyperlink{tass}{\textit{TASS}}]} \\
+    & 4.a.1. SoftSonnette ne reçoit aucune communication de SoftPorte \\
+    & 4.a.2. SoftSonnette affiche \hyperlink{EcranErreurCommunication}{Écran\_SoftSonnette avec la variante [Erreur Communication]} \\
+    & 4.a.3. Abandon CU avec levée de l'erreur "\hyperlink{initBoardEchec}{\textit{Initialisation Board Échec}}" \\
+    & \\
+    & \textbf{6: [E\_Caméra non connectée]} \\
+    & 6.a.1. SoftSonnette ne détecte pas la présence de E\_Caméra \\
+    & 6.a.2. SoftSonnette affiche \hyperlink{EcranWebcamNonConnec}{Écran\_SoftSonnette avec la variante [Erreur E\_Caméra Non Connectée]} \\
+    & 6.a.3. Abandon CU avec levée de l'erreur "\hyperlink{initBoardEchec}{\textit{Initialisation Board Échec}}" \\
+    & \\
+    \hline
+    Extensions & \\
+    \hline
+    %Inc
+    Informations complémentaires & N.A. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Initialiser Board}
+  \label{tableau-cu-initialiser-board}
+\end{table}
+
+\newpage
+\subsubsection{CU Se connecter}
+
+\paragraph{Représentation graphique}
+
+N.A.
+
+\paragraph{Représentation textuelle}
+\hypertarget{CU_connecte}{}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Se connecter \\
+    \hline
+    Résumé & Démonstrateur établit la connexion entre SoftSonnette et AOP \\
+    \hline
+    Portée & AOP, SoftSonnette \\
+    \hline
+    Niveau & Utilisateur \\
+    \hline
+    Acteurs directs & Démonstrateur \\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions & \\
+    \hline
+    Garanties minimales & \\
+    \hline
+    Garanties en cas de succès &
+    La connexion entre SoftSonnette et AOP est réalisée \\
+    \hline
+    Scénario nominal & \\
+    &    1. Démonstrateur entre \hyperlink{idc}{\textit{les informations\_de\_connexion}} \\
+    &    2. Démonstrateur se connecte \\
+    &    3. AOP affiche \hyperlink{popUpAttenteConnexion}{PopUp\_Attente\_Connexion} \\
+    &    4. AOP demande la connexion à SoftSonnette \\
+    &    5. SoftSonnette valide le \hyperlink{mdp}{\textit{mot de passe}} \\
+    &    6. SoftSonnette informe AOP de la connexion \\
+    &    7. AOP synchronise l'heure de la Board avec l'heure du Téléphone \\
+    & \\
+    \hline
+    Variantes & \\
+    & \textbf{5: [Mauvais \hyperlink{mdp}{\textit{mot de passe}}]} \\
+    & 5.a.1. AOP affiche \hyperlink{popUpErreurMDPAdmin}{PopUp\_Erreur\_MDP\_Admin} \\
+    & 5.a.2. Démonstrateur valide le message \\
+    & 5.a.3. AOP affiche \hyperlink{EcranDemarrage}{Écran\_Demarrage} \\
+    & 5.a.4. Retour en 2 \\
+    & \\
+    & \textbf{5-6: [Connexion non établie après \hyperlink{tac}{TAC}]} \\
+    & 5-6.b.1. AOP affiche \hyperlink{popUpErreurConnexion}{PopUp\_Erreur\_Connexion} \\
+    & 5-6.b.2. Démonstrateur valide le message \\
+    & 5-6.b.3. AOP affiche \hyperlink{EcranDemarrage}{Écran\_Demarrage} \\
+    & 5-6.b.4. Retour en 2 \\
+    & \\
+    \hline
+  \end{tabularx}
+\end{table}
+\newpage
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Extensions & \\
+    \hline
+    %Inc
+    Informations complémentaires
+    & Lorsque le Démonstrateur renseigne \hyperlink{idc}{\textit{les informations\_de\_connexion}} à l'étape 1, AOP lui empêche de renseigner une adresse \hyperlink{IP}{\textit{IP}} autrement qu'avec les caractéristiques définies dans le Dictionnaire du domaine. \\
+    & \\
+    & Un message d'avertissement est affiché au Démonstrateur en utilisant un système de notification disponible sur le Téléphone. \\
+    & Le détail de fonctionnement de ces messages d'avertissement est défini en conception. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Se connecter}
+  \label{tableau-cu-se-connecter}
+\end{table}
+
+\subsubsection{CU Demander à entrer}
+
+\paragraph{Représentation graphique}
+
+\begin{figure} [H]
+  \centering
+  \includegraphics[scale=0.5]{CU_Utilisateur_entrer}
+  \caption{Représentation graphique du CU Demander à entrer}
+  \label{Entrer}
+\end{figure}
+
+\paragraph{Représentation textuelle}
+\hypertarget{CU_entrer}{}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Demander à entrer \\
+    \hline
+    Résumé & L'identification du Testeur est effectuée, la Porte se déverrouille si le Testeur est reconnu et autorisé \\
+    \hline
+    Portée & SoftSonnette, SoftPorte \\
+    \hline
+    Niveau & Utilisateur \\
+    \hline
+    Acteurs directs & Testeur \\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions & Testeur présente son visage \\
+    \hline
+    Garanties minimales & \\
+    \hline
+    Garanties en cas de succès & SoftSonnette déverrouille la Porte si le Testeur est reconnu et autorisé \\    
+    \hline
+    Scénario nominal & \\
+    &    1. Testeur demande à entrer \\
+    &    2. SoftSonnette prend en photo le visage du Testeur via E\_Caméra \\
+    &    3. SoftSonnette stoppe la diffusion du \hyperlink{video}{\textit{flux vidéo}} \\
+    &    4. SoftSonnette \hyperlink{fcnid}{identifie le visage *} \\
+    &    5. SoftSonnette reprend la diffusion du \hyperlink{video}{\textit{flux vidéo}} \\
+    &    6. SoftSonnette vérifie que le Testeur est autorisé à entrer \\
+    &    7. SoftSonnette demande à SoftPorte d'ouvrir la Porte \\
+    &    8. SoftPorte \hyperlink{CU_ouvrePorte}{\underline{ouvre la Porte}} \\
+    & \\
+    \hline
+    Variantes & \\
+    & \textbf{4: [SoftSonnette n'identifie pas le visage]} \\
+    & 4.a.1. SoftSonnette informe SoftPorte que le visage n'est pas reconnu \\
+    & 4.a.2. SoftPorte signale \hyperlink{EcranSoftPorte}{\textit{l'interdiction d'entrer}} pendant \hyperlink{tal}{\textit{TAL}} \\
+    & 4.a.3. Abandon CU \\
+    & \\
+    & \textbf{6: [SoftSonnette n'autorise pas le Testeur]} \\
+    & 6.a.1. SoftSonnette informe SoftPorte que le visage n'est pas reconnu \\
+    & 6.a.2. SoftPorte signale \hyperlink{EcranSoftPorte}{\textit{l'interdiction d'entrer}} pendant \hyperlink{tal}{\textit{TAL}} \\
+    & 6.a.3. Abandon CU \\
+    & \\
+    \hline
+    Extensions & \\
+    \hline
+    Informations complémentaires & N.A. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Demander à entrer}
+  \label{tableau-cu-entrer}
+\end{table}
+
+\newpage
+
+\subsubsection{CU Ouvrir Porte}
+
+\paragraph{Représentation graphique}
+
+N.A.
+
+\paragraph{Représentation textuelle}
+\hypertarget{CU_ouvrePorte}{}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Ouvrir Porte \\
+    \hline
+    Résumé & SoftSonnette ouvre la Porte via SoftPorte et met à jour l'état de la Porte sur les écrans de AOP (si connecté) et de SoftSonnette \\
+    \hline
+    Portée & SoftSonnette \\
+    \hline
+    Niveau & Fonctionnel \\
+    \hline
+    Acteurs directs & \\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions & \\
+    \hline
+    Garanties minimales & \\
+    \hline
+    Garanties en cas de succès &  
+    Le champ d'état de la Porte est mis à jour sur l'IHM \hyperlink{EcranWebcamConnec}{Écran\_SoftSonnette} et sur AOP, s'il est connecté \\
+    & La Porte est \hyperlink{deverrouiller}{\textit{déverrouillée}} pendant \hyperlink{top}{\textit{TOP}} \\
+    \hline
+    Scénario nominal &    \\
+    &    1. SoftPorte signale l'ouverture de la Porte à AOP \\
+    &    2. SoftPorte signale l'ouverture de la Porte à SoftSonnette \\
+    &    3. SoftPorte \hyperlink{deverrouiller}{\textit{déverrouille}} la Porte pendant \hyperlink{top}{\textit{TOP}} \\
+    &    4. SoftPorte signale la fermeture de la Porte à AOP \\
+    &    5. SoftPorte signale la fermeture de la Porte à SoftSonnette \\
+    & \\
+    \hline
+    Variantes & \\
+    & \textbf{1: [AOP non utilisé]} \\
+    & 1.a.1. Va en 2 \\
+    & \\
+    & \textbf{4: [AOP non utilisé]} \\
+    & 4.a.1. Va en 5 \\
+    & \\
+    \hline
+    Extensions & \\
+    \hline
+    %Inc
+    Informations complémentaires & N.A. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Ouvrir Porte}
+  \label{tableau-cu-ouvrir-porte}
+\end{table}
+\newpage
+
+\subsubsection{CU Regarder vidéo}
+
+\paragraph{Représentation graphique}
+
+N.A.
+
+\paragraph{Représentation textuelle}
+\hypertarget{CU_Regarder_video}{}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Regarder vidéo \\
+    \hline
+    Résumé & Le Démonstrateur regarde la vidéo via AOP \\
+    \hline
+    Portée & AOP \\
+    \hline
+    Niveau & Utilisateur \\
+    \hline
+    Acteurs directs & Démonstrateur \\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions & AOP et SoftSonnette connectés \\ 
+    & E\_Caméra connectée\\
+    \hline
+    Garanties minimales & \\
+    \hline
+    Garanties en cas de succès & \hyperlink{EcranVideo}{Écran\_Video} affiche le \hyperlink{video}{\textit{flux vidéo}} de E\_Caméra \\
+    \hline
+    Scénario nominal & \\
+    &    1. Démonstrateur demande à regarder la vidéo \\
+    &    2. AOP affiche \hyperlink{EcranVideo}{Écran\_Video} \\
+    &    3. AOP demande à SoftSonnette de lui envoyer la vidéo en continue \\
+    &    4. Démonstrateur demande à retourner à \hyperlink{EcranAccueil}{Écran\_Accueil} \\
+    &    5. AOP demande à SoftSonnette d'arrêter de lui envoyer la vidéo \\
+    & \\
+    \hline
+    Variantes & \\
+    & \textbf{4: [Rafraîchissement Écran avec une fréquence \hyperlink{fr}{FR}]} \\
+    & 4.a.1. SoftSonnette envoie flux video à AOP \\
+    & 4.a.2. AOP met à jour \hyperlink{EcranVideo}{Écran\_Video} avec le flux video \\
+    & 4.a.3. Retour en 4 \\
+    & \\
+    & \textbf{4: [Vidéo indisponible]} \\
+    & 4.b.1. SoftSonnette stoppe l'envoie du flux video à AOP \\
+    & 4.b.2. AOP affiche \hyperlink{popUpVideoIndisponible}{PopUp\_VideoIndisponible} \\
+    & 4.b.3. Démonstrateur valide le message \\
+    & 4.b.4. Abandon CU \\
+    & \\
+    \hline
+    Extensions & \\
+    \hline
+    Informations complémentaires & N.A. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Regarder video}
+  \label{tableau-cu-Regarder-video}
+\end{table}
+
+\newpage
+
+\subsubsection{CU Consulter calendrier}
+
+\paragraph{Représentation graphique}
+
+N.A.
+
+\paragraph{Représentation textuelle}
+\hypertarget{CU_Consulter_calendrier}{}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Consulter calendrier \\
+    \hline
+    Résumé & Démonstrateur consulte le calendrier d'un employé en particulier \\
+    \hline
+    Portée & AOP \\
+    \hline
+    Niveau & Utilisateur \\
+    \hline
+    Acteurs directs & Démonstrateur \\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions & AOP et SoftSonnette connectés \\
+    & Au moins un employé est enregistré sur SoftSonnette \\
+    \hline
+    Garanties minimales & \\
+    \hline
+    Garanties en cas de succès & \hyperlink{EcranCalendrier}{Écran\_Calendrier} s'affiche \\
+    \hline
+    Scénario nominal & \\
+    &   1. Démonstrateur demande à consulter les calendriers \\
+    &   2. AOP demande à SoftSonnette la liste des employés \\
+    &   3. SoftSonnette envoie la liste des employés à AOP \\
+    &   4. AOP affiche \hyperlink{EcranCalendrier}{Écran\_Calendrier} \\
+    &   5. Démonstrateur demande à voir le calendrier d'un employé \\
+    &   6. AOP affiche \hyperlink{EcranCalendrier}{Écran\_Calendrier} avec la variante liée à l'employé sélectionné \\
+    &   7. Démonstrateur demande à retourner à \hyperlink{EcranAccueil}{Écran\_Accueil} \\
+    & \\
+    \hline
+    Variantes & \\
+    \hline
+    Extensions & \\
+    \hline
+    %Inc
+    Informations complémentaires & N.A. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Consulter calendrier}
+  \label{tableau-cu-Consulter-Calendrier}
+\end{table}
+
+\newpage
+
+\subsubsection{CU Contrôler Porte à distance}
+
+\paragraph{Représentation graphique}
+
+N.A.
+
+\paragraph{Représentation textuelle}
+\hypertarget{CU_Controler_Porte}{}
+
+%Inc
+%Ce CU sera implémenté lors de l'incrément 2.
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Contrôler Porte à distance \\
+    \hline
+    Résumé & Démonstrateur \hyperlink{deverrouiller}{\textit{déverrouille}} la Porte à distance \\
+    \hline
+    Portée & AOP, SoftSonnette \\
+    \hline
+    Niveau & Utilisateur \\
+    \hline
+    Acteurs directs & Démonstrateur\\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions & AOP et SoftSonnette connectés\\
+    \hline
+    Garanties minimales & \\
+    \hline
+    Garanties en cas de succès & La Porte est \hyperlink{deverrouiller}{\textit{déverrouillée}} \\
+    \hline
+    Scénario nominal & \\
+    &   1. Démonstrateur demande à contrôler la Porte \\
+    &   2. AOP demande à SoftSonnette l'état courant de la Porte \\
+    &   3. AOP affiche \hyperlink{EcranPorte}{Écran\_Porte} \\
+    &   4. Démonstrateur demande à ouvrir la Porte \\
+    &   5. AOP demande à SoftPorte d'ouvrir la Porte \\
+    &   6. SoftPorte \hyperlink{CU_ouvrePorte}{\underline{ouvre Porte}} \\
+    &   7. Démonstrateur demande à retourner à \hyperlink{EcranAccueil}{Écran\_Accueil} \\
+    & \\
+    \hline
+    Variantes & \\
+    & \textbf{2-7: [Mise à jour état de la Porte]} \\
+    & 2-7.a.1. SoftSonnette signale à AOP un changement de l'état de la Porte \\
+    & 2-7.a.2. AOP met à jour l'état de la Porte sur l'écran \\
+    &\\
+    \hline
+    Extensions & \\
+    \hline
+    Informations complémentaires & N.A. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Contrôler Porte à distance}
+  \label{tableau-cu-Dévérouillé-porte}
+\end{table}
+
+\newpage
+
+\subsubsection{CU Consulter liste des employés}
+
+\paragraph{Représentation graphique}
+
+N.A.
+
+\paragraph{Représentation textuelle}
+\hypertarget{CU_modifier}{}
+
+%Inc
+%Ce CU sera implémenté lors de l'incrément 2.
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Consulter liste des employés \\
+    \hline
+    Résumé & Démonstrateur consulte la liste des employés et peut en ajouter ou supprimer. \\
+    & Les actions du Démonstrateur sont transmises à SoftSonnette \\
+    \hline
+    Portée & AOP, SoftSonnette \\
+    \hline
+    Niveau & Utilisateur \\
+    \hline
+    Acteurs directs & Démonstrateur  \\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions & AOP et SoftSonnette connectés \\
+    \hline
+    Garanties minimales & \\
+    \hline
+    Garanties en cas de succès & 
+    Une gestion des employés peut être réalisée, en ajoutant ou supprimant des employés \\
+    \hline
+    Scénario nominal & \\
+    &    1. Démonstrateur demande à consulter la liste des employés \\
+    &    2. AOP demande à SoftSonnette la liste des employés \\
+    &    3. SoftSonnette envoie la liste des employés à AOP \\
+    &    4. AOP affiche \hyperlink{EcranListe}{Écran\_Liste} \\
+    &    5. Démonstrateur demande à ajouter un employé \\
+    &    6. AOP affiche \hyperlink{EcranAjoutStandard}{Écran\_Ajout} \\
+    &    7. Démonstrateur renseigne les \hyperlink{caracEmploye}{\textit{informations de l'employé}} \\
+    &    8. Démonstrateur valide l'ajout \\
+    &    9. AOP demande à SoftSonnette l'ajout de l'employé \\
+    &    10. SoftSonnette ajoute l'employé à la liste \\
+    &    11. AOP demande à SoftSonnette la liste des employés \\
+    &    12. SoftSonnette envoie la liste des employés à AOP \\
+    &    13. AOP affiche \hyperlink{EcranListe}{Écran\_Liste} \\
+    &    14. Démonstrateur demande à retourner à \hyperlink{EcranAccueil}{Écran\_Accueil} \\
+    & \\
+    \hline
+    Variantes & \\
+    & \textbf{5: [Suppression employé]} \\
+    & 5.a.1. Démonstrateur demande à supprimer un employé \\
+    & 5.a.2. AOP affiche \hyperlink{popUpSuppression}{PopUp\_Suppression} \\
+    & 5.a.3. Démonstrateur valide la suppression \\
+    & 5.a.4. AOP demande à SoftSonnette la suppression de l'employé \\
+    & 5.a.5. SoftSonnette supprime l'employé à la liste \\
+    & 5.a.6. AOP demande à SoftSonnette la liste des employés \\
+    & 5.a.7. SoftSonnette envoie la liste des employés à AOP \\
+    & 5.a.8. Va en 13 \\
+    & \\
+    \hline
+  \end{tabularx}
+  \label{tableau-cu-modifier-liste-employes}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    & \\
+    & \textbf{5: [Pas d'ajout d'employé]} \\
+    & 5.a.1. Va en 14 \\
+    & \\
+    & \textbf{5-9: [Annulation action]} \\ 
+    & 5-9.a.1. Démonstrateur demande à annuler son choix \\
+    & 5-9.a.2. Retour 4 \\
+    & \\
+    & \textbf{7: [Ajout employé spécial]} \\
+    & 7.a.1. Démonstrateur demande à ajouter un employé spécial \\
+    & 7.a.2. AOP affiche \hyperlink{EcranAjoutSpecial}{Écran\_Ajout} avec la variante employé spécial \\
+    & 7.a.3. Démonstrateur renseigne les \hyperlink{hor}{horaires} de l'employé spécial \\
+    & 7.a.4. Va en 8 \\
+    & \\
+    \hline
+    Extensions & \\
+    \hline
+    Informations complémentaires
+    & Lorsque le Démonstrateur renseigne les \hyperlink{caracEmploye}{\textit{informations de l'employé}} à l'étape 7, AOP lui empêche de renseigner un \hyperlink{nom}{\textit{nom}}, un \hyperlink{prenom}{\textit{prénom}}, une \hyperlink{photo}{\textit{photo}}, un \hyperlink{rol}{\textit{rôle}} et pour les employés spéciaux des \hyperlink{hor}{\textit{horaires}} autrement qu'avec les caractéristiques définies dans le Dictionnaire du domaine. \\
+    & \\
+    & Des messages d'avertissement sont affichés au Démonstrateur en utilisant un système de notification disponible sur le Téléphone. \\
+    & Le détail de fonctionnement de ces messages d'avertissement est défini en conception. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Consulter liste des employés}
+  \label{tableau-cu-modifier-liste-employes2}
+\end{table}
+\newpage
+\subsubsection{CU Quitter SàE}
+
+\paragraph{Représentation graphique}
+
+N.A.
+
+\paragraph{Représentation textuelle}
+\hypertarget{CU_quitter}{}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+    \hline
+    Titre & Quitter SàE \\
+    \hline
+    Résumé & Démonstrateur quitte les applications du SàE \\
+    \hline
+    Portée & AOP, SoftSonnette, SoftPorte \\
+    \hline
+    Niveau & Utilisateur \\
+    \hline
+    Acteurs directs & Démonstrateur \\
+    \hline
+    Acteurs indirects & \\
+    \hline
+    Préconditions & \\
+    \hline
+    Garanties minimales & \\
+    \hline
+    Garanties en cas succès & Le SàE est éteint \\
+    \hline
+    Scénario nominal & \\
+      &    1. Démonstrateur quitte AOP \\
+      &    2. AOP se quitte \\
+      &    3. Démonstrateur quitte SoftSonnette \\
+      &    4. SoftSonnette sauvegarde les \hyperlink{donneesPersistantes}{\textit{données persistantes}} en mémoire non volatile \\
+      &    5. SoftSonnette indique à SoftPorte la fin de la démonstration \\
+      &    6. SoftPorte se quitte \\
+      &    7. SoftSonnette se quitte \\
+      & \\
+    \hline
+    Variantes & \\
+    & \textbf{1: [AOP non utilisé]} \\
+    & 1.a.1. Va en 3 \\
+    & \\
+    \hline
+    Extensions & \\
+    \hline
+    Informations complémentaires & N.A. \\
+    \hline
+  \end{tabularx}
+  \caption{CU Quitter SàE}
+  \label{tableau-cu-quitter-sae}
+\end{table}

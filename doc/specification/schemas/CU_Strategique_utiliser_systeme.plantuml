@@ -1,0 +1,28 @@
+@startuml 
+
+usecase Use as "Présenter les capacités de la STM32MP15 au 
+travers d'une application de Sonnette Connectée"
+
+(Use) -up- Démonstrateur
+(Use) -up- Testeur
+(Use) -up- Porte
+
+"Initialiser Board" as (init)
+"Se Connecter" as (connect)
+"Demander à Entrer" as (enter)
+"Regarder vidéo" as (look)
+"Consulter calendrier" as (agenda)
+"Contrôler Porte à distance" as (unlock)
+"Consulter liste employés" as (change)
+"Quitter SàE" as (quit)
+
+(Use) .right.> (init) :      <<include>>
+(Use) .left.> (connect) :   <<include>>
+(Use) ..> (enter) :      <<include>>
+(Use) ..> (look) :      <<include>>
+(Use) ..> (agenda) :      <<include>>
+(Use) ..> (unlock) :      <<include>>
+(Use) ..> (change) :      <<include>>
+(Use) ..> (quit) :       <<include>>
+
+@enduml

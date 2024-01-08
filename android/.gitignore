@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Doxygen
+**/html/
+**/latex/
+
+**/libraries/
+**/.idea/
+**/build/
+**/.gradle/
+**/local.properties

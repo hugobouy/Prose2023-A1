@@ -1,0 +1,172 @@
+@startuml
+'left to right direction
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+hide circle
+hide empty members
+'hide fields
+
+allowmixing
+actor "Demonstrateur" as Demonstrateur 
+actor "Demonstrateur" as Demonstrateur2
+actor "Porte" as Porte 
+actor "Testeur" as Testeur
+
+package AOP{
+    class "gui : GUI <<active>>" as GUI  {
+        -myPass : Password
+        -myIp : IP
+        -myName : String
+        -myFirstName : String
+        -myPicture : Picture
+        -myRole : Role
+        -myWorkingHours : Hour[*]
+        -employeeList : Employee[*]
+        -displayScreen(screenID : int)
+        -displayPopUp(popupID : int)
+        -displaySpecialEmployeeField(displaySpecial : bool)
+        -refreshVideoScreen()
+        -refreshCalendar(employeeID : EmployeeID)
+        -refreshDoorState(doorState : bool)
+		+launchAOP()
+        +updateDoorState(state : bool)
+		+askScreen(screenID : int)
+		+setIp(ip : IP)
+		+setPass(pass : Password)
+		+connect()
+		+setConnectionStatus(status : ConnectionStatus)
+        +setEmployeeList(employeeList : Employee[*])
+		+askCalendar(employeeID : EmployeeID)
+		+askOpenDoor()
+		+askAddEmployee()
+		+setEmployeeName(name : String)
+		+setEmployeeFirstName(firstName : String)
+		+setEmployeePicture(picture : Picture)
+		+setEmployeeRole(role : Role)
+		+setSpecialEmployeeAccess(day : Day, startHour : Hour, stopHour : Hour)
+		+askDeleteEmployee(employeeID : EmployeeID)
+		+confirm()
+		+cancel()
+		+return()
+		+quitAOP()
+    }
+
+    class "connectionManager : ConnectionManager <<active>>" as ConnectionManager  {
+        -connectionState : bool
+        -checkConnection()
+        -getLocalTime() : Time
+        +askConnection(ip : IP, pass : Password)
+        +validatePass(passValidated : bool)
+    }
+}
+
+package SoftSonnette{
+    class "uiss : UISS <<active>>" as UISS  {
+        -appState : SSState
+        -display(state : SSState)
+        -refreshDoorState(state : bool)
+		+launchSS()
+		+quitSS()
+        +askStartCom()
+		+ring()
+        +updateCamState(bool)
+		+updateDoorState(bool)
+    }
+    class "cameraman : Cameraman <<active>>" as Cameraman  {
+        -cameraAlive : bool
+        -streamToAOPandScreen()
+        -streamToScreenOnly()
+        -checkCameraConnected()
+        +takePicture() : Picture
+		+subscribeToVideoStream(enable : bool)
+        +startStreaming()
+        +stopStreaming()
+        +suspendStreaming()
+        +resumeStreaming()
+    }
+    class "guard : Guard" as Guard  {
+        +askCheckPass(pass : Password)
+    }
+    class "clock : Clock <<Protected>>" as Clock  {
+        -currentTime : Time
+        +getCurrentTime() : Time
+        +setCurrentTime(time : Time)
+    }
+    class "bouncer : Bouncer <<active>>" as Bouncer  {
+        -picture : Picture
+        -employeeList : Employee[*]
+        -recognizedEmployee : Employee
+        -currentTime : Time
+        -checkEmployeeAllow(time : Time, employeeID : EmployeeID) : bool
+        +setRecognizeFace(employeeID : EmployeeID)
+        +askFaceRecognition()
+    }
+    class "employeeManager : EmployeeManager <<entity>> <<protected>>" as EmployeeManager  {
+        -employeeList : Employee[*]
+        +addEmployee(name : String, firstName : String, picture : Picture, 
+        role : Role, workingHours : Hour[*])
+        +deleteEmployee(employeeID : EmployeeID)
+        +getEmployeeList() : Employee[*]
+        +getEmployee(employeeID : EmployeeID) : Employee
+        +askEmployeeList()
+        +load()
+        +save()
+    }
+
+    class "recognitionAI : RecognitionAI <<active>>" as RecognitionAI  {
+	    +launchAI(picture : Picture, employeeList : Employee[*])
+    }
+}
+
+package SoftPorte{
+    class "uisp : UISP" as UISP  {
+        -signalAppState()
+        +launchSP()
+        +quitSP()
+        +ackStartCom()
+        +signalNotAllowed()
+    }
+    class "doorManager : DoorManager <<active>>" as DoorManager  {
+        -doorState : bool
+        -unlockDoor()
+        +askOpenDoor()
+        +askDoorState() : bool 
+    }
+}
+
+'GUI link
+GUI -down- DoorManager : > askDoorState()\n askOpenDoor()\n< updateDoorState(...)
+GUI -right- Demonstrateur : < launchAOP()\n askScreen(...)\n setIp(...)\n setPass(...)\n connect()\n askCalendar(...)\n askOpenDoor()\n askAddEmployee()\n setEmployeeName(...)\n setEmployeeFirstName(...)\n setEmployeePicture(...)\n setSpecialEmployeeAccess(...)\n askDeleteEmployee(...)\n confirm()\n cancel()\n return()\n quitAOP()
+GUI -up- ConnectionManager : < askConnection(...)\n> setConnectionStatus(...)
+GUI -down- Cameraman : > subscribeToVideoStream(...)
+
+'Bouncer link
+Bouncer -down-  EmployeeManager: > getEmployee(...)\n getEmployeeList()
+Bouncer -left- Cameraman : < takePicture()\n suspendStreaming()\n resumeStreaming()
+Bouncer -up- Clock: > getCurrentTime()
+Bouncer -down- UISS : < askFaceRecognition()\n
+Bouncer -up- RecognitionAI : < launchAI(...)\n> setRecognizeFace(...)
+Bouncer -left- DoorManager : > askOpenDoor()
+Bouncer -left- UISP : \n< signalNotAllowed() 
+
+'UISS link
+UISS -down- Testeur: < ring()
+UISS -- EmployeeManager: > save()\n load()
+UISS -right- Demonstrateur2 : < launchSS()\n quitSS()
+UISS -left- Cameraman : < startStreaming()\n stopStreaming() \n> updateCamState(...)
+UISS -right- UISP: > launchSP() \n quitSP() \n ackStartCom() \n< askStartCom()
+UISS -right-  DoorManager: < updateDoorState(...)
+
+'ConnectionManager link
+ConnectionManager -right-- Clock : > setCurrentTime(...)
+ConnectionManager -right- Guard : < validatePass(...)\n> askCheckPass(...)
+
+'EmployeeManager link
+GUI -down- EmployeeManager: > addEmployee(...)\n deleteEmployee(...)\n askEmployeeList() \n< setEmployeeList(...)
+
+'DoorManager link
+DoorManager -- Porte
+'DoorManager -[#transparent]down- UISP
+
+
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+
+package gui
+{
+    class MainActivity <<active>>
+
+    package fragments
+    {
+        class FragmentCalendar
+        class FragmentDoor
+        class FragmentVideo
+        class FragmentListEmployee
+        class FragmentAddEmployee
+        class FragmentConnection
+        class FragmentHome
+    }
+
+    MainActivity <--> FragmentHome
+    MainActivity --> FragmentConnection
+    MainActivity --> FragmentCalendar
+    MainActivity --> FragmentListEmployee
+    MainActivity --> FragmentAddEmployee
+    MainActivity --> FragmentDoor
+    MainActivity --> FragmentVideo
+
+}
+
+@enduml

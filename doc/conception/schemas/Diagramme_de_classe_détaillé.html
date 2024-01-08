@@ -1,0 +1,460 @@
+<script>
+		// @ts-check
+	/**
+	 * @type {import("./Model.d.ts").Model<false>}
+	 */	
+	const model =
+		{
+			name: "Imported_Architecture Candidate détailé SoftSonnette",
+			classes: String.raw`
+				class Starter{
+				main()
+				cleanup()
+				}
+				
+				class UISS <<active>>{
+				uiss_launchSS()
+				uiss_quitSS()
+				uiss_ring()
+				uiss_updateCamState(state : bool)
+				uiss_updateDoorStat(state : bool)
+				uiss_signalNotAllowed()
+				uiss_display()
+				}
+				
+				class ProxyGUI{
+				gui_updateDoorState(state : bool)
+				}
+				
+				class Cameraman <<active>>{
+				-cameraAlive : bool
+				-checkCameraConnected()
+				cameraman_getCameraPicture() : Picture
+				cameraman_subscribeToVideoStream(enable : bool)
+				}
+				
+				class Guard {
+				-motDePasse : Password
+				guard_askCheckPass(pass : Password)
+				}
+				
+				class Clock <<protected>>{
+				-currentTime : Time
+				clock_getCurrentTime()
+				clock_setCurrentTime(time : Time)
+				}
+				
+				class Streamer{
+				inforstream : CustomData
+				streamer_initGstreamer()
+				streamer_streamEcran()
+				streamer_StreamTel()
+				streamer_cleanPipeline()
+				streamer_stopPipeline()
+				streamer_refreshVideo()
+				}
+				
+				class Bouncer <<active>>{
+				-picture : Picture
+				bouncer_checkEmployeeAllow(time : Time, employee : Employee)
+				bouncer_setRecognizeFace(employeeID : EmployeeID)
+				bouncer_askFaceRecognition(employeeID : EmployeeID)
+				}
+				
+				class RecognitionAI{
+				RecognitionAI_launch()
+				}
+				
+				class ProxyUISP{
+				UISP_launchSP()
+				}
+				
+				class ProxyDoorManager{
+				DoorManager_askOpenDoor()
+				DoorManager_askDoorState() : bool
+				}
+				
+				class EmployeeManager <<entity>> <<protected>>{
+				-employeeList : Employee[*] 
+				-addEmployee(name : String, FirstName : String, picture : Picture, role : String, workingHours : Hour[*])
+				-deleteEmployee(employeeID : EmployeeID)
+				-getEmployeeList() : Employee[*] 
+				-getEmployee(employeeID : EmployeeID) : Employee
+				+load()
+				+save()
+				}
+				
+				class ProxyConnectionManager{
+				ProxyConnectionManager_validatePass(passValidated : bool)
+				}
+				
+				class PostmanAOP{
+				-socketSoftSonnette : int
+				-socketAOP : int
+				postmanAOP_read(message : char)
+				postmanAOP_askSendMessage(message : char)
+				postmanAOP_setUpConnection() 
+				}
+				
+				class DispatcherAOP{
+				dispatcherAOP_dispatch()
+				dispatcherAOP_setConnected(state : bool)
+				}
+				
+				class DispatcherSP{
+				dispatcherUISS_dispatch()
+				dispatcherProxyGUI_dispatch()
+				}
+				
+				Cameraman "1" -- "1" UISS
+				Starter "1" -- "1" UISS
+				Starter "1" -- "1" Cameraman
+				Starter "1" -- "1" Bouncer
+				Cameraman "1" -- "1" Streamer
+				Guard "1" -- "1" ProxyConnectionManager
+				Guard "1" -- "1" PostmanAOP
+				RecognitionAI "1" -- "1" Bouncer
+				Bouncer "1" -- "1" UISS
+				Cameraman "1" -- "1" Bouncer
+				Clock "1" -- "1" Bouncer
+				EmployeeManager "1" -- "1" Bouncer
+				EmployeeManager "1" -- "1" DataEmployee
+				Cameraman "1" -- "1" DispatcherAOP
+				PostmanAOP "1" -- "1" Bouncer
+				PostmanAOP "1" -- "1" ProxyGUI
+				DispatcherAOP "1" -- "1" ProxyDoorManager
+				PostmanSP "1" -- "1" ProxyDoorManager
+				PostmanSP "1" -- "1" ProxyUISP
+				PostmanSP "1" -- "1" DispatcherSP
+				ProxyGUI "1" -- "1" DispatcherSP
+				ProxyConnectionManager "1" -- "1" PostmanAOP
+				
+			`,
+			objects: [
+				{
+					name: "cameraman",
+					class: "Cameraman",
+					stereotypes: [
+						"active",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "guard",
+					class: "Guard",
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "clock",
+					class: "Clock",
+					stereotypes: [
+						"protected",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "bouncer",
+					class: "Bouncer",
+					stereotypes: [
+						"active",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "recognitionAI",
+					class: "RecognitionAI",
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "employeeManager",
+					class: "EmployeeManager",
+					stereotypes: [
+						"entity",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "starter",
+					class: "Starter",
+					stereotypes: [
+						"active",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "proxyConnectionManager",
+					class: "ProxyConnectionManager",
+					stereotypes: [
+						"medium",
+					],
+					packagePath: [
+						"com",
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "streamer",
+					class: "Streamer",
+					stereotypes: [
+						"boundary",
+						"medium",
+					],
+					packagePath: [
+						"com",
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "dataEmployee",
+					class: "DataEmployee",
+					stereotypes: [
+						"entity",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "dispatcherAOP",
+					class: "DispatcherAOP",
+					stereotypes: [
+						"medium",
+					],
+					packagePath: [
+						"com",
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "postmanAOP",
+					class: "PostmanAOP",
+					stereotypes: [
+						"active",
+						"medium",
+					],
+					packagePath: [
+						"com",
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "proxyGUI",
+					class: "ProxyGUI",
+					stereotypes: [
+						"medium",
+					],
+					packagePath: [
+						"com",
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "dispatcherSP",
+					class: "DispatcherSP",
+					stereotypes: [
+						"medium",
+					],
+					packagePath: [
+						"com",
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "postmanSP",
+					class: "PostmanSP",
+					stereotypes: [
+						"active",
+						"medium",
+					],
+					packagePath: [
+						"com",
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "proxyDoorManager",
+					class: "ProxyDoorManager",
+					stereotypes: [
+						"medium",
+					],
+					packagePath: [
+						"com",
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "proxyUISP",
+					class: "ProxyUISP",
+					stereotypes: [
+						"medium",
+					],
+					packagePath: [
+						"com",
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "UISS",
+					class: "UISS",
+					stereotypes: [
+						"active",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+			],
+			connectorByName: {
+				C1: {
+					ends: [
+						"clock",
+						"bouncer",
+					],
+				},
+				C2: {
+					ends: [
+						"cameraman",
+						"bouncer",
+					],
+				},
+				C3: {
+					ends: [
+						"employeeManager",
+						"bouncer",
+					],
+				},
+				C4: {
+					ends: [
+						"recognitionAI",
+						"bouncer",
+					],
+				},
+				C5: {
+					ends: [
+						"streamer",
+						"cameraman",
+					],
+				},
+				C6: {
+					ends: [
+						"starter",
+						"cameraman",
+					],
+				},
+				C7: {
+					ends: [
+						"starter",
+						"bouncer",
+					],
+				},
+				C8: {
+					ends: [
+						"starter",
+						"UISS",
+					],
+				},
+				C9: {
+					ends: [
+						"guard",
+						"proxyConnectionManager",
+					],
+				},
+				C10: {
+					ends: [
+						"proxyConnectionManager",
+						"postmanAOP",
+					],
+				},
+				C11: {
+					ends: [
+						"dataEmployee",
+						"employeeManager",
+					],
+				},
+				C12: {
+					ends: [
+						"proxyGUI",
+						"postmanAOP",
+					],
+				},
+				C13: {
+					ends: [
+						"postmanAOP",
+						"dispatcherAOP",
+					],
+				},
+				C14: {
+					ends: [
+						"proxyDoorManager",
+						"dispatcherAOP",
+					],
+				},
+				C15: {
+					ends: [
+						"cameraman",
+						"dispatcherAOP",
+					],
+				},
+				C16: {
+					ends: [
+						"guard",
+						"dispatcherAOP",
+					],
+				},
+				C17: {
+					ends: [
+						"employeeManager",
+						"dispatcherAOP",
+					],
+				},
+				C18: {
+					ends: [
+						"dispatcherSP",
+						"proxyGUI",
+					],
+				},
+				C19: {
+					ends: [
+						"dispatcherSP",
+						"postmanSP",
+					],
+				},
+				C20: {
+					ends: [
+						"proxyUISP",
+						"postmanSP",
+					],
+				},
+				C21: {
+					ends: [
+						"proxyDoorManager",
+						"postmanSP",
+					],
+				},
+				C22: {
+					ends: [
+						"UISS",
+						"cameraman",
+					],
+				},
+			},
+		}
+	;
+	document.write(`
+		<iframe width="100%" height="100%" src='http://172.24.2.1/AnimUML.html#${encodeURIComponent(JSON.stringify(model)).replace(/'/g, '%27')}'></iframe>
+	`);
+</script>

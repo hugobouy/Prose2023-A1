@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_navigation"
+    app:startDestination="@id/fragmentConnection">
+
+    <fragment
+        android:id="@+id/fragmentConnection"
+        android:name="com.prose.a1.aop.view.fragment.FragmentConnection"
+        android:label="fragment_connection"
+        tools:layout="@layout/fragment_connection">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentHome"
+        android:name="com.prose.a1.aop.view.fragment.FragmentHome"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentCalendar"
+        android:name="com.prose.a1.aop.view.fragment.FragmentCalendar"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentVideo"
+        android:name="com.prose.a1.aop.view.fragment.FragmentVideo"
+        android:label="fragment_video"
+        tools:layout="@layout/fragment_video" />
+
+    <fragment
+        android:id="@+id/fragmentListEmployee"
+        android:name="com.prose.a1.aop.view.fragment.FragmentListEmployee"
+        android:label="fragment_list_employee"
+        tools:layout="@layout/fragment_list_employee">
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/fragmentAddEmployee"
+        android:name="com.prose.a1.aop.view.fragment.FragmentAddEmployee"
+        android:label="fragment_add_employee"
+        tools:layout="@layout/fragment_add_employee">
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentDoor"
+        android:name="com.prose.a1.aop.view.fragment.FragmentDoor"
+        android:label="fragment_door"
+        tools:layout="@layout/fragment_door">
+    </fragment>
+
+</navigation>

@@ -1,0 +1,157 @@
+\newpage
+\subsection{Gestion du multitâche}
+\subsubsection{Identification des accès concurrents dans \appliLin}%3.4.1
+
+Dans un soucis de lisibilité, le nom des classes est abrégé dans le tableau \ref{tableau-acces-concurrents-1} répertoriant les accès concourants.
+Les acronymes utilisés sont répertoriés dans le tableau ci-dessous:
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|p{2cm}|X|p{2cm}|}
+      \hline 
+         \textbf{Tâche}  &  \textbf{Abrégé} & \textbf{Autre} & \textbf{Abrégé} \\ 
+        \hline
+        RecognitionAI  & RAI & Clock &  Cl \\ 
+        \hline
+        Bouncer  & Bo & EmployeeManager &  EM \\ 
+        \hline
+        Cameraman  & Ca & ProxyGUI &  PG \\ 
+        \hline
+        UISS  &  UISS & ProxyConnectionManager &  PCM \\ 
+        \hline
+        Starter  & Sta & ProtocolSP &  ProSP \\ 
+        \hline
+        PostmanAOP  & PAOP & Guard &  G \\ 
+        \hline
+        PostmanSP  & PSP & ProxyDoorManager &  PDM \\ 
+        \hline
+        DispatcherAOP  & DAOP & DataEmployee &  DE \\ 
+        \hline
+        DispatcherSP  & DSP & ProtocolSS &  PSS \\ 
+        \hline
+        Streamer & Str & ProxyUISP &  PUISP \\ 
+        \hline
+
+    \end{tabularx}
+    \caption{Tableau des classes abrégées  dans \appliLin}
+    \label{tableau-abreger-classe-1}
+  \end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|X|X|X|X|}
+      \hline 
+            & Cl & EM & PG & PCM & ProSP & G & PDM & DE & PSS & PUISP \\ 
+        \hline
+            RAI  &   &   &   &   &   &   &   &   &   &      \\ 
+        \hline
+            Bo   & X & X & X  &   &   &   & X  & X &   & X     \\ 
+        \hline
+            Ca   &   &   &   &   &  &   &   &   &   &    \\ 
+        \hline
+            UISS &   &   &   &   &   &   &   &   &   &  X  \\ 
+        \hline
+            Sta  &   &   &   &   &   &   &   &   &   &    \\ 
+        \hline                                  
+            PAOP &   &   &   &   &   &   &   &   &   &      \\ 
+        \hline
+            PSP  &   &   &   &   &   &   &   &   &   &    \\ 
+        \hline
+            DAOP & X & X &  X & X &   & X & X & X  & X &    \\ 
+        \hline
+            DSP  &   &   & X &   & X  &   &   &   &   &    \\ 
+        \hline
+            Str  &   &   &  &   &   &   &   &   &   &    \\ 
+        \hline
+    \end{tabularx}
+    \caption{Tableau des accès concurrents dans \appliLin}
+    \label{tableau-acces-concurrents-1}
+  \end{table}
+
+  Les classes DispatcherAOP et Bouncer appellent concurremment Clock et EmployeeManager.
+  Pour éviter tout soucis ces deux classes possèdent l'attribut "protected" indiquant aux développeur de mettre en place des stratégies de verrouillage des ressources critiques permettant ainsi d'éviter les accès concourants.
+  
+
+\subsubsection{Identification des accès concurrents dans \appliPo}%3.4.2
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|X|X|X|X|X|}
+    \hline 
+                        & ProxyGUI  & ProxyUISS & UISP  & DispatcherSS  \\ 
+      \hline
+          DoorManager   &     X     &     X     &       &               \\ 
+      \hline
+          PostmanSS     &           &           &   X   &       X       \\ 
+      \hline
+  \end{tabularx}
+  \caption{Tableau des accès concurrents dans \appliPo}
+  \label{tableau-acces-concurrents-2}
+\end{table}
+
+Il n'y a pas de problème de concurrence.
+
+\newpage
+\subsubsection{Identification des accès concurrents dans \appliA}%3.4.3
+
+Dans un soucis de lisibilité, le nom des classes est abrégé dans le tableau \ref{tableau-acces-concurrents-3} répertoriant les accès concourants.
+Les acronymes utilisés sont répertoriés dans le tableau ci-dessous:
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|p{2cm}|X|p{2cm}|}
+      \hline 
+         \textbf{Tâche}  &  \textbf{abréger} & \textbf{Autre} & \textbf{abréger} \\ 
+        \hline
+        Communication  & Com & Protocol &  Pr \\ 
+        \hline
+        PostmanVideo  & PV & ConnectionManager &  CM \\ 
+        \hline
+        PostmanSoftSonnette  & PS & Dispatcher &  Di \\ 
+        \hline
+        GUI  & GUI & CacheEmployeeManager  &  CEM \\ 
+        \hline
+        CacheCameraman  &  CCa & WeeklyCalendar  &  WC \\ 
+        \hline
+          &  & ProxyDoorManager   &  PDM \\ 
+        \hline
+          &  & ProxyClock   &  PC \\ 
+        \hline
+          &  & ProxyGuard   &  PG \\ 
+        \hline 
+
+
+    \end{tabularx}
+    \caption{Tableau des classe abrégées dans \appliA}
+    \label{tableau-abreger-classe-2}
+  \end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|X|X|X|}
+      \hline 
+                 & Pr & CM & Di  & CEM  & WC & PDM & PC & PG \\ 
+        \hline
+            GUI  &    &  X &  X  &  X   &  X &  X  & X  & X  \\ 
+        \hline
+            Com  &  X &  X &  X  &  X   &  X &  X  & X  & X  \\ 
+        \hline
+            PV   &    &    &     &      &    &     &    &    \\ 
+        \hline
+            PS   &    &    &     &      &    &     &    &    \\ 
+        \hline
+            CCa  &    &    &     &      &    &     &    &    \\      
+        \hline
+    \end{tabularx}
+    \caption{Tableau des accès concurrents dans \appliA}
+    \label{tableau-acces-concurrents-3}
+  \end{table}
+
+
+  La tâche MainActivity, appartenant à GUI, est le cœur d'AOP. 
+  Or, MainActivity n’est pas susceptible de manipuler des ressources critiques puisqu'elle délègue ses tâches aux objets concernés, il n’y a donc pas de problèmes de concurrence ici.
+  
+  La tâche Communication se trouve en haut de la hiérarchie, régissant les demandes, les appels à ses méthodes de lecture et d’écriture, et gère le socket de communication, comme son nom l’indique elle communique avec tous les objets.
+    
+  Les tâches PostmanVideo, PostmanSoftSonnette et CacheCameraman n’accèdent à aucun objet “non actif”, aucun problème de concurrence n’est à détecter ici.
+  

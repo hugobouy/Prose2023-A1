@@ -1,0 +1,36 @@
+@startuml
+
+actor Démonstrateur
+
+Démonstrateur -> Starter : main()
+activate Starter
+Starter -> Cameraman : new()
+Cameraman --> Starter 
+Starter -> UISS : new()
+UISS --> Starter
+Starter -> PostmanAOP : new()
+PostmanAOP -> DispatcherAOP : new()
+DispatcherAOP --> PostmanAOP 
+PostmanAOP --> Starter
+Starter -> Bouncer : new()
+Bouncer --> Starter
+
+Starter -> Cameraman : start()
+activate Cameraman
+Cameraman --> Starter
+Starter -> UISS : launchSS()
+UISS -> UISS : start()
+activate UISS
+UISS --> Starter 
+UISS -> EmployeeManager : load()
+Starter -> PostmanAOP : start()
+activate PostmanAOP
+PostmanAOP -> DispatcherAOP : start()
+activate DispatcherAOP
+DispatcherAOP --> PostmanAOP
+PostmanAOP --> Starter
+Starter -> Bouncer : start()
+activate Bouncer
+Bouncer --> Starter
+
+@enduml

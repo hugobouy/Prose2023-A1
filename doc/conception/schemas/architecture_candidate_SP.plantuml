@@ -1,0 +1,57 @@
+@startuml
+
+hide fields
+hide methods
+
+
+package SoftPorte {
+
+    class DoorManager <<active>>{
+        -doorState : Bool 
+        -unlockDoor()
+        +askOpenDoor()
+        +askDoorState()
+    }
+
+    package Communication #A9D0F5{
+        class ProxyGUI <<medium>>
+        class ProxyUISS <<medium>>
+        {
+            +updateDoorState()
+        }
+        class PostmanSS <<active>> <<medium>>
+        {
+            +send()
+            -read()
+        }
+        class DispatcherSS <<medium>>
+        {
+            +dispatch()
+        }
+        ' class Protocol{
+
+        ' }
+    }
+    class UISP{
+        -appState : SPState
+        -signalAppState()
+        +launchSP()
+    }
+
+    ' Protocol <-- DispatcherSS
+    ' Protocol <-- ProxyGUI
+    ' Protocol <-- ProxyUISS
+    DoorManager --> ProxyGUI
+    DoorManager --> ProxyUISS
+    ProxyGUI --> PostmanSS
+    ProxyUISS --> PostmanSS
+    DispatcherSS -up-> DoorManager
+    PostmanSS -up-> DispatcherSS
+    DispatcherSS --> UISP
+    UISP -left-> ProxyUISS
+}
+
+
+   
+
+@enduml

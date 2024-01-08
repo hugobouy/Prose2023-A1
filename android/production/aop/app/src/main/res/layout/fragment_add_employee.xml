@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.FragmentListEmployee">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/title_nouvel_employe"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/nom_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="70dp"
+        android:autofillHints=""
+        android:hint="@string/name_new_employe"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZéèêàôùïî'-"
+        android:inputType="text"
+        android:minHeight="48dp"
+        tools:ignore="VisualLintTextFieldSize" />
+
+    <EditText
+        android:id="@+id/prenom_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="120dp"
+        android:hint="@string/firstname_new_employe"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZéèêàôùïî'-"
+        android:inputType="text"
+        android:minHeight="48dp"
+        tools:ignore="VisualLintTextFieldSize" />
+
+    <TextView
+        android:id="@+id/view_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="180dp"
+        android:text="@string/text_photo"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:ignore="TextSizeCheck" />
+
+    <Button
+        android:id="@+id/button_import_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="171dp"
+        android:layout_marginStart="110dp"
+        android:text="@string/button_import_photo"
+        android:textAllCaps="false"/>
+
+
+    <TextView
+        android:id="@+id/select_roles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="220dp"
+        android:text="@string/select_role"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:ignore="TextSizeCheck" />
+
+    <Spinner
+        android:id="@+id/role_spinner"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="250dp"
+        android:background="@drawable/border"
+        android:entries="@array/roles"
+        android:minHeight="48dp"
+        android:prompt="@string/select_role" />
+
+    <TextView
+        android:id="@+id/description_heures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="310dp"
+        android:text="@string/description_h_crénaux"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:ignore="TextSizeCheck" />
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="350dp"
+        android:layout_marginStart="17dp"
+
+        tools:ignore="NotSibling,UselessParent">
+
+        <!-- Lundi -->
+
+        <TableRow android:gravity="center_vertical">
+
+            <TextView
+                android:background="@drawable/border"
+                android:padding="8dp"
+                android:text="@string/monday"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:padding="4dp"
+                android:text="@string/de_print" />
+
+            <Spinner
+                android:id="@+id/lundi_debut_spinner"
+                android:contentDescription="@string/h_start_monday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:padding="1dp"
+                android:text="@string/a_print" />
+
+            <Spinner
+                android:id="@+id/lundi_fin_spinner"
+                android:contentDescription="@string/h_end_monday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+        </TableRow>
+
+        <!-- Mardi -->
+
+        <TableRow
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:background="@drawable/border"
+                android:padding="8dp"
+                android:text="@string/tuesday"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:padding="4dp"
+                android:text="@string/de_print" />
+
+            <Spinner
+                android:id="@+id/mardi_debut_spinner"
+                android:contentDescription="@string/h_start_tuesday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:padding="1dp"
+                android:text="@string/a_print" />
+
+            <Spinner
+                android:id="@+id/mardi_fin_spinner"
+                android:contentDescription="@string/h_end_tuesday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+        </TableRow>
+
+        <!-- Mercredi -->
+
+        <TableRow
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:background="@drawable/border"
+                android:padding="8dp"
+                android:text="@string/wednesday"
+                android:textStyle="bold" />
+
+            <TextView
+                android:padding="4dp"
+                android:text="@string/de_print" />
+
+            <Spinner
+                android:id="@+id/mercredi_debut_spinner"
+                android:contentDescription="@string/h_start_wednesday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:padding="1dp"
+                android:text="@string/a_print" />
+
+            <Spinner
+                android:id="@+id/mercredi_fin_spinner"
+                android:contentDescription="@string/h_end_wednesday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+        </TableRow>
+
+        <!-- Jeudi -->
+
+        <TableRow
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:background="@drawable/border"
+                android:padding="8dp"
+                android:text="@string/thursday"
+                android:textStyle="bold" />
+
+            <TextView
+                android:padding="4dp"
+                android:text="@string/de_print" />
+
+            <Spinner
+                android:id="@+id/jeudi_debut_spinner"
+                android:contentDescription="@string/h_start_thursday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:padding="1dp"
+                android:text="@string/a_print" />
+
+            <Spinner
+                android:id="@+id/jeudi_fin_spinner"
+                android:contentDescription="@string/h_end_thursday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+        </TableRow>
+
+        <!-- Vendredi -->
+
+        <TableRow
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:background="@drawable/border"
+                android:padding="8dp"
+                android:text="@string/friday"
+                android:textStyle="bold" />
+
+            <TextView
+                android:padding="4dp"
+                android:text="@string/de_print" />
+
+            <Spinner
+                android:id="@+id/vendredi_debut_spinner"
+                android:contentDescription="@string/h_start_friday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:padding="1dp"
+                android:text="@string/a_print" />
+
+            <Spinner
+                android:id="@+id/vendredi_fin_spinner"
+                android:contentDescription="@string/h_end_friday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+        </TableRow>
+
+        <!-- Samedi -->
+
+        <TableRow
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:background="@drawable/border"
+                android:padding="8dp"
+                android:text="@string/saturday"
+                android:textStyle="bold" />
+
+            <TextView
+                android:padding="4dp"
+                android:text="@string/de_print" />
+
+            <Spinner
+                android:id="@+id/samedi_debut_spinner"
+                android:contentDescription="@string/h_start_saturday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:padding="1dp"
+                android:text="@string/a_print" />
+
+            <Spinner
+                android:id="@+id/samedi_fin_spinner"
+                android:contentDescription="@string/h_end_saturday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+        </TableRow>
+
+        <!-- Sunday -->
+
+        <TableRow
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:background="@drawable/border"
+                android:padding="8dp"
+                android:text="@string/sunday"
+                android:textStyle="bold" />
+
+            <TextView
+                android:padding="4dp"
+                android:text="@string/de_print" />
+
+            <Spinner
+                android:id="@+id/dimanche_debut_spinner"
+                android:contentDescription="@string/h_start_sunday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:padding="1dp"
+                android:text="@string/a_print" />
+
+            <Spinner
+                android:id="@+id/dimanche_fin_spinner"
+                android:contentDescription="@string/h_end_sunday"
+                android:entries="@array/heures_une_journee"
+                tools:ignore="TouchTargetSizeCheck" />
+        </TableRow>
+
+    </TableLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:padding="10dp">
+
+
+        <Button
+            android:id="@+id/ajouter_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_add_new_employe"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/annuler_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel_button"
+            android:layout_margin="10dp" />
+
+    </LinearLayout>
+
+
+</FrameLayout>

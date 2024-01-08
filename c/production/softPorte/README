@@ -1,0 +1,6 @@
+Installation process
+
+1) Create a new workspace under the production folder
+2) Select the import project option and chose the production/softPorte/softPorte2 folder
+3) Make sure all the sub-projects are selected
+4) Confirm and build the project

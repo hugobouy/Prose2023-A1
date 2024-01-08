@@ -1,0 +1,46 @@
+\subsection{Architecture détaillée}
+
+Les diagrammes ci-dessous représentent le SàE dans son intégralité. 
+En plus des classes vues précédemment, ce diagramme présente la gestion de la communication ainsi que les objets frontières nécessaires au bon fonctionnement du logiciel.
+
+Ces diagrammes, dans un souci de lisibilité, ne détaillent pas les méthodes ainsi que les attributs des classes.
+Ces derniers sont détaillés dans les diagrammes de classe qui suivent.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_plantuml.eps}
+    \caption{Architecture candidate détaillée de AOP représentée par un diagramme de communication}
+    \label{archiDetailleAOP}
+\end{figure}
+
+Il est a noté que le classe GUI de la conception générale a été divisée en plusieurs Fragment représentant les différents écrans.
+Ces fragments sont regroupés dans le package gui.
+
+AOP adopte une stratégie de communication en utilisant une classe Communication, Protocol, Postman et Dispatcher.
+A l'inverse, SoftSonnette et SoftPorte adoptent une stratégie avec des Proxys, Postamn, Protcol et Dispatcher.
+Des détails sur ces deux stratégies sont proposés dans la partie 3.3. "Protocole de communication".
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette.eps}
+    \caption{Architecture candidate détaillée de SoftSonnette représentée par un diagramme de communication}
+    \label{archiDetailleSS}
+\end{figure}
+
+% Important : Par soucis de lisibilité, ne sont pas représentés sur ce diagramme les classes protocoles qui interfacent les objets Proxy et Dispatcher comme suit :
+
+% \begin{figure} [H]
+%     \centering
+%     \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette_Protocol}
+%     \caption{Diagramme de classes présentant les interactions avec les objets ProtocolSP et ProtocolSS}
+%     \label{archiSimplifieeProtocol}
+% \end{figure}
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_SP}
+    \caption{Architecture candidate détaillée de SoftPorte représentée par un diagramme de communication}
+    \label{archiDetailleSoftPorte}
+\end{figure}
+
+Les objets Starter ne sont pas représentés dans les diagrammes de communication et sont détaillés dans la suite du document.

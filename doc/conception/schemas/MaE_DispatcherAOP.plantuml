@@ -1,0 +1,16 @@
+@startuml
+
+[*] -> S_ON
+state S_ON {
+    [*] -> S_NOT_CONNECTED : /connected = 0;
+    S_NOT_CONNECTED : entry/ postmanAOP_read(header); dispatcherAOP_decodeHeader(header)
+    S_NOT_CONNECTED : dispatcherAOP_setConnected(true) / connected = 1;
+    S_NOT_CONNECTED -> S_NOT_CONNECTED : [header.cmdId != ASK_CHECK_PASS]
+    S_NOT_CONNECTED -down-> S_DISPATCH : [header.cmdId == ASK_CHECK_PASS || connected]
+    S_DISPATCH : entry/ postmanAOP_read(message); dispatcherAOP_dispatch(header, message)
+    S_DISPATCH -> S_DISPATCH: when(connected) / postmanAOP_read(header); \n dispatcherAOP_decodeHeader(header);
+    S_DISPATCH -> S_NOT_CONNECTED : [!connected]
+}
+S_ON -> [*] : dispatcherAOP_stop()
+
+@enduml

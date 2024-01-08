@@ -1,0 +1,154 @@
+.DS_Store
+
+# Development space
+**/.vscode
+**/docker-compose.yml
+*/**/build
+*/**/output
+.depend*
+.fuse_*
+**/ebauches/build/**
+**/ebauches/output/**
+**/test/plan_test/echauches/PDT_TEST_A1.pdf
+**/html/
+**/latex/
+**/node_modules/
+**/package-lock.json
+*.eps
+**/anime_uml_generated/*.pdf
+**/anime_uml_generated/*.svg
+**/anime_uml_generated/*.plantuml
+**/anime_uml_generated/*.puml
+**/anime_uml_generated/*.tex
+
+**/anime_uml_detailed_sp_generated/*.pdf
+**/anime_uml_detailed_sp_generated/*.svg
+**/anime_uml_detailed_sp_generated/*.plantuml
+**/anime_uml_detailed_sp_generated/*.puml
+**/anime_uml_detailed_sp_generated/*.tex
+
+**/anime_uml_detailed_aop_generated/*.pdf
+**/anime_uml_detailed_aop_generated/*.svg
+**/anime_uml_detailed_aop_generated/*.plantuml
+**/anime_uml_detailed_aop_generated/*.puml
+**/anime_uml_detailed_aop_generated/*.tex
+
+**/anime_uml_detailed_ss_generated/*.pdf
+**/anime_uml_detailed_ss_generated/*.svg
+**/anime_uml_detailed_ss_generated/*.plantuml
+**/anime_uml_detailed_ss_generated/*.puml
+**/anime_uml_detailed_ss_generated/*.tex
+
+**/.idea/
+
+# Java
+*.class
+
+## Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+## Intermediate documents:
+*.dvi
+*.xdv
+*-converted-to.*
+
+## Bibliography auxiliary files (bibtex/biblatex/biber):
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+## Build tool auxiliary files:
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+## Build tool directories for auxiliary files
+# latexrun
+latex.out/
+
+## Auxiliary and intermediate files from other packages:
+# algorithms
+*.alg
+*.loa
+
+# achemso
+acs-*.bib
+
+# glossaries
+*.acn
+*.acr
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.lzo
+*.lzs
+*.slg
+*.slo
+*.sls
+
+# uncomment this for glossaries-extra (will ignore makeindex's style files!)
+*.ist
+
+# hyperref
+*.brf
+
+# listings
+*.lol
+
+# minted
+_minted*
+*.pyg*
+
+# svg
+svg-inkscape/
+
+
+#RobotframeWork
+
+**/robot_framework/report/
+
+**/STM32Cube_FW_MP1_V1.6.0/
+**/.metadata
+**/.settings
+**/*.out
+**/*.json
+**/Debug/
+**/Release/
+
+
+# Doxygen
+**/html/
+**/latex/
+
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Doxygen
+**/html/
+**/latex/
+
+**/libraries/
+**/.idea/
+**/build/
+**/.gradle/
+**/local.properties
+

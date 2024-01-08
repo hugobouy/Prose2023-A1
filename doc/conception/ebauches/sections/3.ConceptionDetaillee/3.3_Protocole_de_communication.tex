@@ -1,0 +1,311 @@
+\subsection{Protocole de communication}
+
+Les communications entre AOP et SoftSonnette se font via socket TCP/IP et celles entre SoftSonnette et SoftPorte via VirtualUART. 
+
+\subsubsection{Protocole de communication entre \appliLin~et \appliA}%3.3.1
+
+    \paragraph{Formalisation du protocole}%3.3.1.1
+
+    Le protocole de communication entre SoftSonnette et AOP est défini comme une suite d'octets selon la forme suivante:
+
+    \begin{center}
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            TAILLE & CMD & NB\_ARGS & DONNEES \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+    Ce protocole est dit symétrique.
+    Cela signifie que l'encodage de la trame est là même d'un bout à l'autre de la communication.
+    Une trame se compose ainsi :
+    
+    \begin{itemize}
+        \item {TAILLE : Nombre entier codé sur deux octets donnant la taille totale de la trame en octet.
+        Cette taille comprend ces 2 octets de TAILLE.}
+        \item {CMD : Valeur pouvant aller de 0x00 à 0x0B et indiquant la commande que l'on veut exécuter.}
+        \item {NB\_ARGS : Indique le nombre d'arguments situés dans la partie données, codé sur un octet.}
+        \item {DONNEES : La partie données a une taille variable et est facultative, elle est construite de cette façon:}
+       
+    \end{itemize} 
+
+        \begin{center}
+
+            \begin{tabular}{|c|c|}
+                \hline
+                TAILLE\_ARG & ARG \\
+                \hline
+            \end{tabular}
+        \end{center}
+
+        Précisons que la taille variable de la partie "données" dépend du nombre d'arguments que l'on veut transmettre.
+        Voici la description de ses différentes parties:
+
+        \begin{itemize}
+            \item {TAILLE\_ARG : Entier codé sur deux octets donnant la taille totale de l'argument en octet.
+            Contrairement à TAILLE, TAILLE\_ARG ne compte pas sa propre taille.}
+            \item {ARG : Chaîne de caractères contenant l'argument.}
+        \end{itemize} 
+        
+        Cette dernière structure est donc à répéter selon la valeur de NB\_ARGS, et donc de CMD.
+        Par exemple, une trame ne contenant pas d'argument avec un CMD de 5 prend la forme suivante : 
+
+        \begin {table}[H]
+        \center
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{TAILLE} & \textbf{CMD} & \textbf{NB\_ARGS} \\
+            \hline
+            0x00 0x04 & 0x05 & 0x00 \\
+            \hline
+        \end{tabular}
+        \end{table}
+
+\newpage
+
+        Tableau récapitulatif des différentes commandes: 
+
+            \begin {table}[H]
+            \center
+            \begin{tabularx}{\textwidth}{|p{0.5cm}|X|X|}
+                \hline
+                \textbf{ID} & \textbf{CMD} & \textbf{Commentaire} \\
+                \hline
+                0 & ERR & Trame réservée à la mention d'une erreur de réception \\
+                \hline
+                1 & SUBSCRIBE\_VIDEO & GUI demande à recevoir la vidéo de SoftSonnette \\
+                \hline 
+                2 & ASK\_CHECK\_PASS & ConnectionManager demande à Guard si le mot de passe entré sur l'application est correct \\
+                \hline
+                3 & VALIDATE\_PASS & Réponse de Guard si le mot de passe est valide \\
+                \hline
+                4 & SET\_TIME & ConnectionManager modifie l'heure courante sur Clock \\
+                \hline
+                5 & ASK\_OPEN\_DOOR & Demande d'ouverture de la Porte depuis AOP vers DoorManager\\
+                \hline
+                6 & ASK\_DOOR\_STATE & Demande si la Porte est ouverte ou fermée \\
+                \hline
+                7 & UPDATE\_DOOR\_STATE & DoorManager met à jour l'état de la porte sur l'écran d'AOP \\
+                \hline
+                8 & ADD\_EMPLOYEE & AOP demande à ajouter un employé dans les données persistantes situées sur la carte \\
+                \hline
+                9 & DELETE\_EMPLOYEE & AOP demande à supprimer un employé des données persistantes situées sur la carte \\
+                \hline
+                10 & ASK\_EMPLOYEE\_LIST & AOP demande la liste des employés à SoftSonnette \\
+                \hline
+                11 & SET\_EMPLOYEE\_LIST & Réponse d'EmployeeManager sur la liste d'employés \\
+                \hline
+            \end{tabularx}
+            \end{table}
+
+            \begin {table}[H]
+            Les différents arguments selon la CMD sont les suivants : 
+            \center
+            \begin{tabularx}{\textwidth}{|X|p{1.9cm}|p{1.3cm}|p{1.3cm}|p{1.1cm}|p{1.1cm}|}
+                \hline
+                \textbf{CMD} & \textbf{ARG1} & \textbf{ARG2} & \textbf{ARG3} & \textbf{ARG4} & \textbf{ARG5}\\
+                \hline
+                ERR & X & X & X & X & X \\
+                \hline
+                SUBSCRIBE\_VIDEO & Bool & X & X & X & X \\
+                \hline 
+                ASK\_CHECK\_PASS & Password & X & X & X & X \\
+                \hline
+                VALIDATE\_PASS & Bool & X & X & X & X \\
+                \hline
+                SET\_TIME & Time & X & X & X & X \\
+                \hline
+                ASK\_OPEN\_DOOR & X & X & X & X & X \\
+                \hline
+                ASK\_DOOR\_STATE & X & X & X & X & X \\
+                \hline
+                UPDATE\_DOOR\_STATE & Bool & X & X & X & X \\
+                \hline
+                ADD\_EMPLOYEE & Name & Surname & Picture & Role & Hours \\
+                \hline
+                DELETE\_EMPLOYEE & ID & X & X & X & X \\
+                \hline
+                ASK\_EMPLOYEE\_LIST & X & X & X & X & X \\
+                \hline
+                SET\_EMPLOYEE\_LIST & EmployeeID & Name & Surname & Role & Hours \\
+                \hline
+            \end{tabularx}
+            \end{table}
+
+\newpage
+
+    Les tailles des différents types sont précisées ci-dessous : 
+
+    \begin{itemize}
+        \item {Bool : Booléen codé sur un octet, prend les valeurs 0x00 ou 0x01.}
+        \item {Password : Chaîne de caractères codé sur 4 octets pour les quatre chiffres qu'il contient.}
+        \item {Time : Chaîne de caractères codé sur 7 octets : deux pour l'année, puis un pour le mois, le jour, l'heure, la minute et la seconde.}
+        \item {EmployeeID : Entier codé sur 1 octet.}
+        \item {Name : Chaîne de caractères de taille variable, codé entre 1 et 12 octets selon TAILLE\_ARG.}
+        \item {Surname : Chaîne de caractères de taille variable, codé entre 2 et 12 octets selon TAILLE\_ARG.}
+        \item {Picture : Chaîne d'octets de taille variable selon TAILLE\_ARG.}
+        \item {Rôle : Entier codé sur 1 octet.}
+        \item {Hours : Chaîne de caractères, codé sur 14 octets soit 7x2 créneaux horaires.}
+       
+    \end{itemize} 
+
+    \paragraph{Exemples}%3.3.1.2
+
+        \subparagraph{Demande de connexion entre \appliA~et \appliLin}
+    
+        Le diagramme de séquence ci-dessous décrit le processus de connexion entre AOP et SoftSonnette.
+        A noter que la phase de synchronisation du temps qui survient après validatePass() n'est pas présentée par soucis de lisibilité.
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_séquence_détaillé_se_connecter_AOP}
+            \caption{Processus de connexion entre AOP et SoftSonnette du point de vue de AOP}
+            \label{Sequ-seConnecter-AOP}
+        \end{figure}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_séquence_détaillé_se_connecter_softSonnette}
+            \caption{Processus de connexion entre AOP et SoftSonnette du point de vue de SoftSonnette}
+            \label{Sequ-seConnecter-softSonnette}
+        \end{figure}
+
+        Dans ce processus de connexion, une requête ASK\_CHECK\_PASS correspondant à l'appel de la méthode askCheckPass() est envoyée.
+        La requête est encodée de cette manière : 
+
+        \begin {table}[H]
+        \center
+        \begin{tabularx}{\textwidth}{|p{2cm}|p{2cm}|p{3cm}|p{3cm}|X|}
+            \hline
+            \textbf{TAILLE} & \textbf{CMD} & \textbf{NB\_ARGS} & \textbf{TAILLE\_ARG} & \textbf{ARG} \\
+            \hline
+            0x00 0x0A & 0x02 & 0x01 & 0x00 0x04 & 0x31 0x32 0x33 0x34\\
+            \hline
+        \end{tabularx}
+        \end{table}
+
+        Dans cet exemple : 
+
+        \begin{itemize}
+            \item {TAILLE vaut 0x00 0x0A ce qui signifie que la trame a une longueur de 10 octets.}
+            \item {CMD vaut 0x02 ce qui équivaut à la requête ASK\_CHECK\_PASS.}
+            \item {NB\_ARGS vaut 0x01 car il n'y a qu'un seul argument à suivre.}
+            \item {TAILLE\_ARG vaut 0x00 0x04 indiquant que ARG a une taille de 4 octets.}
+            \item {ARG vaut 0x31 0x32 0x33 0x34 correspondant au code en ASCII de la chaîne "1234".}
+        \end{itemize} 
+
+\newpage
+
+\subsubsection{Protocole de communication entre \appliLin~et \appliPo}%3.3.2
+
+    \paragraph{Formalisation du protocole}%3.3.2.1
+
+    Le protocole de communication entre SoftSonnette et SoftPorte est défini comme une suite d'octets selon la forme suivante:
+
+    \begin{center}
+        \begin{tabular}{|c|c|}
+            \hline
+            CMD & TARGET \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+    \begin{itemize}
+        \item {CMD : Valeur pouvant aller de 0x00 à 0x09 et indiquant la commande que l'on veut exécuter.}
+        \item {TARGET : Indique la cible du message entre AOP et SoftSonnette, codé sur un octet. 
+        Elle peut prendre les valeurs SOFTS\_ID = 0x00, AOP\_ID = 0x01 et SOFTP\_ID = 0x02.}
+       
+    \end{itemize} 
+
+    Tableau récapitulatif des différentes commandes: 
+
+    \begin {table}[H]
+    \center
+    \begin{tabularx}{\textwidth}{|p{0.5cm}|X|X|}
+        \hline
+        \textbf{ID} & \textbf{CMD} & \textbf{Commentaire} \\
+        \hline
+        0 & ERR & Trame réservée à la mention d'une erreur de réception \\
+        \hline
+        1 & ASK\_OPEN\_DOOR & Demande d'ouverture de la Porte depuis SoftSonnette ou AOP vers DoorManager\\
+        \hline
+        2 & UPDATE\_DOOR\_STATE\_TRUE & DoorManager met à jour l'état de la Porte (ouverte) sur l'écran d'AOP ou sur l'écran d'UISS\\
+        \hline
+        3 & UPDATE\_DOOR\_STATE\_FALSE & DoorManager met à jour l'état de la Porte (fermée) sur l'écran d'AOP ou sur l'écran d'UISS\\
+        \hline
+        4 & ASK\_DOOR\_STATE & Demande si la Porte est ouverte ou fermée \\
+        \hline
+        5 & SIGNAL\_NOT\_ALLOWED & Bouncer signale à UISP l'interdiction d'ouvrir la Porte \\
+        \hline
+        6 & LAUNCH\_SP & Lance l'application SoftPorte \\
+        \hline
+        7 & QUIT\_SP & Quitte l'application SoftPorte \\
+        \hline
+        8 & ASK\_START\_COM & Envoie un signal à UISS \\
+        \hline
+        9 & ACK\_START\_COM & Réponse de UISS à UISP \\
+        \hline
+    \end{tabularx}
+    \end{table}
+
+    \begin {table}[H]
+    Les différents arguments selon la CMD sont les suivants : 
+    \center
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \textbf{CMD} & \textbf{TARGET} \\
+        \hline
+        ERR & SOFTS\_ID / AOP\_ID / SOFTP\_ID \\
+        \hline
+        ASK\_OPEN\_DOOR & SOFTP\_ID \\
+        \hline 
+        UPDATE\_DOOR\_STATE\_TRUE & SOFTS\_ID / AOP\_ID \\
+        \hline
+        UPDATE\_DOOR\_STATE\_FALSE & SOFTS\_ID / AOP\_ID \\
+        \hline
+        ASK\_DOOR\_STATE & SOFTP\_ID \\
+        \hline
+        SIGNAL\_NOT\_ALLOWED & SOFTP\_ID \\
+        \hline
+        LAUNCH\_SP & SOFTP\_ID \\
+        \hline
+        QUIT\_SP & SOFTP\_ID \\
+        \hline
+        ASK\_START\_COM & SOFTS\_ID \\
+        \hline
+        ACK\_START\_COM & SOFTP\_ID \\
+        \hline
+    \end{tabularx}
+    \end{table}
+
+    \paragraph{Exemples}%3.3.2.2
+
+        Le diagramme de séquence ci-dessous décrit le processus d'ouverture de la Porte.
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_séquence_détaillé_ouvrir_porte}
+            \caption{Processus d'ouverture de la Porte}
+            \label{Sequ-ouvrirPorte}
+        \end{figure}
+
+        Dans cet exemple, une requête UPDATE\_DOOR\_STATE\_TRUE correspondant à l'appel de la méthode updateDoorState(true) sur l'objet GUI est envoyée.
+        Cette requête est encodée de telle manière : 
+
+        \begin {table}[H]
+        \center
+        \begin{tabular}{|c|c|}
+            \hline
+            \textbf{CMD} & \textbf{TARGET} \\
+            \hline
+            0x02 & 0x01 \\
+            \hline
+        \end{tabular}
+        \end{table}
+
+        Dans cet exemple : 
+
+        \begin{itemize}
+            \item {CMD vaut 0x02 ce qui équivaut à la requête UPDATE\_DOOR\_STATE\_TRUE.}
+            \item {TARGET vaut 0x01 ce qui indique que la cible est un objet d'AOP, ici GUI.}
+        \end{itemize} 

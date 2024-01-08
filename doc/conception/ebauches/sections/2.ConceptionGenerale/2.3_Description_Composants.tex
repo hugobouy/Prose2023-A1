@@ -1,0 +1,439 @@
+\newpage
+
+\subsection{Description des composants}
+
+\subsubsection{Description des types manipulés entre composants}%2.3.1
+
+\begin{itemize}
+    \item ConnectionStatus : Énumération représentant l'état de la connexion entre \appliA~et \appliLin.
+    ConnectionStatus peut prendre pour valeur : PASS\_KO, CONNECT\_KO et ALL\_OK.
+    \item Day : Énumération représentant un jour de la semaine.
+    Day peut prendre pour valeur : MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY et SUNDAY.
+    \item \hyperlink{emp}{\textit{Employee}} : Structure contenant les informations de l'employé.
+    Employee contient : firstName , name, role (Role), id (EmployeeID), workingHours~[~]~[~] et picture (chemin local vers l'image).
+    \begin{itemize}
+        \item \hyperlink{prenom}{\textit{firstName}} est une chaîne de caractère comprenant entre 2 et 12 caractères alphanumériques encodés en UTF-8.
+        \item \hyperlink{nom}{\textit{name}} suit les mêmes règles que firstName à la différence qu'il peut être comprit entre 1 et 12 caractères alphanumériques.
+        \item workingHours~[~]~[~] est une matrice de 7 lignes (jours de la semaine) et 2 colonnes (horaires début et fin de journée).
+    \end{itemize}    
+    \item \hyperlink{idEmp}{\textit{EmployeeID}} : Un entier qui représente le numéro d'un employé allant jusqu'à MAX\_EMPLOYE qui vaut 10. La constante "UNKNOWN" vaut -1, et signifie que l'employé n'est pas reconnu.
+    \item \hyperlink{hor}{\textit{Hour}} : Structure contenant un horaire de début ou de fin de journée, enregistrée au format 24 h avec une précision de 30 minutes.
+    Hour contient l'heure et la minute de l'horaire.
+    \item \hyperlink{IP}{\textit{Ip}} : Chaîne de caractères de type IPV4 au format X.X.X.X où X est un entier compris entre 0 et 255. 
+    Correspond à l'adresse de la Board.
+    \item \hyperlink{mdp}{\textit{Password}} : Chaîne de caractères. Les caractéristiques sont définies dans le dictionnaire des domaines.
+    \item \hyperlink{photo}{\textit{Picture}} : Image du visage d'un employé qui sera utilisée pour la reconnaissance faciale.
+    \item PopUpID : Énumération représentant les différentes pop-up affichables sur \appliA.
+    PopUpID peut prendre pour valeur : WAITING\_ID, ERROR\_PASS\_ID, ERROR\_CONNECT\_ID, DELETE\_ID et VIDEO\_NOT\_AVAILABLE.  
+    \item \hyperlink{rol}{\textit{Role}} : Énumération représentant les différents types d'employés pour délimiter leurs horaires.
+    Role peut prendre pour valeur : E\_MORNING, E\_DAY, E\_EVENING, E\_SECURITY et E\_SPECIAL.
+    \item ScreenID : Énumération représentant les différents écrans affichables sur \appliA.
+    ScreenID peut prendre pour valeur : STARTER\_ID, HOME\_ID, ADD\_EMPLOYEE\_ID, ADD\_SPECIAL\_EMPLOYEE\_ID, EMPLOYEE\_LIST\_ID, DOOR\_CONTROL\_ID, CALENDAR\_ID et VIDEO\_ID.
+    \item Time : respecte la norme ISO 8601 : YYYY-MM-DD-HH: MM: SS.
+    Time se met à jour lors de la connexion entre \appliA~et \appliLin.
+    \item SSState : Énumération des affichages de \appliLin.
+    SSState peut prendre pour valeur: STATE\_IDLE, STATE\_WEBCAM\_CONNECTED, STATE\_WEBCAM\_NOT\_CONNECTED, STATE\_ERROR\_COM.
+    À noter que STATE\_IDLE correspond à l'affichage vide de l'écran de SoftSonnette (sans affichage vidéo et sans label d'erreur).
+\end{itemize}
+
+\newpage
+
+\subsubsection{Diagramme de classe}%2.3.2
+Est représenté ci-dessous le diagramme de classe de PSC, composé de 11 classes avec pour chacune leurs attributs et leurs méthodes décrites dans la suite du document.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_de_classe}
+    \caption{Diagramme de classes du SàE}
+    \label{Diagramme_de_classes}
+\end{figure}
+
+\newpage
+
+\subsubsection{Description des classes}%2.3.3
+    \paragraph{[Object] ConnectionManager}%2.3.3.1
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-ConnectionManager.eps}
+        \caption{Diagramme de classe représentant ConnectionManager}
+        \label{Classe_ConnectionManager}
+    \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.1.1
+        La classe ConnectionManager permet de transiter les informations de connexion.
+        Elle permet aussi d'assurer que les applications sont connectées et d'agir en conséquence.
+        Cette classe interagit avec Guard, Clock, et GUI.
+        \subparagraph{Description structurelle}%2.3.3.1.2
+            \subsubparagraph{Attributs}%2.3.3.1.2.1
+            \begin{itemize}
+                \item connectionState : bool : Exprime l'état de la connexion actuelle.
+            \end{itemize}
+            \subsubparagraph{Services offerts}%2.3.3.1.2.2
+            \begin{itemize}
+                \item {checkConnection() : void : Tâche de fond qui vérifie si la connexion est toujours opérationnelle.
+                Dans le cas d'une perte de connexion cette fonction informe les objets intéressés.}
+                \item {getLocalTime() : Time : Récupère l'heure et la date du téléphone}
+                \item {askConnection(ip : IP, pass : Password) : void : Envoie les informations de connexion vers Guard.}
+                \item {validatePass(passValidated : bool) : void : Reçoit l'information de connexion qui valide ou non la connexion.}
+            \end{itemize}
+\newpage
+        \subparagraph{Description comportementale}%2.3.3.1.3
+        La MAE suivante permet d'expliquer le fonctionnement de l'objet actif ConnectionManager :
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-connectionManager-SM.eps}
+            \caption{Machine à état représentant ConnectionManager}
+            \label{MaE_ConnectionManager}     
+        \end{figure}
+
+\newpage
+
+    \paragraph{[IHM] GUI}%2.3.3.2
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-GUI.eps}
+        \caption{Diagramme de classe représentant GUI}
+        \label{Classe_GUI}
+    \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.2.1
+        La classe GUI permet de gérer les interfaces utilisateurs entre le Démonstrateur et AOP en affichant les différentes vues de AOP.
+        Cette classe interagit avec ConnectionManager, DoorManager, EmployeeManager et Cameraman.
+        \subparagraph{Description structurelle}%2.3.3.2.2
+            \subsubparagraph{Attributs}%2.3.3.2.2.1
+            \begin{itemize}
+                \item myPass : Password : Contient le mot de passe entré lors de la connexion.
+                \item myIP : IP : Contient l'adresse IP entrée lors de la connexion.
+                \item myName : String : Contient le nom entré lors de l'ajout d'un employé.
+                \item myFirstName : String : Contient le prénom entré lors de l'ajout d'un employé.
+                \item myPicture : Picture : Contient la photo d'un employé à ajouter.
+                \item myRole : Role : Contient le rôle d'un employé lors de son ajout.
+                \item myWorkingHours : Hour[] : Contient les horaires de l'employé pour les 7 jours de la semaine.
+                \item employeeList : Employee[] : Contient la liste des employés envoyés depuis la Board.
+            \end{itemize}
+
+            \subsubparagraph{Services offerts}%2.3.3.2.2.2
+            \begin{itemize}
+                \item displayScreen(screenID : ScreenID) : void : Affiche l'écran entré en paramètre de la fonction.
+                \item displayPopUp(popUpID : PopUpID) : void : Affiche la PopUp entrée en paramètre de la fonction.
+                \item displaySpecialEmployeeField(displaySpecial : bool) : void : Affiche les options afin d'ajouter les horaires d'un employé spécial.
+                \item refreshVideoScreen() : Tâche de fond en charge de lire le flux vidéo entrant et de l'afficher sur l'écran permettant de regarder la vidéo.
+                \item refreshCalendar(employeeID : EmployeeID) : void : Met à jour l'affichage du calendrier en fonction de l'ID de l'employé à afficher.
+                \item refreshDoorState(doorState : bool) : Met à jour l'affichage de l'état de la Porte sur l'écran de contrôle à distance de la Porte en fonction du paramètre de type booléen.
+                \item launchAOP() : void : Lance AOP.
+                \item updateDoorState(doorState : bool) : void : Évènement pour demander à AOP de mettre à jour l'état de la Porte sur l'écran de contrôle à distance de la Porte.
+                \item askScreen(screenID : ScreenID) : void : Démonstrateur demande à afficher l'écran entré en paramètre de la fonction.
+                \item setIP(ip : IP) : void : Modifie l’attribut myIP avec le paramètre de la fonction.
+                \item setPass(pass : Password) : void : Modifie l’attribut myPass avec le paramètre de la fonction.
+                \item connect() : void : Demande la connexion.
+                \item setConnectionStatus(status : ConnectionStatus) : void : Vérifie si la connexion est établie via le paramètre de la fonction status de type ConnectionStatus.
+                \item askCalendar(employeeID : EmployeeID) : void : Demande d'afficher le calendrier correspondant au paramètre de la fonction de type EmployeeID.
+                \item setEmployeeList(employeeListRemote : Employee[]) : void : Retour asynchrone permettant de mettre à jour la copie de la liste des employés de AOP.
+                \item askOpenDoor() : void : Demande l'ouverture de la Porte.
+                \item askAddEmployee() : void: Demande à ajouter un employé.
+                \item setEmployeeName(name : String) : void : Modifie l’attribut myName avec le paramètre de la fonction.
+                \item setEmployeeFirstName(firstName : String) : void :  Modifie l’attribut myFirstName avec le paramètre de la fonction.
+                \item setEmployeePicture(picture : Picture) : void : Modifie l’attribut myPicture avec le paramètre de la fonction.
+                \item setEmployeeRole(role : Role) : void : Modifie l’attribut myRole avec le paramètre de la fonction.
+                \item setSpecialEmployeeAccess(day : Day, startHour : Hour, stopHour : Hour) : void : Entre les horaires de l'employé spécial.
+                Avec comme paramètres day, startHour et stopHour qui prend en compte le jour, le début et de la fin de la journée de l'employé.
+                Ces paramètres permettent la mise à jour de myWorkingHours.
+                \item askDeleteEmployee(employeeID : EmployeeID) : void : Demande la suppression d'un employé. L'employé est déterminé par le paramètre de la fonction.
+                \item confirm() : void : Confirme les modifications faites.
+                \item cancel() : void : Annule les modifications effectuées.
+                \item return() : void : Retourne à l'écran précédent.
+                \item quitAOP() : void : Quitte AOP.
+            \end{itemize}    
+            
+        \subparagraph{Description comportementale}%2.3.3.2.3
+        Les MAE suivantes permettent d'expliquer le fonctionnement de l'objet actif GUI :
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-gui-SM.eps}
+            \caption{Machine à état représentant GUI}
+            \label{MaE_connexion_GUI}
+        \end{figure}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-gui-gui.Active.S_CONNECTED-SM.eps}
+            \caption{Machine à état représentant GUI}
+            \label{MaE_home_GUI}
+        \end{figure}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-gui-gui.Active.S_CONNECTED.S_EMPLOYEE_LIST-SM.eps}
+            \caption{Machine à état représentant employé liste}
+            \label{MaE_home_GUI_employee_list}
+        \end{figure}
+
+\newpage
+
+    \paragraph{[Object] EmployeeManager}%2.3.3.3
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-EmployeeManager.eps}
+        \caption{Diagramme de classe représentant EmployeeManager}
+        \label{Classe_EmployeeManager}
+    \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.3.1
+        La classe EmployeeManager répertorie la liste des employés enregistrés dans l'application.
+        Cet objet gère l'ajout et la suppression d'employés et interagit avec GUI, Bouncer. 
+        \subparagraph{Description structurelle}%2.3.3.3.2
+            \subsubparagraph{Attributs}%2.3.3.3.2.1
+            \begin{itemize}
+                \item {employeeList : Employee[] : Contient la liste des employés. 
+                Il s'agit d'une copie des données persistantes chargée en mémoire.}
+            \end{itemize}
+            \subsubparagraph{Services offerts}%2.3.3.3.2.2
+            \begin{itemize}
+                \item {addEmployee(name : String, firstName : String, picture : Picture, role : String, workingHours : Hour[]) : void : Ajoute un employé à la liste à partir de son nom, prénom, sa photo, son rôle et les horaires de travail qui lui sont liés.}
+                \item {deleteEmployee(employeeID : EmployeeID) : void : Supprime l'employé lié à l'identifiant employeeID passé en paramètre.}
+                \item {getEmployeeList() : Employee[] : Renvoie la liste des employés à SoftSonnette.}
+                \item {getEmployee(employeeID : EmployeeID) : Employee : Retourne l'objet employé lié à l'identifiant employeeID passé en paramètre.}
+                \item {askEmployeeList() : Employee[] : Renvoie la liste des employés à AOP.}
+                \item {load() : void : Charge les données persistantes des informations employés en mémoire vive.}
+                \item {save() : void : Sauvegarde les données persistantes en mémoire non volatile.}
+            \end{itemize}
+
+\newpage
+
+    \paragraph{[Object] Clock}%2.3.3.4
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-Clock.eps}
+        \caption{Diagramme de classe représentant Clock}
+        \label{Classe_Clock}
+    \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.4.1
+        La classe Clock est en charge du temps.
+        Elle synchronise les heures entre AOP et SoftSonnette.
+        Elle est aussi utilisée pour savoir si un employé peut entrer en fonction de ses horaires attribués. 
+        \subparagraph{Description structurelle}%2.3.3.4.2
+            \subsubparagraph{Attributs}%2.3.3.4.2.1
+            \begin{itemize}
+                \item {currentTime : Time : Contient le temps courant.}
+            \end{itemize}
+            \subsubparagraph{Services offerts}%2.3.3.4.2.2
+            \begin{itemize}
+                \item {getCurrentTime(): Time : Permet de donner l'heure courante pour la comparaison des heures dans Bouncer.}
+                \item {setCurrentTime(time : Time): void : Permet de modifier l'heure courante de la Board.}
+            \end{itemize}
+\newpage
+
+    \paragraph{[Object] Cameraman}%2.3.3.5
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-Cameraman.eps}
+        \caption{Diagramme de classe de Cameraman}
+        \label{Classe-Cameraman}
+    \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.5.1
+        La classe Cameraman interface E\_Caméra.
+        Il permet de prendre une image du Testeur (pour qu’il se fasse reconnaître) et de capturer le flux vidéo retransmis sur l’écran de SoftSonnette et sur l’AOP.
+        \subparagraph{Description structurelle}%2.3.3.5.2
+            \subsubparagraph{Attributs}%2.3.3.5.2.1
+            \begin{itemize}
+                \item {cameraAlive : bool : Indique si la caméra est connectée ou non.}
+                \item {alreadyAlive : bool : Indique si un flux vidéo est déja en cours d'utilisation}
+            \end{itemize}
+            \subsubparagraph{Services offerts}%2.3.3.5.2.2
+            \begin{itemize}
+                \item {streamToAOPandScreen() : void : Tâche de fond permettant de streamer la vidéo sur AOP et sur l'écran de SoftSonnette.}
+                \item {streamToScreenOnly() : void : Tâche de fond permettant de streamer la vidéo sur l'écran de SoftSonnette.}
+                \item {checkCameraConnected() : void : Vérifie la présence de la caméra.}
+                \item {takePicture() : Picture : Fonction passive qui prend une photo de ce que voit Cameraman. 
+                Cette photo est utilisée pour reconnaître le visage d’un Testeur.}
+                \item {subscribeToVideoStream(enable : bool) : void : Fonction appelée par AOP pour demander à Cameraman de lui Streamer la vidéo.}
+                \item {startStreaming() : void : Permet de démarrer le streaming.}
+                \item {stopStreaming() : void : Stop définitivement le streaming - Sortie de la MàE.}
+                \item {suspendStreaming() : void : Permet de mettre en pause le streaming.}
+                \item {resumeStreaming() : void : Permet reprendre le streaming.}
+            \end{itemize}
+\newpage
+        \subparagraph{Description comportementale}%2.3.3.3.3
+            La MAE suivante permet d'expliquer le fonctionnement de l'objet actif Cameraman:
+            \begin{figure} [H]
+                \centering
+                \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-cameraman-SM.eps}
+                \caption{Machine à États de Cameraman}
+                \label{MAE-Cameraman}
+            \end{figure}
+
+\newpage
+
+    \paragraph{[Object] Guard}%2.3.3.6
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-Guard.eps}
+            \caption{Diagramme de classe de Guard}
+            \label{Classe-Guard}
+        \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.6.1
+        La classe Guard est le gardien du mot de passe permettant à \appliA~d'interagir avec \appliLin.
+        Il vérifie que le mot de passe reçu est celui codé en dur dans l'application puis autorise la connexion si ce dernier est correct.
+        \subparagraph{Description structurelle}%2.3.3.6.2
+            \subsubparagraph{Attributs}%2.3.3.6.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%2.3.3.6.2.2
+            \begin{itemize}
+                \item{askCheckPass(pass : Password) : void : Permet de demander à Guard de vérifier le mot de passe passé en paramètre.}
+            \end{itemize}
+
+\newpage
+
+    \paragraph{[Object] Bouncer}%2.3.3.7
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-Bouncer.eps}
+        \caption{Diagramme de classe représentant Bouncer}
+        \label{Classe_Bouncer}
+    \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.7.1
+        La classe Bouncer permet au SàE d'autoriser ou non un Testeur à entrer.
+        En interaction avec Cameraman elle déclenche la prise d'une photo du Testeur se présentant à la sonnette.
+        Elle interagit également avec EmployeeManager pour récupérer la liste des employés.
+        Elle déclenche la reconnaissance faciale avec la classe RecognitionAI à qui elle envoie toutes les données nécessaires.
+        Elle vérifie qu'un employé reconnu ait l'autorisation d'entrer sur l'horaire courant qu'elle récupère auprès de la classe Clock.
+        Elle demande enfin l'ouverture de la Porte à DoorManager ou signale à UISP que le Testeur n'est pas reconnu ou non autorisé.
+        \subparagraph{Description structurelle}%2.3.3.7.2
+            \subsubparagraph{Attributs}%2.3.3.7.2.1
+            \begin{itemize}
+                \item{picture : Picture : Photo du Testeur à reconnaître.}
+                \item{employeeList : Employee[] : Liste courante des employés.}
+                \item{recognizedEmployee : EmployeeID : ID de l'employé reconnu par RecognitionAI.}
+                \item{currentTime : Time : Temps utilisé pour vérifier que l'employé est autorisé à entrer.}
+            \end{itemize}
+            \subsubparagraph{Services offerts}%2.3.3.7.2.2
+            \begin{itemize}
+                \item {checkEmployeeAllow(time : Time, employeeID : EmployeeID) : bool : À partir du temps courant et de l'ID de l'employé, elle vérifie si l'employé est autorisé à entrer à l'horaire courant.}
+                \item {setRecognizeFace(employeeID : EmployeeID) : void : Appelée par RecognitionAI pour retourne l'employé reconnu par l'IA, ou UNKNOWN s'il n'y a pas de correspondance.}
+                \item {askFaceRecognition() : void : Trigger permettant de déclencher le processus reconnaissance facial et d'autorisation d'entrée.}
+            \end{itemize}
+\newpage
+        \subparagraph{Description comportementale}%2.3.3.7.3
+        La MAE suivante permet d'expliquer le fonctionnement de l'objet actif Bouncer:
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-bouncer-SM.eps}
+            \caption{Machine à États de Bouncer}
+            \label{MAE-Bouncer}
+        \end{figure}
+    
+\newpage
+
+    \paragraph{[IHM] UISS}%2.3.3.8
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-UISS.eps}
+        \caption{Diagramme de classe d'UISS}
+        \label{Classe-UISS}
+    \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.8.1
+        La classe UISS s'occupe de la gestion de l'interface utilisateur entre le \actT~, le \actD~et \appliLin.
+        Elle permet l'affichage de la vidéo, l'état de la Porte mais aussi au \actT~de sonner et au \actD~de quitter l'application.
+        \subparagraph{Description structurelle}%2.3.3.8.2
+            \subsubparagraph{Attributs}%2.3.3.8.2.1
+            \begin{itemize}
+                 \item {appState : SSState : Variable de mise a jour de l'écran qui prend trois valeurs possibles.}
+            \end{itemize}
+            \subsubparagraph{Services offerts}%2.3.3.8.2.2
+            \begin{itemize}
+                \item {display(state : SSState) : void : Affiche l'écran de \appliLin~ avec la variante transmise par le paramètre state.}
+                \item {refreshDoorState(doorState : bool) : Met à jour l'affichage de l'état de la Porte sur l'écran de SoftSonnette en fonction du paramètre de type booléen passé.}
+                \item {launchSS() : void : Démarre l'application \appliLin.}
+                \item {quitSS() : void : Ferme l'application \appliLin.}
+                \item {askStartCom() : void : Évènement reçu de la part de SoftPorte qui demande l'établissement de la communication.}
+                \item {ring() : void : \actT~sonne.}
+                \item {updateCamState(bool) : void : Évènement en provenance de Cameraman indiquant à UISS l'état de la caméra en fonction du paramètre de type booléen passé.
+                UISS met ensuite à jour l'écran avec un appel à la fonction display().}
+                \item {updateDoorState(doorState : bool) : void : Évènement en provenance de DoorManager indiquant à UISS l'état de la Porte en fonction du paramètre de type booléen passé.
+                UISS met ensuite à jour le label indiquant l'état de la Porte sur l'écran avec un appel à la fonction refreshDoorState().}
+            \end{itemize}
+\newpage
+        \subparagraph{Description comportementale}%2.3.3.8.3
+        La MAE suivante permet d'expliquer le fonctionnement de l'objet actif UISS.
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-uiss-SM.eps}
+            \caption{Machine à États d'UISS}
+            \label{MAE-UISS}
+        \end{figure}
+
+\newpage
+
+    \paragraph{[Object] DoorManager}%2.3.3.9
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-DoorManager.eps}
+        \caption{Diagramme de classe représentant DoorManager}
+        \label{DoorManager}
+    \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.9.1
+        La classe DoorManager est en charge du contrôle de la Porte simulée.
+        Elle permet de commander son déverrouillage, et de fournir l'état de cette dernière.
+    
+        \subparagraph{Description structurelle}%2.3.3.9.2
+            \subsubparagraph{Attributs}%2.3.3.9.2.1
+            \begin{itemize}
+                \item {doorState : bool : Indique l'état de la Porte (ouvert/fermé).}
+            \end{itemize}
+            \subsubparagraph{Services offerts}%2.3.3.9.2.2
+            \begin{itemize}
+                \item {unlockDoor() : void : Déverrouille la Porte pendant \hyperlink{top}{\textit{TOP}}.}
+                \item {askOpenDoor() : void : Envoie la demande d'ouverture de la Porte vers UISP.}
+                \item {askDoorState() : void : Demande l'état de la porte à UISP (retour asynchrone).}
+            \end{itemize}
+        \subparagraph{Description comportementale}%2.3.3.9.3
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-doorManager-SM.eps}
+            \caption{Machine à état représentant DoorManager}
+            \label{MaE_DoorManager}
+        \end{figure}
+
+\newpage
+
+    \paragraph{[IHM] UISP}%2.3.3.10
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-UISP.eps}
+        \caption{Diagramme de classe d'UISP}
+        \label{UISP}
+    \end{figure}
+        \subparagraph{Philosophie de conception}%2.3.3.10.1
+        La classe UISP permet de mettre à jour les différents éléments physiques de la Board.
+        Elle met en place la communication entre SoftPorte et SoftSonnette, signale son bon démarrage en agissant sur la LED LD5 verte et signale lorsqu'un Testeur n'est pas autorisé à entrer avec la LED LD6 rouge.
+        \subparagraph{Description structurelle}%2.3.3.10.2
+            \subsubparagraph{Attributs}%2.3.3.10.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%2.3.3.10.2.2
+            \begin{itemize}
+                \item {signalAppState() : void : Signale le lancement de l'application en allumant la LED verte.}
+                \item {launchSP() : void : Lance SoftPorte.}
+                \item {quitSP() : void : Quitte SoftPorte.}
+                \item {signalNotAllowed(): void : Signale l'interdiction d'entrer en allumant la LED rouge.}
+                \item {ackStartCom() : void : Confirme l'initialisation de la communication entre SoftPorte et SoftSonnette. 
+                Cette fonction appel ensuite signalAppState() si la communication est établie avec succès.}
+            \end{itemize}
+
+\newpage
+
+    \paragraph{[Object] RecognitionAI}%2.3.3.11
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-class-RecognitionAI.eps}
+            \caption{Diagramme de classe de RecognitionAI}
+            \label{Classe-RecognitionAI}
+        \end{figure}
+            \subparagraph{Philosophie de conception}%2.3.3.11.1
+            La classe RecognitionAI interface la librairie client de reconnaissance faciale.
+            En lui fournissant la photo d’un Testeur, celle-ci détermine si le Testeur en question est autorisé à entrer.
+            Cet objet est appelé par Bouncer lorsqu’une demande d’ouverture est faite.
+            Une fois la reconnaissance faciale terminée, RecognitionAI envoie à Bouncer le résultat.
+            \subparagraph{Description structurelle}%2.3.3.11.2
+                \subsubparagraph{Attributs}%2.3.3.11.2.1
+                N.A.
+                \subsubparagraph{Services offerts}%2.3.3.11.2.2
+                \begin{itemize}
+                    \item{launch(picture : Picture, employeeList : Employee[]) : void : Lance le processus de reconnaissance faciale.}
+                \end{itemize}

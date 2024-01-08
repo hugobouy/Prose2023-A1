@@ -1,0 +1,131 @@
+@startuml 
+
+box "SoftPorte" #dcdcdc
+participant DoorManager
+participant Proxy_UISS
+participant Proxy_GUI_SP as "Proxy_GUI"
+participant Dispatcher_SS
+participant Postman_SS
+end box
+box "SoftSonnette" #ffffff
+participant Postman_SP
+participant Dispatcher_SP
+participant Protocol_SP
+participant Proxy_Door_Manager
+participant Bouncer
+participant UISS
+participant Proxy_GUI_SS as "Proxy_GUI"
+participant Protocol_SS
+participant Postman_AOP 
+end box
+box "AOP" #a8f8ff
+participant Communication
+participant Postman_SoftSonnette
+participant Protocol 
+participant Dispatcher_SS_AOP as "Dispatcher_SS"
+participant GUI 
+end box
+
+activate DoorManager
+activate Postman_SS
+activate Postman_SP
+activate Dispatcher_SP
+activate UISS
+activate Bouncer
+activate Postman_AOP
+activate Communication
+activate Postman_SoftSonnette
+activate GUI
+
+/'partie SoftSonnette'/
+Bouncer -> Proxy_Door_Manager : askOpenDoor()
+activate Proxy_Door_Manager
+Proxy_Door_Manager -> Protocol_SP : encodeMessage(ASK_OPEN_DOOR, SOFTP_ID)
+Protocol_SP --> Proxy_Door_Manager : encodedMsg
+Proxy_Door_Manager-> Postman_SP: askSendMessage(encodedMsg)
+deactivate Proxy_Door_Manager
+
+... Message en transit ...
+
+/'partie SoftPorte'/
+Postman_SS -> Dispatcher_SS : dispatch(encodedMsg)
+activate Dispatcher_SS
+Dispatcher_SS -> DoorManager : askOpenDoor()
+deactivate Dispatcher_SS
+
+/'envoi de la notif UISS'/
+DoorManager -> Proxy_UISS : updateDoorState(doorState)
+activate Proxy_UISS
+Proxy_UISS -> Postman_SS : send(encodedMsg)
+deactivate Proxy_UISS
+
+... Message en transit ...
+
+/'partie SoftSonnette'/
+/'réception de la notif SS'/
+/'décodage'/
+Dispatcher_SP -> Postman_SP : readMessage(MESSAGE_SIZE)
+Postman_SP --> Dispatcher_SP : encodedMessage
+Dispatcher_SP -> Dispatcher_SP : dispatch(encodedMessage)
+Dispatcher_SP -> Protocol_SP : decode(encodedMessage)
+activate Protocol_SP
+Protocol_SP --> Dispatcher_SP : decodedMessage
+deactivate Protocol_SP
+/'Fin décodage'/
+
+Dispatcher_SP -> UISS : updateDoorState(doorState)
+UISS -> UISS : refreshDoorState(doorState)
+
+/'partie SoftPorte'/
+/'création et envoi de la notif AOP vers SoftSonnette'/
+DoorManager -> Proxy_GUI_SP : updateDoorState(doorState)
+activate Proxy_GUI_SP
+Proxy_GUI_SP -> Postman_SS : send(encodedMsg)
+deactivate Proxy_GUI_SP
+
+... Message en transit ...
+
+/'partie Softonnette'/
+/'réception et envoi de la notif AOP vers AOP'/
+/'décodage'/
+Dispatcher_SP -> Postman_SP : readMessage(MESSAGE_SIZE)
+Postman_SP --> Dispatcher_SP : encodedMessage
+Dispatcher_SP -> Dispatcher_SP : dispatch(encodedMessage)
+Dispatcher_SP -> Protocol_SP : decode(encodedMessage)
+activate Protocol_SP
+Protocol_SP --> Dispatcher_SP : decodedMessage
+deactivate Protocol_SP
+/'Fin décodage'/
+Dispatcher_SP -> Proxy_GUI_SS : updateDoorState(doorState)
+deactivate Dispatcher_SP
+Proxy_GUI_SS -> Protocol_SS : encode(UPDATE_DOOR_STATE,1, True)
+activate Protocol_SS
+Protocol_SS --> Proxy_GUI_SS : encodedMessage
+deactivate Protocol_SS
+Proxy_GUI_SS-> Postman_AOP: askSendMessage(encodedMessage)
+
+... Message en transit ...
+
+/'partie AOP'/
+/'réception et décodage'/
+Communication -> Postman_SoftSonnette : readMsg(MESSAGE_SIZE)
+/'début décodage'/
+Postman_SoftSonnette --> Communication : encodedMessage
+activate Protocol
+Communication -> Protocol : decodeMessage(MESSAGE_SIZE, msg)
+Protocol --> Communication : decodedMsg
+deactivate Protocol
+/'Fin du décodage'/
+Communication -> Dispatcher_SS_AOP : dispatch(decodedMsg)
+activate Dispatcher_SS_AOP
+/'Fin du décodage'/
+Dispatcher_SS_AOP -> GUI : updateDoorState(doorState)
+deactivate Dispatcher_SS_AOP
+GUI -> GUI : refreshDoorState(doorState)
+
+/'ouverture de la porte'/
+DoorManager -> DoorManager : unlockDoor()
+DoorManager -> DoorManager : doorState = true
+
+
+@enduml

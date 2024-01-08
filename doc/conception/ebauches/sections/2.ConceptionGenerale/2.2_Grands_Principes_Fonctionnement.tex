@@ -1,0 +1,127 @@
+\newpage
+
+\subsection{Grands principes de fonctionnement}
+
+Cette partie représente le fonctionnement général de SoftSonnette, SoftPorte, AOP et leurs interactions respectives.
+Les diagrammes de séquences présentés sont : 
+\begin {itemize}
+    \item Présenter les capacités de la STM32MP15 au travers d'une application de Sonnette Connectée
+    \item Initialiser Board
+    \item Se connecter
+    \item Demander à entrer
+    \item Regarder vidéo
+    \item Consulter calendrier
+    \item Contrôler Porte à distance
+    \item Consulter liste des employés
+    \item Quitter SàE
+\end {itemize}
+
+Les diagrammes de séquence présentent l'histoire nominal des Cas d'Utilisation du dossier de spécification \refSpec. 
+Ils ne traitent donc pas les erreurs de fonctionnement.
+
+\newpage
+
+\subsubsection{Présenter les capacités de la STM32MP15 au travers d'une application de Sonnette Connectée} %2.2.1
+Ce diagramme représente le scénario nominal de l'ensemble des CUs du dossier de spécification \refSpec.
+Il s'agit du CU Stratégique du SàE.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_Strategique}
+    \caption{Diagramme de séquence du scénario nominal}
+    \label{CU-Stratégique}
+\end{figure}
+
+\newpage
+
+\subsubsection{Initialiser Board} %2.2.2
+Ce diagramme représente le scénario nominal du CU "Initialiser Board" dans le dossier de spécification \refSpec.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_InitialiserBoard}
+    \caption{Diagramme de séquence de l'initialisation de Board}
+    \label{CU-InitialiserBoard}
+\end{figure}
+
+\newpage
+
+\subsubsection{Se connecter} %2.2.3
+Ce diagramme représente le scénario nominal du CU "Se connecter" dans le dossier de spécification \refSpec.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_SeConnecter}
+    \caption{Diagramme de séquence de la connexion entre AOP et SoftSonnette}
+    \label{CU-SeConnecter}
+\end{figure}
+
+\subsubsection{Demander à entrer} %2.2.4
+Ce diagramme représente le scénario nominal du CU "Demander à entrer" dans le dossier de spécification \refSpec.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_Demander_Entrer}
+    \caption{Diagramme de séquence du CU "Demander à entrer" }
+    \label{CU-Entrer}
+\end{figure}
+
+\subsubsection{Ouvrir Porte} %2.2.5
+Ce diagramme représente le scénario nominal du CU "Ouvrir Porte" dans le dossier de spécification \refSpec.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_OuvrirPorte}
+    \caption{Diagramme de séquence du CU "Ouvrir Porte"}
+    \label{CU-OuvrirPorte}
+\end{figure}
+
+\subsubsection{Regarder vidéo} %2.2.6
+Ce diagramme représente le scénario nominal du CU "Regarder vidéo" dans le dossier de spécification \refSpec.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_Regarder_Video}
+    \caption{Diagramme de séquence du CU "Regarder vidéo"}
+    \label{CU-Regarder_Video}
+\end{figure}
+
+\subsubsection{Consulter calendrier} %2.2.7
+Ce diagramme représente le scénario nominal du CU "Consulter calendrier" dans le dossier de spécification \refSpec.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_Consulter_Calendrier}
+    \caption{Diagramme de séquence du CU "Consulter calendrier"}
+    \label{CU-Consulter_Calendrier}
+\end{figure}
+
+\subsubsection{Contrôler Porte à distance} %2.2.8
+Ce diagramme représente le scénario nominal du CU "Contrôle Porte à distance" dans le dossier de spécification \refSpec.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_Contrôler_Porte_A_Distance}
+    \caption{Diagramme de séquence du CU "Contrôle Porte à distance"}
+    \label{CU-Contrôler_Porte_A_Distance}
+\end{figure}
+
+\subsubsection{Consulter liste employés} %2.2.9
+Ce diagramme représente le scénario nominal du CU "Consulter liste employés" dans le dossier de spécification \refSpec.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_Consulter_Liste}
+    \caption{Diagramme de séquence du CU "Consulter liste employés"}
+    \label{CU-Consulter_Liste}
+\end{figure}
+
+\subsubsection{Quitter SàE} %2.2.10
+Ce diagramme représente le scénario nominal du CU "Quitter SàE" dans le dossier de spécification \refSpec.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_anime_uml-sequence-CU_QuitterSAE}
+    \caption{Diagramme de séquence du CU "Quitter SàE"}
+    \label{CU-Quitter}
+\end{figure}

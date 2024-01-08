@@ -1,0 +1,10 @@
+@startuml 
+:Démonstrateur:- (Use)
+
+"Administrer" as (Use)
+"Modifier liste des employés" as (orga)
+"Ouvrir porte" as (open)
+
+(Use) ..> (orga) : <<include>>
+(Use) ..> (open) : <<include>>
+@enduml

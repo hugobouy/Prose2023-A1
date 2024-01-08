@@ -1,0 +1,32 @@
+@startuml
+
+actor Demonstrateur
+
+Demonstrateur -> GUI : askScreen()
+activate GUI
+GUI -> EmployeeManager : getEmployeeList()
+EmployeeManager -> Data_Employee : load()
+Data_Employee --> EmployeeManager : Employee[*]
+EmployeeManager --> GUI : Employee[*]
+GUI -> GUI : displayScreen()
+Demonstrateur -> GUI : askAddEmployee()
+GUI -> GUI : displayScreen()
+Demonstrateur -> GUI : setEmployeeName()
+Demonstrateur -> GUI : setEmployeeFirstName()
+Demonstrateur -> GUI : setEmployeePicture()
+Demonstrateur -> GUI : setEmployeeRole()
+Demonstrateur -> GUI : confirm()
+
+GUI -> EmployeeManager : addEmployee()
+EmployeeManager -> Data_Employee : save()
+GUI -> EmployeeManager : getEmployeeList()
+EmployeeManager -> Data_Employee : load()
+Data_Employee --> EmployeeManager : Employee[*]
+EmployeeManager --> GUI : Employee[*]
+GUI -> GUI : displayScreen()
+
+Demonstrateur -> GUI : askHome()
+GUI -> GUI : displayScreen()
+
+
+@enduml

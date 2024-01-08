@@ -1,0 +1,973 @@
+<script>
+	// @ts-check
+	/**
+	 * @type {import("./Model.d.ts").Model<false>}
+	 */	
+	const model =
+		{
+			name: "PSC",
+			classes: String.raw`
+				class GUI <<active>>{
+					-myPass : Password
+					-myIp : IP
+					-myName : String
+					-myFirstName : String
+					-myPicture : Picture
+					-myRole : Role
+					-myWorkingHours : Hour[*]
+					-employeeList : Employee[*]
+					-displayScreen(screenID : int)
+					-displayPopUp(popupID : int)
+					-displaySpecialEmployeeField(displaySpecial : bool)
+					-refreshVideoScreen()
+					-refreshCalendar(employeeID : EmployeeID)
+					-refreshDoorState(doorState : bool)
+					launchAOP()
+					updateDoorState(state : bool)
+					askScreen(screenID : int)
+					setIp(ip : IP)
+					setPass(pass : Password)
+					connect()
+					setConnectionStatus(status : ConnectionStatus)
+					setEmployeeList(employeeListRemote : Employee[*])
+					askCalendar(employeeID : EmployeeID)
+					askOpenDoor()
+					askAddEmployee()
+					setEmployeeName(name : String)
+					setEmployeeFirstName(firstName : String)
+					setEmployeePicture(picture : Picture)
+					setEmployeeRole(role : Role)
+					setSpecialEmployeeAccess(day : Day, startHour : Hour, stopHour : Hour)
+					askDeleteEmployee(employeeID : EmployeeID)
+					confirm()
+					cancel()
+					return()
+					quitAOP()
+				}
+
+				class ConnectionManager <<active>>{
+					-connectionState : bool
+					-checkConnection()
+					-getLocalTime() : Time
+					askConnection(ip : IP, pass : Password)
+					validatePass(passValidated : bool)
+				}
+				
+				class UISS <<active>>{
+					-appState : SSState
+					-display(state : SSState)
+					-refreshDoorState(doorState : bool)
+					launchSS()
+					quitSS()
+					askStartCom()
+					ring()
+					updateCamState(bool)
+					updateDoorState(doorState : bool)
+				}
+				class Cameraman <<active>>{
+					-cameraAlive : bool
+					-alreadyAlive : bool
+					-streamToAOPandScreen()
+					-streamToScreenOnly()
+					-checkCameraConnected()
+					takePicture() : Picture
+					subscribeToVideoStream(enable : bool)
+					startStreaming()
+					stopStreaming()
+					suspendStreaming()
+        			resumeStreaming()
+				}
+				class Guard {	
+					askCheckPass(pass : Password)
+				}
+				class Clock <<protected>>{
+					-currentTime : Time
+					getCurrentTime() : Time
+					setCurrentTime(time : Time)
+				}
+				class Bouncer <<active>>{
+					-picture : Picture
+					-employeeList : Employee[*]
+					-recognizedEmployee : EmployeeID
+					-currentTime : Time
+					-checkEmployeeAllow(time : Time, employeeID : EmployeeID) : bool
+					setRecognizeFace(employeeID : EmployeeID)
+					askFaceRecognition()
+				}
+				class EmployeeManager <<entity>> <<protected>>{
+					-employeeList : Employee[*]
+					addEmployee(name : String, firstName : String, picture : Picture, role : Role, workingHours : Hour[*])
+					deleteEmployee(employeeID : EmployeeID)
+					getEmployeeList() : Employee[*]
+					getEmployee(employeeID : EmployeeID) : Employee
+					+askEmployeeList()
+					+load()
+					+save()
+				}
+				class RecognitionAI <<active>>{
+					launchAI(picture : Picture, employeeList : Employee[*])
+				}
+				class UISP {
+					-signalAppState()
+					launchSP()
+					quitSP()
+					ackStartCom()
+					signalNotAllowed()
+				}
+				class DoorManager <<active>>{
+					-doorState : bool
+					-unlockDoor()
+					askOpenDoor()
+					askDoorState() : bool 
+				}
+				GUI "1" -- "1" DoorManager
+				Cameraman "1" <-- "1" GUI
+				Cameraman "1" -- "1" UISS
+				Cameraman "1" <-- "1" Bouncer
+				UISS "1" -- "1" UISP
+				UISS "1" <-- "1"  DoorManager
+				UISS "1" --> "1" EmployeeManager
+				Bouncer "1" <-right- "1" UISS
+				Bouncer "1" -- "1" RecognitionAI
+				Bouncer "1" --> "1" UISP
+				Bouncer "1" --> "1" DoorManager
+				Clock "1" <-- "1" Bouncer
+				ConnectionManager "1" -- "1" GUI
+				ConnectionManager "1" --> "1" Clock
+				ConnectionManager "1" -- "1" Guard
+				EmployeeManager "1" <-- "1" Bouncer
+				EmployeeManager "1" -right- "1" GUI
+			`,
+			objects: [
+				{
+					name: "demonstrateur",
+					class: "Demonstrateur",
+					isActor: true,
+				},
+				{
+					name: "porte",
+					class: "Porte",
+					isActor: true,
+				},
+				{
+					name: "testeur",
+					class: "Testeur",
+					isActor: true,
+				},
+				{
+					name: "gui",
+					class: "GUI",
+					behavior: String.raw`
+					
+						[*] -d-> Active 
+						state "Active" as Active {
+							state c <<choice>>
+							[*] -> INIT as "launchAOP":/ myPass = " "; myIp = DEFAULT_IP; 
+							note on link 
+							launchAOP()
+							end note
+							INIT : entry/ displayScreen(STARTER_ID); 
+							INIT : setIp(ip)/ myIp = ip;
+							INIT : setPass(pass)/ myPass = pass;
+							
+							INIT --> WAITING as "InitWaiting": connect()
+							c --> ERROR_CONNECT_SCREEN as "cEchec": [status == CONNECT_KO]
+							ERROR_CONNECT_SCREEN : entry/ displayPopUp(ERROR_CONNECT_ID);
+							ERROR_CONNECT_SCREEN --> INIT as "ErrorConInit": return()
+							
+							WAITING : entry/ displayPopUp(WAITING_ID); askConnection(myPass, myIp);
+							WAITING --l-> c as "waitCoc": setConnectionStatus(status)
+
+							c --> ERROR_PASS_SCREEN as "cError": [status == PASS_KO]
+
+							ERROR_PASS_SCREEN: entry/ displayPopUp(ERROR_PASS_ID);
+							ERROR_PASS_SCREEN --> INIT as "errorDem": return()
+							
+							state "S_CONNECTED" as S_CONNECTED {
+								state c <<choice>>
+								
+								[*] -u-> HOME_SCREEN as "launchAOP"
+								HOME_SCREEN : entry/ displayScreen(HOME_ID); 
+								HOME_SCREEN -> c as "HomeToC" :  askScreen(idScreen)
+
+								c-> VIDEO_SCREEN as "CToVideo" : [idScreen == VIDEO_ID]
+								VIDEO_SCREEN : entry/ displayScreen(VIDEO_ID); subscribeToVideoStream(true); 
+								VIDEO_SCREEN : do/ refreshVideoScreen();
+								VIDEO_SCREEN -> HOME_SCREEN as "VideoToHome" : return()/ subscribeToVideoStream(false);
+
+								c-> CALENDAR_SCREEN as "CToCalendar" : [idScreen == CALENDAR_ID]
+								CALENDAR_SCREEN : entry/ askEmployeeList();
+								CALENDAR_SCREEN : setEmployeeList(employeeListRemote)/ employeeList = employeeListRemote; displayScreen(CALENDAR_ID);
+								CALENDAR_SCREEN : askCalendar(employeeID)/ refreshCalendar(employeeID);
+								CALENDAR_SCREEN -> HOME_SCREEN as "CalendarToHome" : return()
+
+								c -> DOOR_CONTROL_SCREEN as "CToDoorControl" : [idScreen == DOOR_CONTROL_ID]
+								DOOR_CONTROL_SCREEN : entry/ askDoorState(); displayScreen(DOOR_CONTROL_ID);
+								DOOR_CONTROL_SCREEN : askOpenDoor()/ askOpenDoor();
+								DOOR_CONTROL_SCREEN : updateDoorState(doorState)/ refreshDoorState(doorState);
+								DOOR_CONTROL_SCREEN -> HOME_SCREEN as "DoorToHome" : return()
+								
+								c -> S_EMPLOYEE_LIST as "CToEmployeeList" : [idScreen == EMPLOYEE_LIST_ID]
+
+								state "S_EMPLOYEE_LIST" as S_EMPLOYEE_LIST {
+								
+									[*] -> EMPLOYEE_LIST_SCREEN as "CToEmployeeList"
+									EMPLOYEE_LIST_SCREEN : entry/ askEmployeeList(); 
+									EMPLOYEE_LIST_SCREEN : setEmployeeList(employeeListRemote)/ employeeList = employeeListRemote; displayScreen(EMPLOYEE_LIST_ID);
+									EMPLOYEE_LIST_SCREEN -> DELETE_SCREEN as "EmployeeListToDelete" : askDeleteEmployee(employeeID)
+									EMPLOYEE_LIST_SCREEN -> ADD_EMPLOYEE_SCREEN as "EmployeeListToAdd" : askAddEmployee() 
+
+									DELETE_SCREEN : entry/ displayPopUp(DELETE_ID)
+									DELETE_SCREEN -> EMPLOYEE_LIST_SCREEN as "ConfirmDelete" : confirm()/ deleteEmployee(employeeID);
+									DELETE_SCREEN -> EMPLOYEE_LIST_SCREEN as "CancelDelete" : cancel()
+
+									ADD_EMPLOYEE_SCREEN : entry/ displayScreen(ADD_EMPLOYEE_ID);
+									ADD_EMPLOYEE_SCREEN : setEmployeeName(name)/ myName = name;
+									ADD_EMPLOYEE_SCREEN : setEmployeeFirstName(firstName)/ myfirstName = firstName;
+									ADD_EMPLOYEE_SCREEN : setEmployeePicture(picture)/ myPicture= picture;
+									ADD_EMPLOYEE_SCREEN : setEmployeeRole(role)/ myRole= role;
+									ADD_EMPLOYEE_SCREEN -r-> EMPLOYEE_LIST_SCREEN as "CancelAdd" : cancel()
+									ADD_EMPLOYEE_SCREEN -l-> EMPLOYEE_LIST_SCREEN as "ConfirmAdd" : confirm()/ addEmployee(myfirstName, myName, myPicture, myRole, myWorkingHours);
+									ADD_EMPLOYEE_SCREEN -> ADD_SPECIAL_EMPLOYEE_SCREEN as "SpecialEmployeeEntry" : when(myRole == SPECIAL_ROLE)/ displaySpecialEmployeeField(true);
+
+									ADD_SPECIAL_EMPLOYEE_SCREEN : entry/ displayScreen(ADD_SPECIAL_EMPLOYEE_ID);
+									ADD_SPECIAL_EMPLOYEE_SCREEN : setEmployeeName(name)/ myName = name;
+									ADD_SPECIAL_EMPLOYEE_SCREEN : setEmployeeFirstName(firstName)/ myfirstName = firstName;
+									ADD_SPECIAL_EMPLOYEE_SCREEN : setEmployeePicture(picture)/ myPicture= picture;
+									ADD_SPECIAL_EMPLOYEE_SCREEN : setEmployeeRole(role)/ myRole= role;
+									ADD_SPECIAL_EMPLOYEE_SCREEN : setSpecialEmployeeAccess(day,startHour ,stopHour)/ myWorkingHours[day][0] = startHour; myWorkingHours[day][1] = stopHour;
+									ADD_SPECIAL_EMPLOYEE_SCREEN -> ADD_EMPLOYEE_SCREEN as "SpecialEmployeeExit" : when(myRole != SPECIAL_ROLE)/ displaySpecialEmployeeField(false);
+									ADD_SPECIAL_EMPLOYEE_SCREEN -> EMPLOYEE_LIST_SCREEN as "CancelSpecialAdd" : cancel()
+									ADD_SPECIAL_EMPLOYEE_SCREEN --> EMPLOYEE_LIST_SCREEN as "ConfirmSpecialAdd" : confirm()/ addEmployee(myfirstName, myName, myPicture, "SPECIAL_ROLE", myWorkingHours);
+								}
+								S_EMPLOYEE_LIST -> HOME_SCREEN as "EmployeeToReturn" : return()								
+							}
+							
+							c -d--> S_CONNECTED as "cAcc": [else]
+							S_CONNECTED -right-> ERROR_CONNECT_SCREEN as "AccError": setConnectionStatus(status)
+						}
+						Active -> [*] as "finito": quitAOP()
+										
+					`
+					,
+					packagePath: [
+						"AOP",
+					],
+				},
+				{
+					name: "uiss",
+					class: "UISS",
+					isActor: false,
+					behavior: String.raw`
+					[*] -d-> Active
+					state Active {
+						state c <<choice>>
+						[*] -> INIT
+						note on link
+						launchSS()
+						end note
+						INIT : entry/display(STATE_IDLE); load(); launchSP();
+						INIT -> IDLE : askStartCom()/ ackStartCom();
+						INIT -> ERROR_COM : after(TASS)/ display(STATE_ERROR_COM);
+						IDLE : entry/startStreaming();
+						IDLE -> c : updateCamState(bool)
+						c -> RUNNING as "run" : [bool == True]/ display(STATE_WEBCAM_CONNECTED);
+						c -> ERROR_CAM_NOT_CONNECTED as "cam_no_connected" : [else]/ display(STATE_WEBCAM_NOT_CONNECTED);
+						RUNNING: ring()/ askFaceRecognition();
+						RUNNING: updateDoorState(doorState)/ refreshDoorState(doorState);
+					}
+					Active -> [*] as "fin" : quitSS()/ stopStreaming(); save();
+					`,
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "cameraman",
+					class: "Cameraman",
+					packagePath: [
+						"SoftSonnette",
+					],
+					behavior: String.raw`
+						
+						state "cameraman" as cameraman {
+						
+							state "SUSPENDED" as SUSPENDED {
+							}
+							state c <<choice>>
+							[*] -> IDLE
+							IDLE -> c as "init2ECRAN_1" : startStreaming() / checkCameraConnected();
+							c -> S_STREAMING as "cam_connected" : [cameraAlive == True]/ updateCamState(true);
+							c -> [*] as "cam_no_connected" : [else]/ updateCamState(false);
+							SUSPENDED-> S_STREAMING as "resume" : resumeStreaming()
+							S_STREAMING -> SUSPENDED as "suspended" : suspendStreaming()
+							
+							state "S_STREAMING" as S_STREAMING {
+								[*] -> SCREEN_ONLY as "init2STREAM_ECRAN" :
+								SCREEN_ONLY : do/ streamToScreenOnly()); 
+								SCREEN_ONLY -> SCREEN_AND_AOP as "STREAM_TEL" : subscribeToVideoStream(true)
+								SCREEN_AND_AOP : do/ streamToAOPandScreen();
+								SCREEN_AND_AOP -> SCREEN_ONLY as "STREAM_ECRAN" : subscribeToVideoStream(false)
+							}
+						}
+						[*] -> cameraman as "init"
+						cameraman -> [*] as "end":stopStreaming()
+						
+					`,
+					
+				},
+				{
+					name: "guard",
+					class: "Guard",
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "clock",
+					class: "Clock",
+					stereotypes: [
+						"protected",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "bouncer",
+					class: "Bouncer",
+					behavior: String.raw`
+					
+					state a <<choice>>
+					[*]	-> IDLE
+					IDLE -> WAIT_RECOGNITION as "wait": askFaceRecognition()/picture = takePicture(); suspendStreaming(); employeeList = getEmployeeList();
+					WAIT_RECOGNITION : entry/launchAI(picture, employeeList);
+					WAIT_RECOGNITION -> a : setRecognizeFace(employeeID)/ recognizedEmployee=employeeID; resumeStreaming();
+					a -> CHECK_ALLOW : [else]/currentTime = getCurrentTime();
+					a -> IDLE: [recognizedEmployee == UNKNOWN]/ signalNotAllowed();
+					CHECK_ALLOW: entry/allowed = checkEmployeeAllow(currentTime, recognizedEmployee);
+					CHECK_ALLOW -> IDLE : when(allowed==true)/ askOpenDoor();
+					CHECK_ALLOW -> IDLE : when(allowed==false)/ signalNotAllowed();
+					`,
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "recognitionAI",
+					class: "RecognitionAI",
+					stereotypes: [
+						"active",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "employeeManager",
+					class: "EmployeeManager",
+					stereotypes: [
+						"entity",
+					],
+					packagePath: [
+						"SoftSonnette",
+					],
+				},
+				{
+					name: "uisp",
+					class: "UISP",
+					packagePath: [
+						"SoftPorte",
+					],
+				},
+				{
+					name: "doorManager",
+					class: "DoorManager",
+					behavior: String.raw`
+						[*] -> IDLE as "init" : 
+						IDLE -> DOOR_OPEN as "askOpenDoor()" : askOpenDoor()/ updateDoorState(true); unlockDoor();
+						DOOR_OPEN -> IDLE as "time > 10" : after(TOP)/ updateDoorState(false);
+                        IDLE : entry/ doorState = false;
+						IDLE : askDoorState/ updateDoorState(doorState);
+						DOOR_OPEN : entry/ doorState = true;
+						DOOR_OPEN : askDoorState/ updateDoorState(doorState);
+
+					`,
+					packagePath: [
+						"SoftPorte",
+					],
+				},
+				{
+					name: "connectionManager",
+					class: "ConnectionManager",
+					behavior: String.raw`
+						state c <<choice>>
+						[*] -> NOT_CONNECTED 
+						NOT_CONNECTED -> WAITING : askConnection(ip, pass)/askCheckPass(pass);
+						WAITING -> c : validatePass(passValidated)
+						WAITING -> NOT_CONNECTED : after(TAC) / setConnectionStatus(CONNECT_KO);
+						c -> CONNECTED as "connected" : [passValidated == True]/ connectionState = True; setCurrentTime(getLocalTime()); setConnectionStatus(PASS_OK);
+						c -> NOT_CONNECTED as "no_connected" : [else]/ setConnectionStatus(PASS_KO);
+						CONNECTED : do/ checkConnection();
+						CONNECTED -> NOT_CONNECTED : when(connectionState == False)/ setConnectionStatus(CONNECT_KO);
+					`,
+					packagePath: [
+						"AOP",
+					],
+				},
+			],
+			connectorByName: {
+				C1: {
+					ends: [
+						"gui",
+						"doorManager",
+					],
+					possibleMessages: {
+						forward: [
+							"askOpenDoor()",
+							"askDoorState()",
+						],
+						reverse: [
+							"updateDoorState(...)",
+						],
+					}
+					
+				},
+				C2: {
+					ends: [
+						"cameraman",
+						"gui",
+					],
+					possibleMessages: {
+						reverse: [
+							"subscribeToVideoStream(...)",
+						],
+					}
+					
+				},
+				C3: {
+					ends: [
+						"cameraman",
+						"uiss",
+					],
+					possibleMessages: {
+						forward: [
+							"updateCamState(...)",
+						],
+						reverse: [
+							"startStreaming()",
+							"stopStreaming()",
+						],
+					}
+					
+				},
+				C4: {
+					ends: [
+						"bouncer",
+						"uiss",
+					],
+					possibleMessages: {
+						reverse: [
+							"askFaceRecognition()",
+						],
+					}
+					
+				},
+				C6: {
+					ends: [
+						"uiss",
+						"doorManager",
+					],
+					possibleMessages: {
+						reverse: [
+							"updateDoorState(...)",
+						],
+					}
+					
+				},
+				C8: {
+					ends: [
+						"bouncer",
+						"recognitionAI",
+					],
+					possibleMessages: {
+						forward: [
+							"launchAI(...)",
+						],
+						reverse: [
+							"setRecognizeFace(...)",
+						],
+					}		
+				},
+				C9: {
+					ends: [
+						"cameraman",
+						"bouncer",
+					],
+					possibleMessages: {
+						reverse: [
+							"takePicture()",
+							"suspendStreaming()",
+							"resumeStreaming()",
+						],
+					}
+					
+				},
+				C10: {
+					ends: [
+						"clock",
+						"bouncer",
+					],
+					possibleMessages: {
+						reverse: [
+							"getCurrentTime()",
+						],
+					}
+					
+				},
+				C11: {
+					ends: [
+						"connectionManager",
+						"gui",
+					],
+					possibleMessages: {
+						forward: [
+							"setConnectionStatus(...)",
+						],
+						reverse: [
+							"askConnection(...)",
+						]
+					}
+					
+				},
+				C12: {
+					ends: [
+						"connectionManager",
+						"clock",
+					],
+					possibleMessages: {
+						forward: [
+							"setCurrentTime(...)",
+						],
+					},
+					
+				},
+				C13: {
+					ends: [
+						"connectionManager",
+						"guard",
+					],
+					possibleMessages: {
+						forward: [
+							"askCheckPass(...)",
+						],
+						reverse: [
+							"validatePass(...)",
+						],
+					},
+					
+				},
+				C14: {
+					ends: [
+						"employeeManager",
+						"bouncer",
+					],
+					possibleMessages: {
+						reverse: [
+							"getEmployee(...)",
+							"getEmployeeList()",
+						],
+					},
+					
+				},
+				C15: {
+					ends: [
+						"employeeManager",
+						"gui",
+					],
+					possibleMessages: {
+						forward: [
+							"setEmployeeList(...)",
+						],
+						reverse: [
+							"addEmployee(...)",
+							"deleteEmployee(...)",
+							"askEmployeeList()",
+						],
+					},
+					
+				},
+				C16: {
+					ends: [
+						"bouncer",
+						"doorManager",
+					],
+					possibleMessages: {
+						forward: [
+							"askOpenDoor()",
+						],
+					},
+					
+					
+				},
+				C17: {
+					ends: [
+						"demonstrateur",
+						"gui",
+					],
+					possibleMessages: {
+						forward: [
+							"launchAOP()",
+							"askScreen(...)",
+							"setIp(...)",
+							"setPass(...)",
+							"connect()",
+							"askCalendar(...)",
+							"askOpenDoor()",
+							"askAddEmployee()",
+							"setEmployeeName(...)",
+							"setEmployeeFirstName(...)",
+							"setEmployeePicture(...)",
+							"setSpecialEmployeeAccess(...)",
+							"askDeleteEmployee(...)",
+							"confirm()",
+							"cancel()",
+							"return()",
+							"quitAOP()",
+						],
+					},
+				},
+				C18: {
+					ends: [
+						"testeur",
+						"uiss",
+					],
+					possibleMessages: {
+						forward: [
+							"ring()"
+						],
+					},
+				},
+				C19: {
+					ends: [
+						"porte",
+						"doorManager",
+					],
+				},
+				C20: {
+					ends: [
+						"demonstrateur",
+						"uiss",
+					],
+					possibleMessages: {
+						forward: [
+							"launchSS()",
+							"quitSS()",
+						],
+					},
+				},
+				C21: {
+					ends: [
+						"uiss",
+						"uisp",
+					],
+					possibleMessages: {
+						forward: [
+							"launchSP()",
+							"quitSP()",
+							"ackStartCom()",
+						],
+						reverse: [
+							"askStartCom()",
+						],
+					},
+				},
+				C22: {
+					ends: [
+						"bouncer",
+						"uisp",
+					],
+					possibleMessages: {
+						forward: [
+							"signalNotAllowed()",
+						],
+					},
+				},
+				C23: {
+					ends: [
+						"uiss",
+						"employeeManager",
+					],
+					possibleMessages: {
+						forward: [
+							"load()",
+							"save()"
+						],
+					},
+				},
+			},
+
+			interactions: {
+                CU_SeConnecter: String.raw`
+                    actor demonstrateur
+                    participant gui
+                    participant connectionManager
+                    participant guard
+                    participant clock
+                    e0 : demonstrateur -> gui : setIp(ip)
+                    e2 : demonstrateur -> gui : setPass(pass)
+                    e4 : demonstrateur -> gui : connect()
+					e6 : gui -> gui : displayPopUp(WAITING_ID)   
+                    e8 : gui -> connectionManager : askConnection(myIp,myPass)                
+                    e10 : connectionManager -> guard : askCheckPass(myPass)                   
+                    e12 : guard -> connectionManager : validatePass(true)
+					e14 : connectionManager -> connectionManager : getLocalTime()
+                    e14 : connectionManager -> clock : setCurrentTime(time) 
+                    e16 : connectionManager -> gui  : setConnectionStatus(PASS_OK)  
+                    loop Continuously
+                    	e18 : connectionManager -> connectionManager : checkConnection()
+                    end
+		          
+                `,
+				CU_Consulter_Liste: String.raw`
+					actor demonstrateur
+					participant gui
+					participant employeeManager
+					e0 : demonstrateur -? gui : askScreen(EMPLOYEE_LIST_ID)
+					accept e0
+					e2 : gui -? employeeManager : askEmployeeList()
+					accept e2
+					e4 : employeeManager -? gui : setEmployeeList(employeeListRemote)
+					accept e4
+					e6 : gui -? gui : displayScreen(EMPLOYEE_LIST_ID)
+					accept e6
+					e8 : demonstrateur -? gui : askAddEmployee()
+					accept e8
+					e10 : gui -? gui : displayScreen(ADD_EMPLOYEE_ID)
+					accept e10
+					e12 : demonstrateur -? gui : setEmployeeName(name)
+					accept e12
+					e14 : demonstrateur -? gui : setEmployeeFirstName(firstName)
+					accept e14
+					e16 : demonstrateur -? gui : setEmployeePicture(picture)
+					accept e16
+					e18 : demonstrateur -? gui : setEmployeeRole(role)
+					accept e18
+					e20 : demonstrateur -? gui : confirm()
+					accept e20
+					e22 : gui -? employeeManager : addEmployee(myFirstName, myName, myPicture, myRole, myWorkingHours)
+					accept e22
+					e24 : gui -? employeeManager : askEmployeeList()
+					accept e24
+					e26 : employeeManager -? gui : setEmployeeList(employeeListRemote)
+					accept e26
+					e28 : gui -? gui : displayScreen(EMPLOYEE_LIST_ID)
+					accept e28
+					e30 : demonstrateur -? gui : askScreen(HOME_ID)
+                    accept e30
+					e32 : gui -? gui : displayScreen(HOME_ID)
+                    accept e32
+				`,
+				CU_Consulter_Liste_Suppression_Employe: String.raw`
+					actor demonstrateur
+					participant gui
+					participant employeeManager
+					e0 : demonstrateur -? gui : askDeleteEmployee(employeeID)
+					accept e0
+					e2 : gui -? gui : displayPopUp(DELETE_ID)
+					accept e2
+					e4 : demonstrateur -? gui : confirm()
+					accept e4
+					e6 : gui -? employeeManager : deleteEmployee(employeeID)
+					accept e6
+					e8 : gui -? employeeManager : askEmployeeList()
+					accept e8
+					e10 : employeeManager -? gui : setEmployeeList(employeeListRemote)
+					accept e10
+					e12 : gui -? gui : displayScreen(EMPLOYEE_LIST_ID)
+					accept e12
+				`,
+				CU_Demander_Entrer: String.raw`
+					actor testeur
+					participant uiss
+					participant bouncer
+					participant cameraman
+					participant recognitionAI
+					participant employeeManager
+					participant clock
+					participant doorManager
+					e0 : testeur -> uiss : ring()
+					e2 : uiss -> bouncer : askFaceRecognition()
+					e4 : bouncer -> cameraman : takePicture()
+					returning e4 : Picture
+					e6 : bouncer -> cameraman : suspendStreaming()
+					e8 : bouncer -> employeeManager : getEmployeeList()
+					returning e8 : Employee[*]
+					e10 : bouncer -> recognitionAI : launchAI(picture,employeeList)
+					e11 : recognitionAI -> bouncer : setRecognizeFace(employeeID)
+					e12 : bouncer -> cameraman : resumeStreaming()
+					e14 : bouncer -> clock : getCurrentTime()
+					returning e14 : Time
+					e16 : bouncer -> bouncer : checkEmployeeAllow(currentTime,recognizedEmployee)
+					e18 : bouncer -> doorManager : askOpenDoor()
+					ref over gui, uiss : CU_Ouvrir_Porte
+				`,
+				CU_InitialiserBoard: String.raw`
+                    participant uiss
+					participant uisp
+                    participant cameraman
+					participant employeeManager
+					e1 : uiss -> uiss : display(STATE_IDLE)
+					e2 : uiss -> employeeManager : load()
+					e3 : uiss -> uisp : launchSP()
+					e4 : uisp -> uiss : askStartCom() 
+					e5 : uiss -> uisp : ackStartCom()
+					e6 : uisp -> uisp : signalAppState()
+					e7 : uiss -> cameraman : startStreaming()
+					e8 : cameraman -> cameraman : checkCameraConnected()
+					e9 : cameraman -> uiss : updateCamState(true)
+					e10 : uiss -> uiss : display(STATE_WEBCAM_CONNECTED)
+                    loop Continuously
+						e1 : cameraman -> cameraman : streamToScreenOnly()
+					end
+                `,
+				CU_Regarder_Video: String.raw`
+                    actor demonstrateur
+                    participant gui
+                    participant cameraman
+                    e0 : demonstrateur -> gui : askScreen(VIDEO_ID)
+					e1 : gui -> gui : displayScreen(VIDEO_ID)
+					e2 : gui -> cameraman : subscribeToVideoStream(true)
+                    loop Continuously 
+						e0 : cameraman -> cameraman : streamToAOPandScreen()
+						e1 : gui -> gui : refreshVideoScreen()
+                    end
+                    e3 : demonstrateur -> gui : return()
+					e4 : gui -> cameraman : subscribeToVideoStream(false)
+					e5 : gui -> gui : displayScreen(HOME_ID)
+                `,
+                CU_Consulter_Calendrier: String.raw`
+                    actor demonstrateur
+                    participant gui
+                    participant employeeManager
+                    e0 : demonstrateur -? gui : askScreen(CALENDAR_ID)
+                    accept e0
+					e2 : gui -? employeeManager : askEmployeeList()
+					accept e2
+					e4 : employeeManager -? gui : setEmployeeList(employeeListRemote)
+					accept e4
+                    e6 : gui -? gui : displayScreen(CALENDAR_ID)
+                    accept e6
+                    e8 : demonstrateur -? gui : askCalendar(employeeID)
+                    accept e8
+					e10 : gui -? gui : refreshCalendar(employeeID)
+					accept e10
+					e12 : demonstrateur -> gui : return()
+					e14 : gui -> gui : displayScreen(HOME_ID) 
+                `,
+                CU_Contrôler_Porte_A_Distance: String.raw`
+                    actor demonstrateur
+                    participant gui
+                    participant doorManager
+					participant uiss
+                    e0 : demonstrateur -? gui : askScreen(DOOR_CONTROL_ID)
+                    accept e0
+					e2 : gui -? doorManager : askDoorState()
+                    accept e2
+					e4 : doorManager -? gui : updateDoorState()
+                    accept e4
+                    e6 : gui -? gui : displayScreen(DOOR_CONTROL_ID)
+                    accept e6
+                    e8 : demonstrateur -? gui : askOpenDoor()
+                    accept e8
+					e10 : gui -? doorManager : askOpenDoor()
+                    accept e10
+                    ref over gui, uiss : CU_Ouvrir_Porte
+                    e12 : demonstrateur -? gui : askScreen(HOME_ID)
+                    accept e12
+					e14 : gui -? gui : displayScreen(HOME_ID)
+                    accept e14
+                `,
+                CU_Strategique: String.raw`
+					actor demonstrateur
+					actor porte
+					participant gui
+					participant uiss
+					participant uisp
+					actor testeur
+					e0 : demonstrateur -? uiss : launchSS()
+					accept e0
+					ref over Demonstrateur, uiss : CU_Initialiser_Board
+					e6 : demonstrateur -? gui : launchAOP()
+					accept e6
+					e8 : gui -? gui : displayScreen(STARTER_ID)
+					accept e8
+					ref over gui : CU_SeConnecter
+					e10 : gui -? gui : displayScreen(HOME_ID)
+					accept e10
+					alt [Entrer]
+					ref over testeur, uiss : CU_Demander_À_Entrer
+					else [Regarder_Vidéo]
+					ref over Demonstrateur, gui : CU_Regarder_Video
+					else [Consulter_calendrier]
+					ref over Demonstrateur, gui : CU_Consulter_Calendrier
+					else [Contrôler_la_porte]
+					ref over Demonstrateur, gui : CU_Contrôler_Porte_À_Distance
+					else [Consulter_la_liste_des_employés]
+					ref over Demonstrateur, gui : CU_Consulter_Liste_Employés
+					end
+					ref over Demonstrateur, gui : CU_Quitter_SàE
+				`,
+				CU_QuitterSAE: String.raw`
+					actor demonstrateur
+					participant gui
+					participant uiss
+					participant employeeManager
+					participant cameraman
+					participant uisp
+					e0 : demonstrateur -? gui : quitAOP()
+					accept e0
+					e2 : demonstrateur -? uiss : quitSS()
+					accept e2
+					e4 : uiss -? cameraman : stopStreaming()
+					accept e4
+					e6 : uiss -? employeeManager : save()
+					accept e6
+					e8 : uiss -? uisp : quitSP()
+					accept e8
+				`,
+				CU_OuvrirPorte: String.raw`
+					participant gui
+					participant uiss
+					participant doorManager
+					e0 : doorManager -? doorManager : unlockDoor()
+					accept e0
+					e2 : doorManager -? gui : updateDoorState(true)
+					accept e2
+					e4 : gui -> gui : refreshDoorState(true)
+					e6 : doorManager -? uiss : updateDoorState(true)
+					accept e6
+					e8 : uiss -> uiss : refreshDoorState(true)				
+					
+					...after(10)...
+					e8 : doorManager -? gui : updateDoorState(false)
+					accept e8
+					e10 : gui -> gui : refreshDoorState(false)
+					e12 : doorManager -? uiss : updateDoorState(false)
+					accept e12
+					e14 : uiss -> uiss : refreshDoorState(false)
+				`,
+            },
+
+			settings: {
+				semantics: {
+					checkEvents: false,
+					considerguardsTrue: true,
+				},
+			},
+		}
+	;
+	document.write(`
+		<iframe width="100%" height="100%" src='http://172.24.2.1/AnimUML.html#${encodeURIComponent(JSON.stringify(model)).replace(/'/g, '%27')}'></iframe>
+	`);
+</script>

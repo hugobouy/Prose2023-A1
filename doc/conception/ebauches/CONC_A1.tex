@@ -1,0 +1,152 @@
+%-----------------------------------------------
+%   LaTeX template
+%   Crée par: Thorkel-dev
+%-----------------------------------------------
+
+\documentclass[a4paper,11pt,titlepage,dvipsnames]{article}
+
+\usepackage{lipsum} % Pas trop compris à quoi ça sert 
+
+\usepackage[
+            imageFooterLeft      =  {latex.png},                     % Optionnel
+            imageHeaderLeft      =  {eseo.png},                      % Optionnel
+            %subject              =  {{Subject of the document}},    % Optionnel
+            %keywords             =  {{Example, Template, LaTeX}},   % Optionnel
+            language             =  {french},                      
+            % encoding             =  {},                            % Defaut utf8
+            ]{Parameter}
+
+\usepackage[
+            logoRight       =   {ST-logo.png},                          % Optionnel
+            logoLeft        =   {eseo.png},                             % Optionnel
+            %logoCenter      =   {latex.png},                           % Optionnel
+            subject         =   {{Incrément 2}},                        % Optionnel
+            projectName     =   {PSC~(Prototype~Sonnette~Connectée)},   % Optionnel
+            enterpriseName  =   {STMicroelectronics},                   % Optionnel
+            responsableName =   {Hugo~BOUY},                            % Optionnel
+            etatDocument    =   {Version~finale},                       % Optionnel
+            % revision        =   {},                                   % Optionnel
+            version         =   {2.3},                                  % Optionnel
+            ]{FrontPage}
+
+\makeglossaries
+\loadglsentries{glossary.tex} % Charge le glossaire
+\loadglsentries{acronyms.tex} % Charge les acronymes
+\addbibresource{biblio.bib}   % Charge la bibliographie
+
+%-----------------------------------------
+%      Variables
+%-----------------------------------------
+%Exemple : le projet \projet~est réalisé par l'équipe \groupe~pour l'entreprise \client.
+%/!\Un '~' est obligatoire pour créer un espace insécable après l'utilisation d'une macro.
+\author{Prose-2024-A1}        % Auteur
+\title{Dossier de conception}     % Titre
+\date{\normalsize\today}    % Date actuelle, automatique
+\newcommand{\client}{STMicroelectronics}
+\newcommand{\groupe}{Prose-2024-A1}
+\newcommand{\amodifier}{{\it À compléter et/ou modifier}}
+
+\newcommand{\projet}{PSC (Prototype Sonnette Connectée)}
+
+\newcommand{\refSpec}{[V2\_SPEC\_A1]}
+\newcommand{\refPAQL}{[PAQL\_A1]}
+
+\newcommand{\appliC}{SoftSonnette et SoftPorte}
+\newcommand{\appliLin}{SoftSonnette}
+\newcommand{\appliPo}{SoftPorte}
+\newcommand{\appliA}{AOP}
+
+\newcommand{\actT}{Testeur}
+\newcommand{\actD}{Démonstrateur}
+\newcommand{\IA}{RecognitionAI}
+
+\graphicspath{{../schemas/}{../figures/}{../schemas/anime_uml_generated}{../schemas/anime_uml_detailed_sp_generated}{../schemas/anime_uml_detailed_ss_generated}{../schemas/anime_uml_detailed_aop_generated}}
+
+%Hyphenation
+\hyphenation{firstName}
+\hyphenation{workingHours}
+\hyphenation{SoftSonnette}
+\hyphenation{DoorManager}
+\hyphenation{PostmanAOP}
+\hyphenation{ConnectionManager}
+
+%-----------------------------------------
+%      Other configurations
+%-----------------------------------------
+
+% Exemple d'arrière plan
+\backgroundsetup{
+    scale=1,
+    opacity=0.1,
+    angle=0,
+    contents={%
+            \includegraphics[width=\textwidth]{eseo.png}
+        }%
+}
+
+\setlength{\parskip}{0.5em} % Espacement entre les paragraphes
+\setlength{\belowcaptionskip}{-0.5em} % Espacement entre les images
+%\setlength{\parindent}{0pt} % Pas d'indentation
+\setcounter{tocdepth}{4}
+
+%-----------------------------------------
+%      Document
+%-----------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\BgThispage % Utiliser l'arrière plan
+\vspace*{\fill}
+\noindent
+AVERTISSEMENT : \\
+Le présent document est un document à but pédagogique.
+Il a été réalisé sous la direction de Jérôme DELATOUR, en collaboration avec des enseignants et les étudiants de l'option SE, groupe A1 (Hugo BOUY, Bastien CASSAR, Paul CHIRON, Paul JURET, Laurent LETENNEUR, Mathis MOULIN, Romain TROVALLET) du groupe ESEO.
+Ce document est la propriété de Jérôme DELATOUR du groupe ESEO. En dehors des activités pédagogiques de l'ESEO, ce document ne peut être diffusé ou recopié sans l'autorisation écrite de ses propriétaires.
+\vspace*{\fill}
+\clearpage
+
+\section*{Table des versions}
+\input{tablesVersion.tex} \label{TableOfVersion} % Ajoute la table des versions
+\clearpage
+
+\addtocontents{toc}{\protect\setlength{\parskip}{0pt}}
+\tableofcontents % Ajoute la table des matières
+
+%-----------------------------------------
+%      Partie I
+%-----------------------------------------
+
+\input{sections/1.Introduction/Introduction.tex} % Exemple d'inclusion de fichier
+
+%-----------------------------------------
+%      Partie II
+%-----------------------------------------
+
+\input{sections/2.ConceptionGenerale/Conception_Generale.tex}
+
+%-----------------------------------------
+%      Partie III
+%-----------------------------------------
+
+\input{sections/3.ConceptionDetaillee/Conception_Detaillee.tex}
+
+%-----------------------------------------
+%      Partie IV
+%-----------------------------------------
+
+\input{sections/4.DictionnaireDomaine/Dictionnaire_domaine.tex}
+
+\newpage
+\listoffigures \label{TableOfFigure} % Affiche la table des figures
+
+%\printbibliography[heading=bibnumbered, label=bibliography] % Affiche les références/bibliographie
+%\nocite{*} % Afficher toutes les références (même celles non utilisées)
+
+\clearpage % Ajoute une page vide
+\null
+\thispagestyle{empty}%
+\addtocounter{page}{-1}% % Ne compte pas dans les numéros de page
+\BgThispage
+\end{document}

@@ -1,0 +1,153 @@
+%-----------------------------------
+% Plan de test simplifié
+%
+% ProSE
+%
+% Auteur : Camille Constant
+%
+%-----------------------------------
+
+\documentclass[a4paper,11pt,titlepage,french]{article}
+
+\usepackage{lipsum} % Sert à avoir l'exemple de texte avec \lipsum
+
+%----------------------------------------
+%       MACROS (à changer)
+%----------------------------------------
+\author{ProSE~2024~A1}        % Auteur
+\title{Plan de Test Système}     % Titre
+\date{\normalsize\today}    % Date actuelle, automatique
+\newcommand{\client}{STMicroelectronics}
+\newcommand{\groupe}{Prose-2024-A1}
+
+\newcommand{\amodifier}{{\it À compléter et/ou modifier\\}}
+
+\newcommand{\equipe}{Projet Prose A1}
+\newcommand{\projet}{PSC (Prototype Sonnette Connectée)}
+\newcommand{\produit}{PSC (Prototype Sonnette Connectée)}
+
+\newcommand{\rqt}{TROVALLET Romain}
+\newcommand{\cdp}{BOUY Hugo}
+
+\newcommand{\versionPdT}{2.1}
+\newcommand{\versionProjet}{2.0}
+
+\newcommand{\refSpec}{[V2\_SPEC\_A1]}
+\newcommand{\verSpec}{2.0}
+\newcommand{\refPAQL}{[PAQL\_A1]}
+\newcommand{\verPAQL}{4.0}
+
+\newcommand{\appliC}{SoftSonnette et SoftPorte}
+\newcommand{\appliLin}{SoftSonnette}
+\newcommand{\appliPo}{SoftPorte}
+\newcommand{\appliA}{AOP}
+
+\usepackage[
+            imageFooterLeft      =  {latex.png},                        % Optionnel
+            imageHeaderLeft      =  {eseo.png},                         % Optionnel
+            subject              =  {{Subject of the document}},        % Optionnel
+            keywords             =  {{Example, Template, LaTeX}},       % Optionnel
+            language             =  {french},                      
+            % encoding             =  {},                               % Defaut utf8
+            ]{Parameter}
+
+\usepackage[
+            logoRight       =   {ST-logo.png},                          % Optionnel
+            logoLeft        =   {eseo.png},                             % Optionnel
+            %logoCenter      =   {latex.png},                          % Optionnel
+            subject         =   {{Incrément 2}},                        % Optionnel
+            projectName     =   {\projet},                          % Optionnel
+            enterpriseName  =   {\client},                          % Optionnel
+            responsableName =   {\rqt},                            % Optionnel
+            etatDocument    =   {Version~finale},                       % Optionnel
+            % revision        =   {},                                   % Optionnel
+            version         =   {\versionPdT},                                  % Optionnel
+            ]{FrontPage}
+
+
+%----------------------------------------
+%       MISE EN PAGE
+%----------------------------------------
+
+
+
+\graphicspath{{../schemas/}{../figures/}}
+
+% Exemple d'arrière plan
+\backgroundsetup{
+    scale=1,
+    opacity=0.1,
+    angle=0,
+    contents={%
+            \includegraphics[width=\textwidth]{eseo.png}
+        }%
+}
+
+\setlength{\parskip}{0.5em} % Espacement entre les paragraphes
+\setlength{\belowcaptionskip}{-0.5em} % Espacement entre les images
+
+%----------------------------------------
+%       DOCUMENT
+%----------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\BgThispage % Utiliser l'arrière plan
+\vspace*{\fill}
+\noindent
+AVERTISSEMENT : \\
+Le présent document est un document à but pédagogique.
+Il a été réalisé sous la direction de Camille CONSTANT, en collaboration avec des enseignants et les étudiants de l'option SE, groupe A1 (Hugo BOUY, Bastien CASSAR, Paul CHIRON, Paul JURET, Laurent LETENNEUR, Mathis MOULIN, Romain TROVALLET) du groupe ESEO.
+Ce document est la propriété de Camille CONSTANT du groupe ESEO. En dehors des activités pédagogiques de l'ESEO, ce document ne peut être diffusé ou recopié sans l'autorisation écrite de ses propriétaires.
+\vspace*{\fill}
+\clearpage
+
+\newpage
+
+\input{TableVersions}
+
+\newpage
+
+%------------------------------- 
+
+\addtocontents{toc}{\protect\setlength{\parskip}{0pt}}
+\tableofcontents
+% alternative pour réduire l'espacement entre les entrées de la table des matières
+% (la valeur numérique peut être adaptée au besoin) : 
+%{\setlength{\baselineskip}{0.96\baselineskip}\tableofcontents\par}
+\newpage
+
+%-------------------------------
+
+\input{sections/1.Introduction.tex}
+\newpage
+
+\input{sections/2.Perimetre.tex}
+\newpage
+
+\input{sections/3.ProcessusStrategie.tex}
+\newpage
+
+\input{sections/4.Environnement.tex}
+\newpage
+
+\input{sections/5.Responsabilites.tex}
+\newpage
+
+\input{sections/6.EquipeTest.tex}
+\newpage
+
+\input{sections/7.Planning.tex}
+\newpage
+
+\input{sections/8.Signatures.tex}
+\newpage
+
+\end{document}
+
+
+
+%--- END 
+

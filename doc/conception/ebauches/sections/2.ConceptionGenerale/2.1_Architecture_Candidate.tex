@@ -1,0 +1,46 @@
+\subsection{Architecture candidate}
+
+Dans le diagramme suivant est présenté l'architecture candidate du SàE. 
+Les différents objets sont présentes ainsi que leurs méthodes.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=\textwidth]{architecture_candidate_etendue}
+    \caption{Architecture candidate}
+    \label{Archicandidate}
+\end{figure}
+
+Lors de la partie conception générale, est faite l'hypothèse d'un système matériel à ressources infinies.
+\newpage
+On distingue dans la représentation de la figure \ref{Archicandidate} les 3 grandes entités du SàE : AOP, SoftSonnette et SoftPorte.
+
+\begin{itemize}
+    \item AOP est l'application  développée pour le téléphone et à destination du Démonstrateur. Elle contient les objets suivants :
+    \begin{itemize}
+        \item[$-$] Connection Manager : Permet de gérer la connexion avec SoftSonnette.
+        \item[$-$] GUI : Interface graphique permettant à l'utilisateur d'interagir avec AOP.
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+    \item SoftSonnette est l'application exécutée sur le microprocesseur. Elle contient les objets suivants :
+    \begin {itemize}
+        \item[$-$] Employee Manager : Permet de gérer les données des employés.
+        \item[$-$] Clock : Permet à SoftSonnette et AOP de synchroniser leur heure.
+        \item[$-$] Cameraman : Permet de gérer le flux vidéo.
+        \item[$-$] Guard : Vérifie le mot de passe pour la connexion entre SoftSonnette et AOP.
+        \item[$-$] Bouncer : Permet de gérer les accès aux Testeurs se présentant devant la Sonnette.
+        \item[$-$] UISS : Interface graphique permettant à l'utilisateur d'interagir avec SoftSonnette.
+        \item[$-$] \IA : Permet d'interfacer la librairie de reconnaissance faciale propriétaire du client. 
+        La librairie n'étant pas fournie à l'équipe projet, il est de la responsabilité du client d'implémenter dans cet objet les différents appels à sa librairie pour permettre le bon fonctionnement du PSC.
+        L'équipe de développement implémente cet objet en mode "boîte noire".
+    \end{itemize}
+\end{itemize}
+
+\begin {itemize}
+    \item SoftPorte est l'application exécutée sur le microcontrôleur. Elle contient les objets suivants :
+    \begin{itemize}
+        \item[$-$] Door Manager : Permet le contrôle de la porte simulée.
+        \item[$-$] UISP : Interface physique permettant à l'utilisateur de visualiser l'état de SoftPorte.
+    \end{itemize}
+\end{itemize}

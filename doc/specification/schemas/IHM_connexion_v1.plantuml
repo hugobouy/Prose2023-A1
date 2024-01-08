@@ -1,0 +1,23 @@
+@startuml
+
+AOP -d->[*]: quitterAOP()
+[*] -d-> AOP
+state AOP{
+    [*] -d-> Écran_Démarrage
+    Écran_Démarrage -down-> PopUP_Attente_Connexion : seConnecter() 
+
+    PopUP_Attente_Connexion -> PopUp_Erreur_Connexion : after(TAC)
+    PopUp_Erreur_Connexion -> Écran_Démarrage : return()
+
+    PopUP_Attente_Connexion ---> PopUp_Erreur_MDP_Admin : [connexionOK et motDePasseKO]
+    
+    PopUp_Erreur_MDP_Admin --> Écran_Démarrage : return()
+
+    state Accueil<<o-o>>{
+        PopUP_Attente_Connexion -d-> Accueil : [connexionOK et motDePasseOK]
+        
+    }
+    Accueil -right-> PopUp_Erreur_Connexion : [connexionKO]
+
+}
+@enduml

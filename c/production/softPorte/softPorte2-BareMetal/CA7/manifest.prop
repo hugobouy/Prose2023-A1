@@ -1,0 +1,5 @@
+MANIFEST_VERSION = openstlinux-5.15-yocto-kirkstone-mp1-v22.11.23
+KERNEL_DT = ./DeviceTree/softPorte2-BareMetal/kernel
+OPTEE_DT = ./DeviceTree/softPorte2-BareMetal/optee-os
+UBOOT_DT = ./DeviceTree/softPorte2-BareMetal/u-boot
+TFA_DT = ./DeviceTree/softPorte2-BareMetal/tf-a

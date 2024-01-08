@@ -1,0 +1,14 @@
+@startuml
+
+start
+:Envoie la photo prise par E_Camera au programme Recognize;
+:Recognize utilise les photos des employés de Données_Testeurs;
+:Recognize effectue la reconnaissance faciale;
+:Recognize renvoie une chaîne de caractère;
+if(chaîne != "unknown" ?) then (oui)
+    :Visage reconnu;
+    stop
+else (non)
+    :Visage non reconnu;
+stop
+@enduml

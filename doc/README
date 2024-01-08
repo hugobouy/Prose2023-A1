@@ -1,0 +1,10 @@
+Les documents dans leurs versions finalisés (pour les deux incréments du projet) sont dans le présent dossier "doc".
+
+Les versions LaTeX modifiables et utilisables en futur template ProSE de certains fichiers sont disponibles dans les dossiers suivants:
+- Dossier de Spécification : doc/specification/
+- Dossier de Conception : doc/conception/
+- Plan de Test : doc/test/plan_test
+
+Le dossier doc/ contient également les éléments de tests utilisant JMeter et Robot_framework dans les dossiers test/JMeter et test/robot_framework.
+
+Le dossier qualite/modeles contient les modèles de code utilisés par l'équipe A1.

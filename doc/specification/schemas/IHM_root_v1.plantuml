@@ -1,0 +1,25 @@
+@startuml
+
+state Accueil{
+    [*] --> Écran_Accueil
+    Écran_Accueil --> Écran_Liste : demanderListeEmployés()
+    Écran_Liste --> Écran_Accueil : return()
+    Écran_Liste --> Écran_Ajout : demanderAjoutEmployé()
+    Écran_Ajout --> Écran_Liste : confirmer()
+    Écran_Ajout --> Écran_Liste : annuler()
+    Écran_Liste --> PopUp_Suppression : demanderSuppressionEmployé(...)
+    PopUp_Suppression --> Écran_Liste : confirmer()
+    PopUp_Suppression --> Écran_Liste : annuler()
+    Écran_Accueil --> Écran_Calendrier : demanderCalendrier(...)
+    Écran_Calendrier --> Écran_Accueil : return()
+    Écran_Accueil --> Écran_Vidéo : demanderVidéo()
+    Écran_Vidéo --> Écran_Accueil : return()
+    Écran_Vidéo --> PopUp_VideoIndisponible : videoIndisponible()
+    PopUp_VideoIndisponible --> Écran_Accueil : return()
+    Écran_Accueil --> Écran_Ouverture_Porte : demanderContrôlePorte()
+    Écran_Ouverture_Porte --> Écran_Accueil : return()
+    Écran_Ajout --> Écran_Ajout : importerImage(...)
+    Écran_Ouverture_Porte --> Écran_Ouverture_Porte : demanderOuverturePorte()
+}
+@enduml
+

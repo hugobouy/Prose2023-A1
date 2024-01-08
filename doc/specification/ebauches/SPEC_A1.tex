@@ -1,0 +1,124 @@
+%-----------------------------------------------
+%   LaTeX template
+%   Crée par: Thorkel-dev
+%-----------------------------------------------
+
+\documentclass[a4paper,11pt,titlepage]{article}
+
+\usepackage{lipsum}
+
+\usepackage[
+            imageFooterLeft      =  {latex.png},                        % Optionnel
+            imageHeaderLeft      =  {eseo.png},                         % Optionnel
+            %subject              =  {{Subject of the document}},        % Optionnel
+            %keywords             =  {{Example, Template, LaTeX}},       % Optionnel
+            language             =  {french},                      
+            % encoding             =  {},                               % Defaut utf8
+            ]{Parameter}
+
+\usepackage[
+            logoRight       =   {ST-logo.png},                          % Optionnel
+            logoLeft        =   {eseo.png},                             % Optionnel
+            %logoCenter      =   {latex.png},                          % Optionnel
+            subject         =   {{Incrément 2}},                        % Optionnel
+            projectName     =   {PSC~(Prototype~Sonnette~Connectée)},    % Optionnel
+            enterpriseName  =   {STMicroelectronics},                   % Optionnel
+            responsableName =   {Hugo~BOUY},                            % Optionnel
+            etatDocument    =   {Version~finale},                       % Optionnel
+            %revision        =   {},                                   % Optionnel
+            version         =   {2.5},                                  % Optionnel
+            ]{FrontPage}
+
+\makeglossaries
+\loadglsentries{glossary.tex} % Charge le glossaire
+\loadglsentries{acronyms.tex} % Charge les acronymes
+\addbibresource{biblio.bib}   % Charge la bibliographie
+
+%-----------------------------------------
+%      Variables
+%-----------------------------------------
+\author{ProSE~2024~A1}        % Auteur
+\title{Dossier de spécification}     % Titre
+\date{\normalsize\today}    % Date actuelle, automatique
+\newcommand{\client}{STMicroelectronics}
+\newcommand{\groupe}{Prose-2024-A1}
+\newcommand{\equipe}{Projet Prose A1}
+
+\graphicspath{{../schemas/}{../figures/}}
+
+
+%Hyphenation
+%\hyphenation{STMicroelectronics}
+
+
+% Exemple d'arrière plan
+\backgroundsetup{
+    scale=1,
+    opacity=0.1,
+    angle=0,
+    contents={%
+            \includegraphics[width=\textwidth]{eseo.png}
+        }%
+}
+
+\setlength{\parskip}{0.5em} % Espacement entre les paragraphes
+\setlength{\belowcaptionskip}{-0.5em} % Espacement entre les images
+%\setlength{\parindent}{0pt} % Pas d'indentation
+\setcounter{tocdepth}{3}
+
+%-----------------------------------------
+%      Document
+%-----------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\BgThispage % Utiliser l'arrière plan
+\vspace*{\fill}
+\noindent
+AVERTISSEMENT : \\
+Le présent document est un document à but pédagogique.
+Il a été réalisé sous la direction de Jérôme DELATOUR, en collaboration avec des enseignants et les étudiants de l'option SE, groupe A1 (Hugo BOUY, Bastien CASSAR, Paul CHIRON, Paul JURET, Laurent LETENNEUR, Mathis MOULIN, Romain TROVALLET) du groupe ESEO.
+Ce document est la propriété de Jérôme DELATOUR du groupe ESEO. En dehors des activités pédagogiques de l'ESEO, ce document ne peut être diffusé ou recopié sans l'autorisation écrite de ses propriétaires.
+\vspace*{\fill}
+\clearpage
+
+\section*{Table des versions}
+\input{tablesVersion.tex} \label{TableOfVersion} % Ajoute la table des versions
+\clearpage
+
+\addtocontents{toc}{\protect\setlength{\parskip}{0pt}}
+\tableofcontents % Ajoute la table des matières
+
+%-----------------------------------------
+%      Partie I
+%-----------------------------------------
+
+\input{sections/1.Introduction/Introduction.tex} % Exemple d'inclusion de fichier
+
+%-----------------------------------------
+%      Partie II
+%-----------------------------------------
+
+\input{sections/2.DescriptionGenerale/Description_Generale.tex}
+
+%-----------------------------------------
+%      Partie III
+%-----------------------------------------
+
+\input{sections/3.ExigencesSpecifiques/Exigences_Specifiques.tex}
+
+%-----------------------------------------
+%      Partie IV
+%-----------------------------------------
+\input{sections/4.Signatures.tex}
+
+
+\newpage
+\listoffigures \label{TableOfFigure} % Affiche la table des figures
+
+%\printbibliography[heading=bibnumbered, label=bibliography] % Affiche les références/bibliographie
+%\nocite{*} % Afficher toutes les références (même celles non utilisées)
+
+\end{document}

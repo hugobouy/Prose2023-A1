@@ -1,0 +1,54 @@
+@startuml
+
+actor Démonstrateur
+
+participant StartAOP
+participant ConnectionManager
+participant Communication
+participant PostmanSoftSonnette
+participant CacheCameraman
+participant PostmanVideo
+
+activate StartAOP
+activate Communication
+activate PostmanSoftSonnette
+activate PostmanVideo
+
+
+rnote over Démonstrateur
+attente quitter
+end note
+
+Démonstrateur -> StartAOP: quitAOP()
+
+StartAOP -> CacheCameraman : stop()
+CacheCameraman -> PostmanVideo : stop()
+PostmanVideo --> CacheCameraman :
+deactivate PostmanVideo
+CacheCameraman --> StartAOP :
+
+StartAOP -> ConnectionManager : stop()
+ConnectionManager -> Communication : stop()
+Communication -> PostmanSoftSonnette : stop()
+PostmanSoftSonnette --> Communication:
+deactivate PostmanSoftSonnette
+Communication --> ConnectionManager :
+deactivate Communication
+ConnectionManager --> StartAOP :
+
+rnote over StartAOP
+attente stop
+end note
+
+StartAOP -> PostmanVideo : free()
+destroy PostmanVideo
+StartAOP -> CacheCameraman : free()
+destroy CacheCameraman
+StartAOP -> PostmanSoftSonnette : free()
+destroy PostmanSoftSonnette
+StartAOP -> Communication : free()
+destroy Communication
+StartAOP -> ConnectionManager : free()
+destroy ConnectionManager
+
+@enduml

@@ -1,0 +1,263 @@
+\newpage
+\subsection{Environnement}
+
+\subsubsection{Architecture matérielle et logicielle}
+
+Le diagramme de déploiement UML de la Figure \ref{ArchitectureMaterielle} représente l’architecture logicielle et matérielle du SàE.
+Les conventions graphiques utilisées sont explicitées en Figure \ref{LegendeDiagrammeDeploiement}.
+Ce diagramme de déploiement identifie les entités matérielles et/ou logicielles avec lesquelles le SàE doit interagir et permet ainsi de déterminer les principaux échanges qu’il entretient avec son environnement.\\
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=\textwidth]{architecture_materielle}
+    \caption{Architecture matérielle et logicielle représentée par un diagramme de déploiement UML}
+    \label{ArchitectureMaterielle}
+\end{figure}
+
+Le SàE se compose de trois briques logicielles :
+\begin{itemize}
+    \item AOP : Application Ouverture Porte (Android)
+    \item SoftSonnette : Application C déployée sur le Microprocesseur sur Linux
+    \item SoftPorte : Application C déployée sur le Microcontrôleur\\
+\end{itemize}
+
+En plus des briques logicielles, le SàE stocke les \hyperlink{caracEmploye}{\textit{informations testeurs}} dans l'entité \hyperlink{donneesTesteurs}{\textit{Données\_Testeurs}} .
+%Inc
+%Le choix de la méthode de stockage des données sera définie lors de la conception et sera implémenté lors de l'incrément 2.
+%Les données textuelles sont stockées dans un fichier csv et les images dans un dossier picture.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=0.7]{legende_diagramme_deploiement}
+    \caption{Légende d'un diagramme UML}
+    \label{LegendeDiagrammeDeploiement}
+\end{figure}
+
+\newpage
+Comme indiqué sur la figure \ref{ArchitectureMaterielle}, les logiciels du SàE sont déployés sur deux supports Hardware : \hyperlink{bd}{\textit{La Board}} et le Téléphone.
+La Board est en interaction avec deux dispositifs matériels supplémentaires contrôlés par le SàE : E\_Ecran et E\_Caméra.  
+Ces dispositifs sont fournis et imposés par le client, ce sont les entités externes au SàE.
+Par convention, le nom de ces entités est préfixé par les caractères "E\_" (E pour Externe).
+
+La Board est une STM32MP15 composée d'un Microcontrôleur ARM Cortex-M4 et d'un Microprocesseur ARM-based dual Cortex-A7 communiquant en VUART (Virtual UART).
+La Board est fournie et imposée par le client.
+
+Les composants externes au SàE ont les caractéristiques suivantes :
+\begin{itemize}
+    \item E\_Ecran : 4" TFT 480x800 pixels avec LED backlight et interface MIPI DSISM.
+    \item E\_Camera : LifeCam HD-3000, USB 2.0. \\
+\end{itemize}
+
+Le client impose également certains composants logiciel pour la production des applications :
+\begin{itemize}
+    \item OpenSTLinux (OSTL) référé par \hyperlink{linux}{\textit{Linux}} dans la suite du document et dont la version est précisée dans le dictionnaire du domaine. Il s'agit de l'OS sur lequel est déployé l'application SoftSonnette.
+    \item Cube FW Package version 1.6, ensemble de librairies à destination du Microcontrôleur utilisé par SoftPorte.
+    \item CubeIDE version 1.12.0, IDE pour le développement de l'application SoftPorte. \\
+\end{itemize}
+
+Il est convenu avec le client que l'application AOP est développée sur Android Studio version 2022.1.1.
+La Téléphone est un Samsung Galaxy A20e fonctionnant sous Android 9.0. 
+L'application est prévue pour fonctionner en mode portrait.
+L'écran du téléphone mesure 5.8" et a une résolution de 720 x 1560 pixels.
+
+La communication entre le Microprocesseur et le Téléphone se fait par réseau Wifi.
+La \hyperlink{bd}{\textit{Board}} est configurée pour créer son propre HotSpot Wifi. 
+Le Téléphone vient ensuite s'y connecter. 
+Les deux entités utilisent ensuite le protocole TCP/IP pour communiquer. 
+L'envoi et la réception de la vidéo se fait en UDP.
+
+\subsubsection{Les interfaces du système}
+
+Ce chapitre décrit les entrées et sorties dites «logiques» et «physiques» du SàE. 
+En effet, nous différencions dans cette étude deux grands types d’entrées/sorties :
+\begin{itemize}
+    \item Celles dites de haut niveau (dites aussi logiques) qui décrivent les évènements et données échangés entre l’utilisateur et les périphériques PSC. 
+    Ces entrées et sorties portent sur les intentions des acteurs interagissant avec le SàE.
+    \item Celles dites de bas-niveau (dites aussi physiques) qui sont les entrées/sorties réellement échangées entre le SàE et les périphériques PSC. 
+    Les entrées/sorties physiques (ou bas niveau) sont décrites au chapitre 2.2.2.3 (page \pageref{2.2.2.3}).
+\end{itemize}
+
+\newpage
+
+\paragraph{Les interfaces logiques}
+
+La figure \ref{ContexteLogique} (page \pageref{ContexteLogique}) présente le contexte de PSC en faisant figurer les entrées/sorties dites de haut niveau (ou logiques). 
+Elles sont regroupées en grandes familles. 
+Pour représenter ce contexte logique, un diagramme de communication UML est utilisé. 
+Nous retrouvons les périphériques PSC déjà présentés en Figure \ref{ArchitectureMaterielle} (page \pageref{ArchitectureMaterielle}).
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=\textwidth]{contexte_logique}
+    \caption{Contexte logique du SàE, représenté par un diagramme de communication UML}
+    \label{ContexteLogique}
+\end{figure}
+
+Dans ce diagramme de communication, seules les entrées/sorties logiques entre les acteurs et les périphériques de PSC sont présentées.
+
+\paragraph{Les interfaces avec les acteurs}
+
+Nous allons maintenant détailler ces entrées et sorties logiques.
+
+\subparagraph{\textit{En provenance du Testeur vers E\_Ecran}} 
+\noindent Voici les évènements logiques du Testeur vers E\_Ecran:
+
+    \begin{itemize}
+        \item sonner() : Le Testeur demande à SoftSonnette (dans le SàE) la permission de rentrer.
+    \end{itemize}
+
+\subparagraph{\textit{A destination du Testeur depuis E\_Ecran}} 
+\noindent Voici l'évènement logique du E\_Ecran vers le Testeur:
+
+    \begin{itemize}
+        \item afficheEcranSoftSonnette() : affiche sur E\_Ecran les éléments de « \hyperlink{EcranWebcamConnec}{Écran\_SoftSonnette} ».
+    \end{itemize}
+
+\subparagraph{\textit{A destination du Démonstrateur depuis E\_Ecran}} 
+\noindent Voici l'évènement logique du E\_Ecran vers le Démonstrateur:
+
+    \begin{itemize}
+        \item afficheEcranSoftSonnette() : affiche sur E\_Ecran les éléments de « \hyperlink{EcranWebcamConnec}{Écran\_SoftSonnette} ».
+    \end{itemize}
+
+\subparagraph{\textit{En provenance du Démonstrateur vers E\_Ecran}} 
+\noindent Voici les évènements logique du Démonstrateur vers E\_Ecran:
+    
+        \begin{itemize}
+            \item démarrerSoftSonnette() : Le Démonstrateur lance l'application SoftSonnette en exécutant le fichier binaire SoftSonnette.out sur Linux.
+            \item quitterSoftSonnette() :  Le Démonstrateur quitte SoftSonnette.
+        \end{itemize}
+
+\subparagraph{\textit{En provenance du Testeur vers E\_Camera}} 
+\noindent Voici l'évènement logique du Testeur vers E\_Camera:
+
+    \begin{itemize}
+        \item présenterVisage(photo) : Le Testeur se positionne devant E\_Camera qui capture une \hyperlink{photo}{\textit{photo}}.
+    \end{itemize}
+
+\subparagraph{\textit{A destination de la Porte depuis le SàE}} 
+\noindent Voici l'évènement logique du SàE vers le Porte:
+
+    \begin{itemize}
+        \item déverrouiller() : Le SàE \hyperlink{deverrouiller}{\textit{déverrouille}} la Porte. 
+    \end{itemize}
+
+\newpage
+
+\subparagraph{\textit{A destination du Testeur depuis le SàE}} 
+\noindent Voici l'évènement logique du SàE vers le Testeur:
+    
+        \begin{itemize}
+            \item signalerVisageNonReconnu() : SoftPorte signale au Testeur que son visage est non reconnu via l'IHM \hyperlink{EcranSoftPorte}{\textit{vue board}}. 
+        \end{itemize}
+
+\subparagraph{\textit{En provenance du Démonstrateur vers le SàE}} 
+\noindent Voici les évènements logiques du Démonstrateur vers le SàE:
+
+    \begin{itemize}
+        \item démarrerAOP() : Le Démonstrateur lance AOP depuis le Téléphone.
+        \item entrerInfoConnexion(\hyperlink{IP}{\textit{IP}}, \hyperlink{mdp}{\textit{mdp}}) : Le Démonstrateur entre les informations de connexion.
+        Cette fonction prend en paramètre l'adresse IP et le mot de passe.
+        \item seConnecter() : Le Démonstrateur valide les informations de connexion.
+        \item demanderAjoutEmployé() : Le Démonstrateur demande l'ouverture du menu pour ajouter un \hyperlink{emp}{\textit{employé}}.
+        \item importerImage(\hyperlink{photo}{\textit{photo}}) : Le Démonstrateur importe l'image du nouvel employé à ajouter.
+        Cette fonction prend en paramètre photo.        
+        \item entrerInfosEmployé(caractéristiques\_employé) : Le Démonstrateur entre les informations relatives au nouvel employé.
+        Cette fonction prend en paramètre les caractéristiques d'un employé (son \hyperlink{nom}{\textit{nom}}, son \hyperlink{prenom}{\textit{prénom}} et son \hyperlink{rol}{\textit{rôle}}).
+        Dans le cas d'un employé spécial les horaires autorisés sont manuellement entrés par le Démonstrateur.
+        \item demanderSuppressionEmployé(employéID) : Le Démonstrateur demande à supprimer un employé. 
+        Cette fonction prend en paramètre l'identifiant d'un employé.
+        \item quitterAOP() : Le Démonstrateur quitte AOP.
+        \item return() : Le Démonstrateur demande à retourner à l'écran précédent.
+        \item confirmer() : Le Démonstrateur confirme les informations entrées.
+        \item annuler() : Le Démonstrateur demande à annuler ses modifications.
+        \item demanderOuverturePorte() : Le Démonstrateur demande l'ouverture à distance de la Porte via AOP.
+        
+        \item L'évènement demanderEcran() est le regroupement des évènements suivants :
+        \begin{itemize}
+            \item[-] demanderCalendrier(employéID) : Le Démonstrateur demande à voir le calendrier d'un employé. 
+            Cette fonction prend en paramètre l'identifiant d'un employé. 
+            \item[-] demanderListeEmployés() : Le Démonstrateur demande à voir la liste des employés.
+            \item[-] demanderVideo() : Le Démonstrateur demande à voir le \hyperlink{video}{\textit{flux vidéo}} de E\_Camera.
+            \item[-] demanderContrôlePorte() : Le Démonstrateur demande à voir l'état de la Porte et le menu permettant d'en prendre le contrôle.
+        \end{itemize}
+    \end{itemize}
+
+\newpage
+
+\subparagraph{\textit{A destination du Démonstrateur depuis le SàE}}
+Voici les évènements logiques du SàE vers le Démonstrateur:\newline
+    \begin{itemize}
+    \item L'évènement afficherEcran() est le regroupement des évènements suivants :
+        \begin{itemize}
+            \item[-] afficherCalendrier(employéID) : affiche l'écran « \hyperlink{EcranCalendrier}{Écran\_Calendrier} » avec la variante lié à employéID. 
+            Cette fonction prend en paramètre l'identifiant d'un employé. 
+            \item[-] afficheListeEmployés() : affiche l'écran « \hyperlink{EcranListe}{Écran\_Liste} ».
+            \item[-] afficherVideo() : affiche l'écran « \hyperlink{EcranVideo}{Écran\_Vidéo} ».
+            \item[-] afficherContrôlePorte() : affiche l'écran « \hyperlink{EcranPorte}{Écran\_Ouverture\_Porte} ».
+            \item[-] afficherDémarrageAOP() : affiche l'écran « \hyperlink{EcranDemarrage}{Écran\_Démarrage} ».
+            \item[-] afficherAccueil() : affiche l'écran « \hyperlink{EcranAccueil}{Écran\_Accueil} ».
+            \item[-] afficherAjoutEmployé() : affiche l'écran « \hyperlink{EcranAjoutStandard}{Écran\_Ajout} ».
+        \end{itemize}
+    \item L'évènement afficherPopUp() est le regroupement des évènements suivants :
+        \begin{itemize}
+            \item[-] afficherPopUpAttenteConnexion() : affiche la Pop-Up « \hyperlink{popUpAttenteConnexion}{PopUP\_Attente\_Connexion}~».
+            \item[-] afficherPopUpErreurConnexion() : affiche la Pop-Up « \hyperlink{popUpErreurConnexion}{PopUp\_Erreur\_Connexion}~».
+            \item[-] afficherPopUpErreurMDP() : affiche la Pop-Up « \hyperlink{popUpErreurMDPAdmin}{PopUp\_Erreur\_MDP\_Admin}~».
+            \item[-] afficherPopUpSuppression() : affiche la Pop-Up « \hyperlink{popUpSuppression}{PopUp\_Suppression}~».
+            \item[-] afficherPopUpVideoIndisponible() : affiche la Pop-Up « \hyperlink{popUpVideoIndisponible}{PopUp\_VideoIndisponible}~».
+        \end{itemize}
+    \item signalerLancementSoftPorte() : SoftPorte signale au Démonstrateur son bon lancement via l'IHM \hyperlink{EcranSoftPorte}{\textit{vue board}}.  
+    \end{itemize}
+
+\newpage
+
+\paragraph{Les interfaces physiques}
+\label{2.2.2.3}
+
+Ce paragraphe précise les caractéristiques de chaque interface entre le logiciel et les composants matériels du système. 
+Il s’agit des entrées/sorties bas-niveaux (dites aussi physiques).
+Ce sont celles que doit réellement traiter le SàE en les interprétant ou les générant en évènement logique. 
+Cela comprend aussi les caractéristiques de configuration (nombre de ports, jeux d’instruction, etc.), les contraintes électriques... 
+
+La suite de ce chapitre décrit chacune de ses interfaces. 
+La figure \ref{ContextePhysique} représente ce contexte physique avec un diagramme de communication UML.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[scale=0.75]{contexte_physique}
+    \caption{Contexte physique du SàE, représenté par un diagramme de communication UML}
+    \label{ContextePhysique}
+\end{figure}
+
+Le SàE interface les périphériques E\_Camera et E\_Ecran en utilisant des librairies standards fournis par \hyperlink{linux}{\textit{Linux}}.
+
+Le client n'impose pas de dispositions pour interfacer les périphériques autres que les contraintes matérielles inhérentes.
+
+Le détail des interactions entre le SàE et les périphériques E\_Camera et E\_Ecran est laissé à la discrétion de l'équipe projet et n'est donc pas documenté dans le présent dossier de spécification. Ces dernières sont définies en conception.
+
+%Exploration 
+
+\newpage
+
+\paragraph{Les interfaces de communication}
+N.A.
+
+\subsubsection{Les contraintes de mémoire}
+%Inc
+%Lors de l'incrément 1, une base de données temporaire est créée sur le Téléphone.
+%Lors de l'incrément 2 la base de données (BdD\_Testeurs) sera implémenté sur la Board.
+Le stockage des \hyperlink{donneesPersistantes}{\textit{données persistantes}} est limité par les contraintes matérielles de stockage sur la \hyperlink{bd}{\textit{Board}}.
+La principale contrainte réside dans le stockage des photos.
+Afin d'assurer un fonctionnement normal du PSC, il est nécessaire de disposer de \hyperlink{maxEmployee}{\textit{MAX\_EMPLOYE}} * \hyperlink{poidsPhoto}{\textit{POIDS\_MAX\_PHOTO}} méga-octets de stockage disponible sur la \hyperlink{bd}{\textit{Board}}.
+
+\subsubsection{Les activités}
+
+\paragraph{Fréquences d'utilisation}
+N.A.
+
+\paragraph{Activité de maintenance}
+N.A.
+
+\subsubsection{Les exigences d'adaptation}
+N.A.

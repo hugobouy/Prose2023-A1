@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="77dp"
+    android:background="@drawable/rounded_rectangle"
+
+    android:layout_margin="7dp"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/item_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/ic_account_circle"
+        android:contentDescription="@string/avatar_icon_description" />
+
+
+
+    <TextView
+        android:id="@+id/item_firstname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:textStyle="bold"
+        android:layout_marginStart="55dp"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/item_lastname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/item_firstname"
+        android:textSize="18sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/item_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/item_firstname"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="5dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/item_firstname"
+        android:textSize="12sp"/>
+
+    <Button
+        android:id="@+id/item_delete_button"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="@string/x"
+        android:textSize="22sp"
+        android:layout_marginEnd="7dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/button_background" />
+
+
+
+</RelativeLayout>

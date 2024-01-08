@@ -1,0 +1,855 @@
+\newpage
+
+\subsection{Description des classes}
+
+\subsubsection{Description des classes de \appliLin}%3.2.1
+
+    \paragraph{[Object] Starter}%3.2.1.2
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-Starter.eps}
+            \caption{Diagramme de classe de Starter}
+            \label{Classe-Starter}
+        \end{figure}
+    
+        \subparagraph{Philosophie de Conception}%3.2.1.2.1
+
+        La classe Starter a pour rôle d'instancier tous les objets actifs utilisés par SoftSonnette et de démarrer leur machine à état respective.
+        Les objets instanciés sont les suivants : 
+
+        \begin{itemize}
+            \item {Cameraman}
+            \item {UISS}
+            \item {PostmanAOP}
+            \item {DispatcherAOP}
+            \item {Bouncer}
+        \end{itemize}
+
+        La classe Starter permet aussi de stopper les machines à état et détruire tous les objets instanciés lors de l'arrêt de SoftSonnette.
+        
+        \subparagraph{Description structurelle}%3.2.1.2.2
+
+            \subsubparagraph{Attributs}%3.2.1.2.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.1.2.2.2
+            \begin{itemize}
+                \item {main() : int : La méthode initiale appelée au lancement de l'application SoftSonnette. Elle instancie et démarre les objets indiqués ci-dessus.}
+                \item {cleanup() : void : Détruit les objets après l'arrêt de l'application et libère la mémoire.}
+            \end{itemize}
+\newpage
+        \subparagraph{Diagramme de séquence du démarrage et de l'arrêt de \appliLin}%3.2.1.2.3
+        Le diagramme suivant représente la séquence d'initialisation de \appliLin.
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_séquence_démarrage_SS.eps}
+            \caption{Diagramme de séquence de l'initialisation de SoftSonnette}
+            \label{Sequ-Demarrage-SS}
+        \end{figure}
+\newpage
+        Le diagramme suivant représente la séquence d'arrêt de \appliLin.
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_séquence_arret_SS.eps}
+            \caption{Diagramme de séquence de l'arrêt de SoftSonnette}
+            \label{Sequ-Arret-SS}
+        \end{figure}
+
+\newpage
+
+    \paragraph{[Medium] ProxyGUI}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-ProxyGUI.eps}
+            \caption{Diagramme de classe de ProxyGUI}
+            \label{Classe-ProxyGUI}
+        \end{figure}
+        
+        \subparagraph{Philosophie de Conception}%3.2.1.2.1
+
+        La classe ProxyGUI dans SoftSonnette simule le comportement de la classe GUI et gère l'encodage de la trame pour la communication vers AOP.
+        Cette classe sert également d'intermédiaire pour la communication entre SoftPorte et AOP en ré-encodant les messages en provenance de SoftPorte et à destination de AOP. 
+        Elle gère la communication d'une seule méthode entre DoorManager et GUI, à travers DispatcherSP et PostmanAOP.
+        
+        \subparagraph{Description structurelle}%3.2.1.2.2
+
+            \subsubparagraph{Attributs}%3.2.1.2.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.1.2.2.2
+            \begin{itemize}
+                \item {updateDoorState(doorState : bool) : void : Met à jour l'affichage de l'état de la Porte sur AOP selon l'état state.}
+            \end{itemize}
+
+\newpage
+
+    \paragraph{[Medium] ProxyConnectionManager}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-ProxyConnectionManager.eps}
+            \caption{Diagramme de classe de ProxyConnectionManager}
+            \label{Classe-ProxyConnectionManager}
+        \end{figure}
+
+        \subparagraph{Philosophie de Conception}%3.2.1.2.1
+
+        La classe ProxyConnectionManager simule le comportement de la classe ConnectionManager, et permet la communication entre Guard et ConnectionManager en passant par l'objet PostmanAOP.
+        
+        \subparagraph{Description structurelle}%3.2.1.2.2
+
+            \subsubparagraph{Attributs}%3.2.1.2.2.1
+                N.A. 
+            \subsubparagraph{Services offerts}%3.2.1.2.2.2
+            \begin{itemize}
+                \item {validatePass(passValidated : bool) : void : Méthode permettant d'envoyer le résultat de la vérification de la connexion à AOP en passant par PostmanAOP, en l'encodant.}
+            \end{itemize}
+            \newpage
+
+    \paragraph{[Medium][Boundary] Streamer}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-Streamer.eps}
+            \caption{Diagramme de classe de Streamer}
+            \label{Classe-Streamer}
+        \end{figure}
+
+        \subparagraph{Philosophie de Conception}%3.2.1.2.1
+
+        La classe Streamer est un objet frontière actif.
+        Il permet l'envoie du flux vidéo depuis SoftSonnette vers AOP.
+        Streamer est basé sur la librairie Linux open-source Gstreamer.
+        
+        \subparagraph{Description structurelle}%3.2.1.2.2
+
+            \subsubparagraph{Attributs}%3.2.1.2.2.1
+            \begin{itemize}
+                \item {inforStream : CustomData : Variable stockant les données du flux vidéo flux}
+            \end{itemize}
+
+            CustomData est une structure permettant de créer le flux video.
+            CustomData contient les informations sur le bus, le pipeline, l'état, l'état de la boucle de rafraîchissement et la valeur du flux video.
+
+            \subsubparagraph{Services offerts}%3.2.1.2.2.2
+            \begin{itemize}
+                \item {initGstreamer() : void : Méthode permettant d'initialiser les instances pour utiliser Gstreamer.}
+                \item {streamEcran() : void : Méthode permettant d'afficher le flux video sur l'écran de SoftSonnette.}
+                \item {streamTel() : void : Méthode permettant d'afficher le flux video sur l'écran de SoftSonnette et d'AOP.}
+                \item {cleanPipeline() : void : Méthode permettant de nettoyer le pipeline du flux video.}
+                \item {stopPipeline() : void : Méthode permettant d'arrêter le flux vidéo.}
+            \end{itemize}
+
+\newpage 
+
+    \paragraph{[Medium] ProxyUISP}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-ProxyUISP.eps}
+            \caption{Diagramme de classe de ProxyUISP}
+            \label{Classe-UISP}
+        \end{figure}
+    
+            \subparagraph{Philosophie de Conception}%3.2.1.8.1
+                
+            La classe ProxyUISP simule le comportement de la classe UISP, et permet la communication entre Bouncer et UISP en passant par l'objet PostmanSP.                      
+            \subparagraph{Description structurelle}%3.2.1.8.2
+                
+            \subsubparagraph{Attributs}%3.2.1.8.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.1.8.2.2
+            \begin{itemize}
+              \item {launchSP() : void : Méthode utilisée pour démarrer SoftPorte.}    
+            \end{itemize}  
+
+\newpage
+
+    \paragraph{[Medium] ProxyDoorManager}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-ProxyDoorManager.eps}
+            \caption{Diagramme de classe de ProxyDoorManager}
+            \label{Classe-ProxyDoorManager}
+        \end{figure}
+    
+            \subparagraph{Philosophie de Conception}%3.2.1.9.1
+                
+            La classe ProxyDoorManager simule le comportement de la classe DoorManager. Elle permet ainsi la communication entre Bouncer et DoorManager en passant par l'objet PostmanSP.                      
+            \subparagraph{Description structurelle}%3.2.1.9.2
+                
+            \subsubparagraph{Attributs}%3.2.1.9.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.1.9.2.2
+            \begin{itemize}
+              \item {askOpenDoor() : void : Méthode utilisée pour demander l'ouverture la Porte.}  
+              \item {getDoorState() : bool : Méthode utilisée pour savoir si la Porte est actuellement ouverte ou fermée.}    
+            \end{itemize}
+
+\newpage
+
+    \paragraph{[Medium] PostmanSP}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-PostmanSP.eps}
+            \caption{Diagramme de classe de PostmanSP}
+            \label{Classe-PostmanSP}
+        \end{figure}
+    
+            \subparagraph{Philosophie de Conception}%3.2.1.10.1
+                
+            La classe PostmanSP est utilisée pour permettre à SoftSonnette d'envoyer des messages à SoftPorte.                
+
+            \subparagraph{Description structurelle}%3.2.1.10.2
+                
+            \subsubparagraph{Attributs}%3.2.1.10.2.1
+
+            \subsubparagraph{Services offerts}%3.2.1.10.2.2
+
+            \begin{itemize}
+                \item {readMessage(size : int) : void : Réception d'un message provenant de SoftPorte.}
+                \item {askSendMessage(message : char*) : void : Envoi d'un message à SoftPorte.} 
+            \end{itemize}  
+
+\newpage
+
+    \paragraph{[Object] ProtocolSS}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-ProtocolSS.eps}
+            \caption{Diagramme de classe de ProtocolSS}
+            \label{Classe-ProtocolSS}
+        \end{figure}
+
+            \subparagraph{Philosophie de conception}
+
+            La classe ProtocolSS gère les fonctions d'encodage et de décodage des trames lors de la communication entre AOP et SoftSonnette, côté SoftSonnette.
+
+            \subparagraph{Description structurelle}
+
+            \subsubparagraph{Attributs}
+            N.A. 
+            \subsubparagraph{Services offerts}
+
+            \begin{itemize}
+                \item {encode(cmd\_id : int, nbargs : int, data : char*) : char* : Fonction haut niveau d'encodage de la trame. 
+                Construit la trame en utilisant les fonctions intermédiaires d'encodage.}
+                \item {decode(frame : char[]) : Decoded\_Frame : Fonction de décodage de la trame. 
+                Reconstruit la trame via une instance de la structure Decoded\_Frame.} 
+            \end{itemize} 
+
+\newpage
+
+    \paragraph{[Object] ProtocolSP}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-ProtocolSP.eps}
+            \caption{Diagramme de classe de ProtocolSP}
+            \label{Classe-ProtocolSP}
+        \end{figure}
+    
+                \subparagraph{Philosophie de conception}
+    
+                L'objet ProtocolSP gère les fonctions d'encodage et de décodage des trames lors de la communication entre SoftPorte et SoftSonnette, côté SoftSonnette.
+    
+                \subparagraph{Description structurelle}
+    
+                \subsubparagraph{Attributs}
+                N.A. 
+                \subsubparagraph{Services offerts}
+    
+                \begin{itemize}
+                    \item {encode(cmd\_id : int, target : int) : char* : Fonction haut niveau d'encodage de la trame. Construit la trame en utilisant les fonctions intermédiaires d'encodage.}
+                    \item {decode(frame : char[]) : Decoded\_Frame\_SP : Fonction de décodage de la trame. Reconstruit la trame via une instance de la structure Decoded\_Frame\_SP.} 
+                \end{itemize} 
+
+\newpage
+
+    \paragraph{[Medium] PostmanAOP}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-PostmanAOP.eps}
+            \caption{Diagramme de classe de PostmanAOP}
+            \label{Classe-PostmanAOP}
+        \end{figure}
+    
+        \subparagraph{Philosophie de Conception}%3.2.1.10.1
+                
+            La classe PostmanAOP a pour objectif de gérer l'envoi et la réception de messages à travers les sockets de communication entre SoftSonnette et AOP.
+            C'est aussi la classe qui met en place le serveur de cette communication.
+            Elle est en interaction avec les proxys de SoftSonnette et DispatcherAOP pour l'encodage et le décodage des trames.
+
+            \subparagraph{Description structurelle}%3.2.1.10.2
+                
+            \subsubparagraph{Attributs}%3.2.1.10.2.1
+
+            \begin{itemize}
+                \item {socketSoftSonnette : int : Socket serveur qui écoute les connexions d'AOP sur le port 1234.} 
+                \item {socketAOP : int : Socket client utilisé par AOP pour communiquer avec SoftSonnette.}    
+            \end{itemize}  
+            
+            \subsubparagraph{Services offerts}%3.2.1.10.2.2
+
+            \begin{itemize}
+                \item {readMessage(size : int) : void : Réception d'un message provenant d'AOP.}
+                \item {askSendMessage(message : char[]) : void : Envoi d'un message à AOP via la boîte aux lettres.} 
+                \item {setUpConnection() : void : Initialise le socket serveur et attend la connexion du client.}
+            \end{itemize}  
+
+            \subparagraph{Gestion du multitâche}%3.2.1.10.2
+
+            La machine à état de PostmanAOP ainsi que l'attente de la connexion du client s’exécutent dans des threads séparés lancés à partir de la méthode start() par le thread principal.
+            Les évènements tels que l'envoi d'un message ou l'arrêt du service sont transmis à partir d'une boîte aux lettres. 
+            \newpage
+
+    \paragraph{[Medium] DispatcherAOP}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-DispatcherAOP.eps}
+            \caption{Diagramme de classe de DispatcherAOP}
+            \label{Classe-DispatcherAOP}
+        \end{figure}
+    
+        \subparagraph{Philosophie de Conception}%3.2.1.10.1
+                        
+            L'objet DispatcherAOP a pour objectif de lire les messages reçus depuis le facteur afin de les décoder et de les renvoyer à l'objet SoftSonnette correspondant.
+
+        \subparagraph{Description structurelle}%3.2.1.10.2
+                
+            \subsubparagraph{Attributs}%3.2.1.10.2.1
+            N.A.
+            
+            \subsubparagraph{Services offerts}%3.2.1.10.2.2
+
+            \begin{itemize}
+                \item {dispatch() : void : Décode le message lu sur le facteur de SoftSonnette, puis envoie le message à l'objet concerné.}
+                \item {setConnected(state : bool) : void : Indique au dispatcher le statut de connexion.}
+            \end{itemize}  
+            \newpage
+
+    \paragraph{[Medium] DispatcherSP}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-DispatcherSP.eps}
+            \caption{Diagramme de classe de DispatcherSP}
+            \label{Classe-DispatcherSP}
+        \end{figure}
+    
+            \subparagraph{Philosophie de Conception}%3.2.1.11.1
+            DispatcherSP est l'objet permettant de recevoir et décoder les messages en provenance de l'objet PostmanSP.
+            Ces messages sont ensuite envoyés à UISS ou à ProxyGUI.                
+            \subparagraph{Description structurelle}%3.2.1.11.2
+                
+            \subsubparagraph{Attributs}%3.2.1.11.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.1.11.2.2
+            \begin{itemize}
+                \item {dispatch() : void : Décode le message lu sur le facteur de SoftPorte, puis envoie le message à l'objet UISS ou à l'objet ProxyGUI.}
+            \end{itemize} 
+            \newpage
+
+    \paragraph{[Entity] DataEmployee}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_softSonnette-class-DataEmployee.eps}
+            \caption{Diagramme de classe de DataEmployee}
+            \label{Classe-DataEmployee}
+        \end{figure}
+    
+            \subparagraph{Philosophie de Conception}%3.2.1.13.1
+                
+            L'entité DataEmployee représente les données persistantes des employés.
+            Cette entité est interfacée uniquement par EmployeeManager.              
+            \subparagraph{Description structurelle}%3.2.1.13.2
+                
+            \subsubparagraph{Attributs}%3.2.1.13.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.1.13.2.2
+            N.A.
+            \newpage
+
+    \subsubsection{Description des classes de \appliA}%3.2.2
+
+    \paragraph{[Object] StarterAOP}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-StarterAOP.eps}
+            \caption{Diagramme de classe de StarterAOP}
+            \label{Classe-StarterAOP}
+        \end{figure}
+
+            \subparagraph{Philosophie de Conception}
+            La classe StartAOP permet d'instancier les autres objets de AOP.  
+            La classe StartAOP est reliée à MainActivity.            
+            \subparagraph{Description structurelle}
+                
+            \subsubparagraph{Attributs}
+            N.A.
+            \subsubparagraph{Services offerts}
+            \begin{itemize}
+                \item {launchAOP() : void : Démarrage des instanciations.}
+                \item {quitAOP() : void : Détruit les instanciations.}
+            \end{itemize}
+
+        \subparagraph{Diagramme de séquence du démarrage et de l'arrêt de \appliA}
+
+        Le diagramme suivant représente la séquence d'initialisation d'\appliA.
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_séquence_démarrage_AOP.eps}
+            \caption{Diagramme de séquence de l'initialisation d'\appliA}
+            \label{Seq-Init-AOP}
+        \end{figure}
+    
+        Le diagramme suivant représente la séquence d'arrêt d'\appliA.
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_séquence_arret_AOP.eps}
+            \caption{Diagramme de séquence de l'arrêt d'\appliA}
+            \label{Seq-Arret-AOP}
+        \end{figure}
+
+\newpage
+
+    \paragraph{[Package] GUI}
+
+            \begin{figure} [H]
+                \centering
+                \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{package_gui.eps}
+                \caption{Package de GUI}
+                \label{Package gui}
+            \end{figure}
+            \subparagraph{Description structurelle de GUI}%3.2.1.13.2
+            Le package GUI correspond à l'objet GUI de la conception générale.
+            Il se compose de plusieurs fragments, chaque fragment étant un écran de l'application AOP.
+            GUI possède également une activité qui gère toute l'application et est en charge des fragments : FragmentCalendar, FragmentVideo, FragmentListEmployee, FragmentAddEmployee et FragmentDoor.
+            \newpage
+
+    \paragraph{[Medium] Communication}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-Communication.eps}
+            \caption{Diagramme de classe de Communication}
+            \label{Classe-Communication}
+        \end{figure}
+    
+            \subparagraph{Philosophie de Conception}%3.2.1.13.1
+                
+            La classe Communication permet de transiter les informations de connexion.
+            Elle permet aussi d’assurer que les applications sont connectées et d’agir en conséquence. 
+            Elle reçoit les demandes de l'utilisateur puis communique avec le Dispatcher et le PostmanSoftSonnette. 
+            setConnectionStatus() est défini par les méthodes onConnectionEstablished(), onConnectionLost() et onConnectionFailed().
+            \subparagraph{Description structurelle}%3.2.1.13.2
+                
+            \subsubparagraph{Attributs}%3.2.1.13.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.1.13.2.2
+            \begin{itemize}
+                \item {onConnectionEstablished() : void : Évènement appelé lorsque la connexion entre AOP et SoftSonnette est faite.} 
+                \item {onConnectionLost() : void : Évènement appelé lors de la perte de la connexion entre AOP et SoftSonnette.} 
+                \item {onConnectionFailed() : void : Évènement appelé lors de l'échec de la connexion entre AOP et SoftSonnette.}
+                \item {errorConnection() : void : Permet de signaler à l’utilisateur une erreur lors de la connexion.}
+                \item {askCheckPass (pass : String) : void : Envoie le mot de passe à SoftSonnette.}
+                \item {setCurrentTime(time : Time) : void : Envoie l'heure d'AOP à SoftSonnette.}
+                \item {sendClock(clock : String) : void: Envoie la clock de AOP à SoftSonnette.}
+                \item {askCalendar() : void : Demande à recevoir la liste des employés pour le calendrier.}
+                \item {askEmployeeList() : void : Demande la liste des employés.}
+                \item {askOpenDoor() : void : Demande l’ouverture de la Porte.}
+                \item {askDoorState() : void : Demande l'état de la Porte.}
+                \item {addEmployee(employeeID : byte, name : String, firstName : String, role : byte, workingHours : byte[][]) : void : Demande l'ajout d'un employé.}
+                \item {deleteEmployee(employeeID : EmployeeID) : void : Demande la suppression d'un employé des données persistantes.}
+                \item {subscribeToVideoStream (enable : bool) : void : Active ou désactive l'affichage de la vidéo.}
+                \item {run() : void : Lance un thread lisant les messages envoyés par SoftSonnette.}
+                \item {beginConnection() : void : Lance la connexion avec SoftSonnette.} 
+                \item {endConnection() : void : Termine la connexion avec SoftSonnette.} 
+            \end{itemize} 
+            \newpage
+
+        %     \paragraph{[Medium] ConnectionManager}
+
+        % \begin{figure} [H]
+        %     \centering
+        %     \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-ConnectionManager.eps}
+        %     \caption{Diagramme de classe de ConnectionManager}
+        %     \label{Classe-ConnectionManager}
+        % \end{figure}
+    
+        %     \subparagraph{Philosophie de Conception}%3.2.1.13.1
+                
+        %     L'objet ConnectionManager permet de gérer la connexion entre la partie IHM et la partie Communication d'AOP.           
+        %     \subparagraph{Description structurelle}%3.2.1.13.2
+                
+        %     \subsubparagraph{Attributs}%3.2.1.13.2.1
+        %     N.A.
+        %     \subsubparagraph{Services offerts}%3.2.1.13.2.2
+        %     \begin{itemize}
+        %         \item {checkIp(myIp : String) : bool : Retourne si le format de l'adresse IP est correct.}
+        %         \item {getLocalTime() : void : Permet d'obtenir l'heure d'AOP.}
+        %         \item {validatePass(valid : byte) : void : Récupère le retour du serveur concernant la validité du mot de passe entré par l'utilisateur.}
+        %         \item {checkConnection() : void : Détecte s'il y a une erreur de connexion avec le serveur.}
+        %         \item {askConnection(myIp : String, myPass : String) : void : Vérifie l'adresse IP puis démarre la connexion avec le serveur.}
+        %     \end{itemize} 
+        %     \newpage
+
+    \paragraph{[Medium] PostmanSoftSonnette}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-PostmanSoftSonnette.eps}
+            \caption{Diagramme de classe de PostmanSoftSonnette}
+            \label{Classe-PostmanSoftSonnette}
+        \end{figure}
+    
+            \subparagraph{Philosophie de Conception}%3.2.1.13.1
+                
+            La classe PostmanSoftSonnette a pour objectif de gérer l'envoi et la réception de messages à travers les sockets de communication entre SoftSonnette et AOP.
+            C'est aussi l'objet qui met en place le serveur de cette communication.
+            Il est en interaction avec les proxys de GUI et UISS pour l'encodage et le décodage des trames.            
+            \subparagraph{Description structurelle}%3.2.1.13.2
+                
+            \subsubparagraph{Attributs}%3.2.1.13.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.1.13.2.2
+            \begin{itemize}
+                \item {mySocket() : void : Enregistre le socket utilisé pour la communication avec SoftSonnette.}
+                \item {connectToServer(ip : IP, port : Port) : void : Lance la connexion grâce au socket et à l'adresse IP entrés en paramètre.}
+                \item {readMsg(short) : byte[ ] : Lis dans le socket la taille du message envoyé, puis lit le reste du message grâce au paramètre de la méthode.}
+                \item {sendMsg(byte : byte[ ]) : void : Envoie un message à SoftSonnette.}
+                \item {disconnect() : void : Ferme le socket.}
+            \end{itemize} 
+            \newpage
+
+    \paragraph{[Medium] Dispatcher}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-Dispatcher.eps}
+            \caption{Diagramme de classe de Dispatcher}
+            \label{Classe-Dispatcher}
+        \end{figure}
+    
+            \subparagraph{Philosophie de Conception}%3.2.1.13.1
+                
+            La classe Dispatcher a pour objectif de gérer l'envoi et la réception de messages à travers les sockets de communication.
+            C'est aussi l'objet qui met en place le serveur de cette communication.
+            \subparagraph{Description structurelle}%3.2.1.13.2
+                
+            \subsubparagraph{Attributs}%3.2.1.13.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.1.13.2.2
+            \begin{itemize}
+                \item {dispatch(size : byte[], msg : int[]) : void : Dispatche les évènements reçus par le serveur.
+                Prend en premier paramètre la taille du message et en deuxième paramètre le message.}
+            \end{itemize} 
+            \newpage   
+
+    \paragraph{[Object] Protocol}
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-Protocol.eps}
+            \caption{Diagramme de classe de Protocol}
+            \label{Classe-Protocol}
+        \end{figure}
+    
+            \subparagraph{Philosophie de Conception}%3.2.1.13.1
+            La classe Protocol est utilisée pour encoder les messages à envoyer et décoder les différents messages reçus.
+            
+            \subparagraph{Description structurelle}%3.2.1.13.2
+                
+            \subsubparagraph{Attributs}%3.2.1.13.2.1
+            \begin{itemize}
+                \item {cmd\_setCurrentTime : int : ID de la commande pour l'envoi de l'heure.}
+                \item {cmd\_askCheckPass : int : ID de la commande pour la demande de vérification du mot de passe.}
+                \item {cmd\_subscribeToVideoStream : int : ID de la commande pour la demande de stream.}
+                \item {cmd\_askDoorState : int : ID de la commande pour la demande de l'état de la Porte.}
+                \item {cmd\_askOpenDoor : int : ID de la commande pour l'ouverture de la Porte.}
+                \item {cmd\_askEmployeeList : int : ID de la commande pour recevoir la liste des employés.}
+                \item {cmd\_addEmployee : int : ID de la commande pour ajouter un employé.}
+                \item {cmd\_deleteEmployee : int : ID de la commande pour supprimer un employé.}
+            \end{itemize} 
+            \subsubparagraph{Services offerts}%3.2.1.13.2.2
+            \begin{itemize}
+                \item {encodeMessage(cmdId : int, nbargs : int, data : String) : byte: Encode le message pour l'envoyer à SoftSonnette.}
+                \item {decodeMessage(size : byte, messageDecode : byte[]): byte : Décode la trame reçue de SoftSonnette.}
+            \end{itemize} 
+
+\newpage   
+        
+    \paragraph{[Medium] PostmanVideo}%3.2.3.3
+
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-PostmanVideo.eps}
+        \caption{Diagramme de classe de PostmanVideo}
+        \label{Classe-PostmanVideo}
+    \end{figure}
+        
+        \subparagraph{Philosophie de Conception}%3.2.3.2.1
+        La classe PostmanVideo est utilisée pour réceptionner du flux UDP provenant de \appliLin.
+
+        \subparagraph{Description structurelle}%3.2.3.2.2
+        
+        \subsubparagraph{Attributs}%3.2.3.2.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.3.2.2.2
+            \begin{itemize}
+                \item {readData() : byte[] : Lit le paquet de  données reçu et retourne sa taille.}
+            \end{itemize} 
+
+\newpage 
+
+    \paragraph{[Cache] CacheCameraman}%3.2.3.4
+
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-CacheCameraman.eps}
+        \caption{Diagramme de classe de CacheCameraman}
+        \label{Classe-CacheCameraman}
+    \end{figure}
+
+        \subparagraph{Philosophie de Conception}%3.2.3.4.1
+        La classe CacheCameraman est utilisée pour le traitement des données du flux vidéo, et donc de la mise à jour de la vidéo.
+        Le temps de synchronisation est difficile à évalué, car il dépend de la vitesse de streaming du Streamer, ainsi que de la vitesse de calcul du téléphone.
+        La vidéo étant envoyé à 15 images par secondes, le temps de synchronisation minimum sera donc de 15 fois par secondes.
+
+        CacheCameraman utilise un mediaCodec, c'est un objet permettant de décoder le flux vidéo en lui fournissant des trames.
+
+        \subparagraph{Description structurelle}%3.2.3.4.2
+        
+            \subsubparagraph{Attributs}%3.2.3.4.2.1
+            \begin{itemize}
+            \item {dataFrame : byte[] : Stocke temporairement les données reçues.}
+            \end{itemize}
+
+            \subsubparagraph{Services offerts}%3.2.3.4.2.2
+            \begin{itemize}
+                \item {initializeMediaCodec() : void : Initialise le mediaCodec (avec les paramètres de la vidéo entrés en dur).}
+                \item {callback(frameData : byte[]) : void : Envoie au mediaCodec les trames détectées pour qu'il les recompose.}
+                \item {storeData(receivedData : byte[]) : void : Stocke les données temporairement avant de les donner au mediaCodec.}
+                \item {stream(frameData : byte[]) : void : Traite la frame qui vient d'être détectée avant de l'envoyer au mediaCodec.}
+                \item {runVideo() : void : Analyse les données reçues et les décompose en trames.}
+                \item {askSubscribeVideoStream(enable : bool) : void : Demande le début du streaming de la vidéo.}
+            \end{itemize}
+
+\newpage 
+
+    \paragraph{[Object] Door}%3.2.3.4
+
+    \begin{figure} [H]
+    \centering
+    \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-Door.eps}
+    \caption{Diagramme de classe de Door}
+    \label{Classe-Door}
+    \end{figure}
+
+    \subparagraph{Philosophie de Conception}%3.2.3.4.1
+    La classe Door permet d'avoir l'état de la Porte et de pouvoir ouvrir la Porte.
+    \subparagraph{Description structurelle}%3.2.3.4.2
+
+        \subsubparagraph{Attributs}%3.2.3.4.2.1
+        N.A.
+        \subsubparagraph{Services offerts}%3.2.3.4.2.2
+        \begin{itemize}
+            \item {getDoorState(state : bool) : void : Permet d'avoir l'état de la Porte.}
+        \end{itemize}
+\newpage      
+
+    \paragraph{[Object] WeeklyCalendar}%3.2.3.3
+
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-WeeklyCalendar.eps}
+        \caption{Diagramme de classe de WeeklyCalendar}
+        \label{Classe-WeeklyCalendar}
+    \end{figure}
+
+        \subparagraph{Philosophie de Conception}%3.2.3.2.1
+        La classe WeeklyCalendar est utilisée pour créer et dessiner le calendrier.
+        \subparagraph{Description structurelle}%3.2.3.2.2
+        
+        \subsubparagraph{Attributs}%3.2.3.2.2.1
+            N.A.
+            \subsubparagraph{Services offerts}%3.2.3.2.2.2
+            \begin{itemize}
+                \item {drawCalendar(canvas : Canvas) : void : Méthode de dessin du calendrier.}
+                \item {editCalendar(name : String) : void : Coloriage des créneaux horaires à dessiner selon l'employé.}
+                \item {onMeasure(widthMeasureSpec : int, heightMeasureSpec : int) : void: Méthode de mesure permettant le dessin du calendrier.}
+            \end{itemize}
+
+\newpage 
+
+    \paragraph{[Cache] CacheEmployeeManager}%3.2.3.3
+
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_AOP_anim_uml-class-CacheEmployeeManager.eps}
+        \caption{Diagramme de classe de CacheEmployeeManager}
+        \label{Classe-CacheEmployeeManager}
+    \end{figure}
+
+            \subparagraph{Philosophie de Conception}%3.2.3.2.1
+            La classe CacheEmployeeManager est utilisée pour stocker temporairement les données des employés.
+            Il est appelé lorsque l'utilisateur souhaite consulter le calendrier ou la liste des employés.
+            Chaque ajout d'employé est ajouté dans le cache puis envoyé au serveur.
+            Ce cache est synchronisé à chaque appel des écrans EMPLOYEE\_LIST\_ID et CALENDAR\_ID.
+            \subparagraph{Description structurelle}%3.2.3.2.2
+            
+            \subsubparagraph{Attributs}%3.2.3.2.2.1
+            \begin{itemize}
+                \item {listEmployees : Employee[] : Liste courante des employés.}       
+            \end{itemize} 
+            \subsubparagraph{Services offerts}%3.2.3.2.2.2
+            \begin{itemize}
+                \item {askCalendarEmployee(name : String): int[] : Méthode permettant de préparer l'affichage du calendrier selon l'employé. Elle permet d'obtenir les heures de début et de fin de chaque jour.}       
+                \item {askEmployeeList(message : byte[]): void : Méthode permettant d'obtenir la liste des employés.}             
+                \item {setDataEmployee(idEmployee : int, name : String, firstName : String, role : int, workingHours : byte[]) : void : Méthode permettant de modifier la liste des employés dans le cache.}
+                \item {getDataEmployee(): Employee[] : Fonction qui retourne la liste cache des employés.}
+                \item {sendEmployee(name : String, firstName : String, picture : Picture, role : Role, workingHours : int[]): void : Méthode d'envoi des données de l'employé vers les données persistantes du projet.}
+                \item {sendDeleteEmployee(employeeID : EmployeeID) : void : Méthode d'envoi de suppression d'un employé.}
+            \end{itemize}
+
+\newpage 
+
+\subsubsection{Description des classes de \appliPo}%3.2.2
+    
+    \paragraph{[Object] Starter}%3.2.2.2
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_SP_anim_uml-class-Starter.eps}
+            \caption{Diagramme de classe de Starter}
+            \label{Class-Starter}
+        \end{figure}
+    
+        \subparagraph{Philosophie de Conception}%3.2.2.2.1
+        La classe Starter correspond au thread principal de l'application SoftPorte.
+        C'est elle qui possède la méthode main(), méthode appelée au lancement de l'application.
+        \subparagraph{Description structurelle}%3.2.2.2.2
+        \subsubparagraph{Attributs}%3.2.3.2.2.1
+        N.A.
+        \subsubparagraph{Services offerts}%3.2.3.2.2.2
+        \begin{itemize}
+            \item {main : Méthode d'entrée du programme}
+            \item {run : Tâche de fond qui attend l'évènement indiquant la fin de l'execution}
+        \end{itemize}
+        
+\newpage
+
+        \subparagraph{Diagramme de séquence du démarrage et de l'arrêt de \appliPo}%3.2.2.2.3
+        Le diagramme suivant représente la séquence d'initialisation d'\appliPo :
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_séquence_démarrage_SP.eps}
+            \caption{Diagramme de séquence de l'initialisation de \appliPo}
+            \label{Seq-Init-SP}
+        \end{figure}
+    
+        Le diagramme suivant représente la séquence d'arrêt d'\appliA.
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{diagramme_séquence_arret_SP.eps}
+            \caption{Diagramme de séquence de l'arrêt de \appliPo}
+            \label{Seq-Arret-SP}
+        \end{figure}
+
+\newpage
+    
+        \paragraph{[Medium] ProxyGUI}%3.2.3.
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_SP_anim_uml-class-ProxyGUI.eps}
+            \caption{Diagramme de classe de ProxyGUI}
+            \label{Class-ProxyGUI}
+            \end{figure}
+        \subparagraph{Philosophie de Conception}%3.2.3.2.1
+        La classe ProxyGUI est utilisé pour simuler le comportement de la classe GUI.
+        Elle encode les trames à destination de GUI avant de les envoyer au postman.
+        
+        \subparagraph{Description structurelle}%3.2.3.2.2
+        \subsubparagraph{Attributs}%3.2.3.2.2.1
+        N.A.
+        \subsubparagraph{Services offerts}%3.2.3.2.2.2
+        \begin{itemize}
+            \item {updateDoorState(doorState : bool): Informe GUI du nouvel état de la porte.}
+        \end{itemize}
+
+\newpage
+
+        \paragraph{[Medium] ProxyUISS}%3.2.3.
+
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_SP_anim_uml-class-ProxyUISS.eps}
+            \caption{Diagramme de classe de ProxyUISS}
+            \label{Class-ProxyUISS}
+        \end{figure}
+        \subparagraph{Philosophie de Conception}%3.2.3.2.1
+        La classe ProxyUISS est utilisée pour simuler le comportement de la classe UISS.
+        Elle encode les trames à destination de UISS avant de les envoyer au postman.
+        
+        \subparagraph{Description structurelle}%3.2.3.2.2
+        \subsubparagraph{Attributs}%3.2.3.2.2.1
+        N.A.
+        \subsubparagraph{Services offerts}%3.2.3.2.2.2
+        \begin{itemize}
+            \item {updateDoorState(doorState): Informe UISS du nouvel état de la porte.}
+        \end{itemize}
+
+\newpage
+    
+        \paragraph{[Medium] PostmanSS}%3.2.3.
+        \begin{figure} [H]
+            \centering
+            \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_SP_anim_uml-class-PostmanSS.eps}
+            \caption{Diagramme de classe de PostmanSS}
+            \label{Class-PostmanSS_SP}
+        \end{figure}
+        \subparagraph{Philosophie de Conception}%3.2.3.2.1
+        La classe PostmanSS est en charge de la communication entre SoftPorte et SoftSonnette.
+        C'est elle qui gère l'envoie et la réception de messages sur le Virtual UART.
+        
+        \subparagraph{Description structurelle}%3.2.3.2.2
+        \subsubparagraph{Attributs}%3.2.3.2.2.1
+        N.A.
+        \subsubparagraph{Services offerts}%3.2.3.2.2.2
+        \begin{itemize}
+            \item {read() : Tâche de fond qui lis les messages reçu et les envoie au dispatcher.}
+            \item {run() : Tâche de fond qui envoie les messages en attentes à SoftSonnette.}
+            \item {send() : Fonction utilisée pour mettre en attente l'envoi d'un message vers SoftSonnette.}            
+        \end{itemize}
+        
+\newpage
+
+    \paragraph{[Medium] DispatcherSS}%3.2.3.
+    \begin{figure} [H]
+        \centering
+        \includegraphics[scale=.5,max width=\textwidth,max height=.9\textheight]{architecture_candidate_SP_anim_uml-class-DispatcherSS.eps}
+        \caption{Diagramme de classe de DispatcherSS}
+        \label{Classe-DispatcherSS}
+    \end{figure}
+    \subparagraph{Philosophie de Conception}%3.2.3.2.1
+    La classe DispatcherSS a pour objectif de recevoir et de décoder les différents messages reçus afin de les distribuer à DoorManager ou UISP.
+    
+    \subparagraph{Description structurelle}%3.2.3.2.2
+    \subsubparagraph{Attributs}%3.2.3.2.2.1
+    N.A.
+    \subsubparagraph{Services offerts}%3.2.3.2.2.2
+    \begin{itemize}
+        \item {dispatch(encodedMessage byte[*]): Fonction utilisée pour décoder les messages reçus et les dispatcher aux objets destinataire.
+        Cette fonction prend en argument le message brut encodé sur 2 octets}
+    \end{itemize}
+    \newpage

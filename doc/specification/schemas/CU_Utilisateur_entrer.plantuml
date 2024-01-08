@@ -1,0 +1,13 @@
+@startuml 
+
+:Démonstrateur:-- (Use)
+:Testeur: --(Use)
+:Porte: --(Use)
+
+"Demander à entrer" as (Use)
+"Ouvrir Porte" as (open)
+
+
+(Use) ..> (open): <<include>>
+
+@enduml

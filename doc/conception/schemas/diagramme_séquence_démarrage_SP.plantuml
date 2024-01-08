@@ -1,0 +1,25 @@
+@startuml
+
+actor SoftSonnette
+participant Starter
+participant UISP
+participant DoorManager
+participant PostmanSS
+
+SoftSonnette -> Starter : main()
+activate Starter
+Starter -> DoorManager : new()
+DoorManager --> Starter 
+Starter -> PostmanSS : new()
+PostmanSS --> Starter
+
+Starter --> UISP : launchSP()
+activate UISP
+UISP -> DoorManager : start()
+activate DoorManager
+DoorManager --> UISP 
+UISP -> PostmanSS : start()
+activate PostmanSS
+PostmanSS --> UISP
+
+@enduml

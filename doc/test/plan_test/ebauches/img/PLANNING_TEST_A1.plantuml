@@ -1,0 +1,42 @@
+@startgantt
+title Planning prévisionnel
+language fr
+
+project starts 2023-02-07
+printscale weekly
+
+-- Phases de réalisation--
+
+[Specs R] starts 2023-02-09 and ends 2023-03-17
+[Specs C] starts 2023-05-17 and ends 2023-05-24
+[Specs C] displays on same row as [Specs R]
+
+[Conception R] starts 2023-03-16 and ends 2023-04-19
+[Conception C] starts 2023-05-17 and ends 2023-05-31
+[Conception C] displays on same row as [Conception R]
+
+[Code R+C] starts 2023-04-10 and ends 2023-04-30
+[Code C] starts 2023-05-17 and ends 2023-06-9
+[Code C] displays on same row as [Code R+C]
+
+-- Phases de test --
+
+[PdT R] starts 2023-03-07 and ends 2023-03-17
+
+[Validation R] starts 2023-03-13 and ends 2023-04-10
+[Validation R+C+E] starts 2023-05-15 and ends 2023-06-14
+[Validation R+C+E] displays on same row as [Validation R]
+
+[Intégration R+E] starts 2023-03-21 and ends 2023-05-12
+[Intégration E+C] starts 2023-05-22 and ends 2023-06-11
+[Intégration R+E] displays on same row as [Intégration E+C]
+
+[Unitaires R+E+C] starts 2023-05-23 and ends 2023-06-10
+
+center footer
+Made by Paul RICHARD & Eliot COULON - Updated by Romain TROVALLET
+end footer
+
+caption R : Rédaction ; C : Correction ; E : Exécution
+
+@endgantt

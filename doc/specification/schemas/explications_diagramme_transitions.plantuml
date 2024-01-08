@@ -1,0 +1,15 @@
+@startuml
+
+[*] -down-> Etat_1: transition initiale
+Etat_1 -right-> Etat_Composite : évènement [condition] / action
+state Etat_Composite{
+ [*] -right-> Sous_Etat_1 : after(10s)
+Sous_Etat_1 -right-> Sous_Etat_2 : after(10s)
+  }
+note right of  Etat_Composite
+  Cet état est dit composite car il est composé de deux sous-états: Sous_Etat_1 et Sous_Etat_2.
+  Toute transition s'appliquant sur l'état composite s'applique aussi sur ses sous-états.
+  La transition entre ces 2 sous-états se fait après un temps d'attente de 10s.
+end note
+
+@enduml

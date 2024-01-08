@@ -1,0 +1,58 @@
+@startuml
+
+actor SoftSonnette
+
+participant Starter
+participant Cameraman
+participant UISS
+participant PostmanAOP
+participant DispatcherAOP
+participant Bouncer
+
+activate Starter
+activate Cameraman
+activate UISS
+activate PostmanAOP
+activate DispatcherAOP
+activate Bouncer
+...
+
+rnote over Starter
+attente quitter
+endrnote
+SoftSonnette --> UISS : quitSS()
+UISS -> UISS : stop()
+UISS --> Starter
+deactivate UISS
+Starter -> Cameraman : stop()
+Cameraman --> Starter
+deactivate Cameraman
+Starter -> PostmanAOP : stop()
+PostmanAOP -> DispatcherAOP : stop()
+DispatcherAOP --> PostmanAOP
+deactivate DispatcherAOP
+PostmanAOP --> Starter
+deactivate PostmanAOP
+Starter -> Bouncer : stop()
+Bouncer --> Starter
+deactivate Bouncer
+
+rnote over Starter
+attente stop
+endrnote
+
+Starter -> Starter : cleanup()
+Starter -> UISS : free()
+destroy UISS
+Starter -> PostmanAOP : free()
+destroy PostmanAOP
+Starter -> DispatcherAOP : free()
+destroy DispatcherAOP
+Starter -> Cameraman : free()
+destroy Cameraman
+Starter -> Bouncer : free()
+destroy Bouncer
+deactivate Starter
+
+
+@enduml

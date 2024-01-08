@@ -1,0 +1,13 @@
+*.DS_Store
+**/STM32Cube_FW_MP1_V1.6.0/
+**/.metadata
+**/.settings
+**/*.out
+**/*.json
+**/Debug/
+**/Release/
+
+
+# Doxygen
+**/html/
+**/latex/

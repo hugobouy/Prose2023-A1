@@ -1,0 +1,244 @@
+\newglossaryentry{bd}
+{
+    name={Board},
+    description={\hypertarget{bd}{Est} désigné par le terme Board la STM32MP15 formant l'ensemble Microcontrôleur + Microprocesseur.}
+}
+
+\newglossaryentry{deverrouiller}
+{
+    name={Déverrouiller la Porte},
+    description={\hypertarget{deverrouiller}{} L'action de déverrouillage de la Porte est réalisée à titre indicatif. 
+    L'ouverture de la Porte est simulée par la mise à jour du voyant indicant l'état de cette dernière sur les écrans d'AOP et de SoftSonnette.}
+}
+
+\newglossaryentry{emp}
+{
+    name={Employé},
+    description={\hypertarget{emp}{Un} employé est équivalent à un Testeur dans le cadre du prototype PSC.
+    Il s'agit d'une personne susceptible de se présenter devant le PSC pour entrer, et dont les informations peuvent être entrées dans l'application AOP.}
+}
+
+\newglossaryentry{idEmp}
+{
+    name={employeID},
+    description={\hypertarget{idEmp}{} Correspond à l'identifiant de l'employé dans \hyperlink{donneesTesteurs}{\textit{Données\_Testeurs}}. 
+    %Conc
+    Il s'agit d'un entier compris entre 1 et MAX\_EMPLOYE}
+}
+
+\newglossaryentry{maxEmployee}
+{
+    name={MAX\_EMPLOYE},
+    description={\hypertarget{maxEmployee}{} Régit le nombre maximal d'employés enregistrés dans \hyperlink{donneesTesteurs}{\textit{Données\_Testeurs}} supporté par le PSC. 
+    MAX\_EMPLOYE vaut 10.}
+}
+
+\newglossaryentry{idc}
+{
+    name={Infomations de connexion},
+    description={\hypertarget{idc}{Les} informations de connexion correspondent à l'adresse \hyperlink{IP}{\textit{IP}} de la Board et au \hyperlink{mdp}{\textit{mot de passe}} requis pour entrer dans AOP.}
+}
+
+\newglossaryentry{linux}
+{
+    name={Linux},
+    description={\hypertarget{linux}{}Fait référence à l'OS OpenSTLinux (OSTL) version 4.1 (Kernel Linux : 5.15) déployé sur le Microprocesseur.}
+}
+
+\newglossaryentry{tac}
+{
+    name={TAC},
+    description={\hypertarget{tac}{}Le Temps d'Attente de Connexion correspond à la durée maximale après laquelle une connexion est considérée comme non établie, entre une demande de connexion et la réponse associée. 
+    %Conc
+    Il est défini que TAC vaut 5 secondes.}
+}
+
+\newglossaryentry{fr}
+{
+    name={FR},
+    description={\hypertarget{fr}{}La Fréquence de Rafraîchissement correspond à la fréquence d'affichage de chaque image lors de flux vidéo. 
+    Il est défini que FR vaut 15 Hz.}
+}
+
+\newglossaryentry{tal}
+{
+    name={TAL},
+    description={\hypertarget{tal}{}Le Temps d'Allumage LED rouge correspond à la durée pendant laquelle la LED LD6 s'allume pour informer que le Testeur est refusé. 
+    %Conc
+    Il est défini que TAL vaut 5 secondes.}
+}
+
+\newglossaryentry{top}
+{
+    name={TOP},
+    description={\hypertarget{top}{}Le Temps d'Ouverture Porte correspond à la durée pendant laquelle la Porte s'ouvre. 
+    %Conc
+    Il est défini que TOP vaut 10 secondes.}
+}
+
+\newglossaryentry{tass}
+{
+    name={TASS},
+    description={\hypertarget{tass}{}Le Temps d'Attente SoftSonnette correspond à la durée pendant laquelle SoftSonnette attend une réponse de SoftPorte lors de l'initialisation de ce dernier. 
+    %Conc
+    Il est défini que TASS vaut 1 seconde.}
+}
+
+\newglossaryentry{initComBoard}
+{
+    name={Initialiser la communication avec SoftSonnette},
+    description={\hypertarget{initComBoard}{} Correspond au processus durant lequel SoftPorte configure la Board et met en place la communication entre les deux applications.}
+}
+
+\newglossaryentry{IP}
+{
+    name={IP},
+    description={\hypertarget{IP}{L'adresse} IP permettant la connexion entre AOP et SoftSonnette. 
+    Cette adresse est représentée sous la forme IPv4 "x.x.x.x" où x représente un entier allant de 0 à 255}
+}
+
+\newglossaryentry{mdp}
+{
+    name={Mot de passe},
+    description={\hypertarget{mdp}{Le} mot de passe permettant au Démonstrateur de se connecter à AOP. 
+    Celui-ci est composé de 4 chiffres.}
+}
+
+\newglossaryentry{hor}
+{
+    name = {Horaires},
+    description={\hypertarget{hor}{}Les horaires d'accès pour déclencher l'ouverture de la Porte sont sous la forme d'un bloc horaire unique pour chaque journée. 
+    Les horaires sont regroupés en créneaux de 30 min et le format d'affichage est le format 24h.
+    Ces horaires se basent sur l'heure de la Board, qui est équipée d'une RTC.
+    %Conc
+    Il est convenu que sa synchronisation est effectuée lors de la connexion entre l'AOP et SoftSonnette.}
+}
+
+\newglossaryentry{rol}
+{
+    name = {Rôle},
+    description={\hypertarget{rol}{}Le rôle d'un employé définit sa plage horaire d'accès.
+    Il existe cinq rôles différents : 
+    \begin{itemize}
+        \item Employé matin : 3h-13h, du lundi au vendredi.
+        \item Employé journée : 8h-20h, du lundi au vendredi.
+        \item Employé soir : 13h-23h, du lundi au vendredi.
+        \item Employé sécurité : Accès illimité (24/7).
+        \item Employé spécial : Les horaires sont définis manuellement pour chaque jour lors de l'ajout de l'employé dans l'application. 
+    \end{itemize}
+    }
+}
+
+\newglossaryentry{install}
+{
+    name = {SàE correctement installé},
+    description={\hypertarget{install}{}Pour une installation correcte il faut les éléments suivants :
+    \begin{itemize}
+        \item AOP installé sur le téléphone.
+        \item Linux installé sur le Microprocesseur. 
+        \item SoftSonnette installé sur Linux.
+        \item SoftPorte déployé sur le Microcontrôleur.
+    \end{itemize}
+    }
+}
+
+\newglossaryentry{video}
+{
+    name = {Flux vidéo},
+    description={\hypertarget{video}{}Le flux vidéo est généré par la webcam (E\_Caméra), qui peut filmer avec une résolution de 1280x720p.
+    %Conc
+    Une résolution plus faible est préférée pour l'envoi du flux, cette résolution est définie dans le dossier de conception.  
+    Stopper l'affichage du flux vidéo correspond à arrêter son affichage sur l'Écran\_SoftSonnette et son envoie à AOP (si ce dernier le requiert pour l'Écran\_Video).
+    Reprendre l'affichage du flux vidéo permet d'afficher de nouveau cette dernière sur Écran\_SoftSonnette mais ne redémarre pas son envoie à AOP, ce dernier doit être redemandé par le Démonstrateur.
+    }
+}
+
+\newglossaryentry{photo}
+{
+    name = {Photo},
+    description={\hypertarget{photo}{}%Conc
+    Les photos sont des fichiers au format jpeg ou jpg d'un poids maximal de POIDS\_MAX\_PHOTO.
+    }
+}
+
+\newglossaryentry{poidsPhoto}
+{
+    name = {POIDS\_MAX\_PHOTO},
+    description={\hypertarget{poidsPhoto}{} Défini le poids maximal autorisé d'une photo en méga-octets.
+    POIDS\_MAX\_PHOTO vaut 3.5 Mo.
+    }
+}
+
+\newglossaryentry{Aop}
+{
+    name = {AOP (Application Ouverture Porte)},
+    description={\hypertarget{Aop}{}AOP est l'application Android utilisée par le Démonstrateur comme interface utilisateur pour gérer les différentes fonctionnalités du PSC.
+    }
+}
+
+\newglossaryentry{SoftSonnette}
+{
+    name = {SoftSonnette},
+    description={\hypertarget{SoftSonnette}{}SoftSonnette est l'application C déployée sur l'OS de la Board tournant sur le Microprocesseur en charge des interactions avec le Testeur.
+    }
+}
+
+\newglossaryentry{SoftPorte}
+{
+    name = {SoftPorte},
+    description={\hypertarget{SoftPorte}{}SoftPorte est l'application C déployée sur le Microcontrôleur de la Board en charge du contrôle de la Porte.
+    }
+}
+
+\newglossaryentry{nom}
+{
+    name = {Nom},
+    description={\hypertarget{nom}{}Le nom d'un employé est une chaine de caractère comprenant entre 1 et 12 alphanumériques encodés en UTF-8.
+    }
+}
+
+\newglossaryentry{prenom}
+{
+    name = {Prénom},
+    description={\hypertarget{prenom}{}Le prénom d'un employé est une chaine de caractère comprenant entre 2 et 12 alphanumériques encodés en UTF-8.
+    }
+}
+
+\newglossaryentry{caracEmploye}
+{
+    name={Informations testeurs},
+    description={\hypertarget{caracEmploye}{}Chaque testeur est identifé par : un \hyperlink{nom}{\textit{nom}}, un \hyperlink{prenom}{\textit{prénom}}, un \hyperlink{rol}{\textit{rôle}}, une \hyperlink{photo}{\textit{photo}} et pour les employés spéciaux des \hyperlink{hor}{\textit{horaires}} d'accès. 
+    La convention d'encodage des données textuelles est l'UTF-8.
+    }
+}
+
+\newglossaryentry{donneesTesteurs}
+{
+    name = {Données\_Testeurs},
+    description={\hypertarget{donneesTesteurs}{}Correspond à l'entité qui stock de manière persistantes les \hyperlink{caracEmploye}{\textit{informations Testeurs}} sur la Board.
+    En fonction du type de donnée, le mode de stockage varie : 
+    \begin{itemize}
+        \item Les données textuelles sont stockées dans un fichier csv, cela comprend le \hyperlink{nom}{\textit{nom}}, le \hyperlink{prenom}{\textit{prénom}}, le \hyperlink{rol}{\textit{rôle}} et les \hyperlink{hor}{\textit{horaires}}.
+        \item Les \hyperlink{photo}{\textit{photos}} sont stockées dans un dossier "picture".
+    \end{itemize}
+    }
+}
+
+\newglossaryentry{donneesPersistantes}
+{
+    name = {Données persistantes},
+    description={\hypertarget{donneesPersistantes}{}Les données persistantes sont les données sauvegardées par le PSC d'une session à une autre. 
+    Ces données sont sauvegardées dans l'entité \hyperlink{donneesTesteurs}{\textit{Données\_Testeurs}}.
+    L'opération de chargement des données persistantes diffère en fonction du type de donnée :
+    \begin{itemize}
+        \item Les données textuelles sont chargées en mémoire vive lors du lancement de SoftSonnette.
+        \item Les \hyperlink{photo}{\textit{photos}} demeurent stockées en mémoire non volatile.
+    \end{itemize}
+    Le processus de sauvegarde des données persistantes diffère en fonction du type de donnée :
+    \begin{itemize}
+        \item La copie en mémoire vive des données textuelles en mémoire non volatile est assurée en fin d'exécution de SoftSonnette.
+        \item L'ajout ou la suppression de \hyperlink{photo}{\textit{photos}} se fait au fur et à mesure de l'exécution du PSC.
+    \end{itemize}
+    }
+}
+

@@ -1,0 +1,33 @@
+@startuml
+
+
+participant Starter
+participant UISP
+participant DoorManager
+participant PostmanSS
+participant DispatcherSS
+
+activate Starter
+activate DoorManager
+activate PostmanSS
+
+PostmanSS -> DispatcherSS : dispatch(encodedMessage)
+DispatcherSS -> UISP : quitSP()
+UISP -> Starter : stopEvent()
+Starter -> PostmanSS : stop()
+
+PostmanSS --> Starter 
+deactivate PostmanSS
+Starter -> DoorManager : stop()
+DoorManager --> Starter
+deactivate DoorManager
+
+rnote over Starter
+attente stop
+endnote
+
+Starter -> UISP : free()
+Starter -> PostmanSS : free()
+Starter -> DoorManager: free()
+
+@enduml

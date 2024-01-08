@@ -1,0 +1,39 @@
+% Auteur : Camille Constant
+
+\section{Environnement de test}
+\label{sec:env}
+
+\subsection{Environnement matériel et logiciel de test}
+\label{sec:env:env}
+
+
+%voir avec Hugo mais pas de problèmes normalement
+
+%{\it Matériel et logiciels nécessaires à l'exécution des tests. 
+
+%Exemples : PC, OS, simulateur, réseau (quel wifi ?), BDD, robot composé d'une carte Armadeus sous Linux xx avec capteurs Lego x, y et actionneurs t, z, etc.}
+
+Afin de réaliser les différents tests de validation système, d'intégration et unitaires, l'environnement matériel suivant est mis en place :
+
+\begin{itemize}
+    \item La STM32MP15 (Board) est alimentée et connectée en USB à un PC disposant d'un OS Linux permettant d'accéder à distance à cette dernière.
+    \item La STM32MP15 déploie sur son Microprocesseur l'OS OpenSTLinux (OSTL, appelé Linux dans la suite du document) (version 4.1)
+    \item Est installé sur le Linux de la Board le logiciel SoftSonnette.
+    \item Est déployé sur le Microcontrôleur de la Board le logiciel SoftPorte et les libraries provenant de Cube FW Package (version 1.6).
+    \item Est mis à disposition du Démonstrateur un smartphone Samsung Galaxy A20e avec Android (version 9.0).
+    \item Est installé sur le smartphone l'application AOP.
+\end{itemize}
+
+\subsection{Outils de test}
+\label{sec:env:outils}
+
+Les tests seront au maximum automatisés grâce aux outils suivants~:
+\begin{itemize}
+    \item Tests unitaires : Framework de test Android (basé sur JUnit), bouchonnage Mockito, CMocka ;
+    \item Tests d'intégration : JMeter ;
+    \item Tests de validation : automatisation avec Robot Framework, sinon tests manuels ;
+    \item Dossier de test : Squash TM avec intégration de la gestion d'anomalies via Redmine.
+\end{itemize}
+
+
+

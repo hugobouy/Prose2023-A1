@@ -1,0 +1,291 @@
+%-----------------------------------------------
+%   LaTeX template parameters
+%   Written By: Thorkel-dev
+%-----------------------------------------------
+
+\ProvidesPackage{Parameter}
+\RequirePackage{kvoptions}
+
+\DeclareStringOption[]{imageHeaderLeft}[]
+\DeclareStringOption[]{imageFooterLeft}[]
+\DeclareStringOption[]{subject}[]
+\DeclareStringOption[]{keywords}[]
+\DeclareStringOption[utf8]{encoding}[]
+\DeclareStringOption[french]{language}[]
+
+\ProcessKeyvalOptions*
+
+%-----------------------------------------------
+%   Packages
+%-----------------------------------------------
+
+\usepackage[T1]{fontenc}
+\usepackage[\Parameter@encoding]{inputenc}
+\usepackage[\Parameter@language]{babel}
+\usepackage[pdftex]{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{xspace}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\usepackage{subfiles}
+\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{xltabular}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage[outputdir=build/, newfloat]{minted}
+\usepackage{caption}
+\usepackage[outdir=build/epstopdf/, update]{epstopdf}
+\usepackage{pdflscape}
+\usepackage[pages=some]{background} % He is prevented from posting any
+
+%-----------------------------------------------
+%   Customize margins
+%-----------------------------------------------
+
+\usepackage[left=2.5cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+]{geometry}
+\geometry{body={160mm,230mm},headheight=42pt,top=3cm}
+
+%-----------------------------------------------
+%   Variables
+%-----------------------------------------------
+
+\hypersetup{
+    colorlinks  = true,
+    linkcolor   = black,
+    filecolor   = red,
+    urlcolor    = blue,
+    pdfborder   = 0 0 0,
+    citecolor   = black
+}
+
+% Adding metadata
+\makeatletter
+\AtBeginDocument{
+    \hypersetup{
+        pdftitle            = \@title,
+        pdfauthor           = \@author,
+        pdfsubject          = \Parameter@subject,
+        pdfkeywords         = \Parameter@keywords,
+        pdfproducer         = {LaTeX},
+        pdfcreator          = {Thorkel-dev},
+        pdfdisplaydoctitle  = true, % Display document title instead of file name in title bar
+    }
+}
+\makeatother
+
+\definecolor{ESEORed}{RGB}{59,13,32}
+\definecolor{ESEOOrange}{RGB}{91,29,15}
+\definecolor{ESEOLightBlue}{RGB}{41,78,87}
+\definecolor{ESEODarkBlue}{RGB}{11,46,74}
+\definecolor{ESEOGrey}{RGB}{35,35,35}
+\definecolor{ESEOWhite}{RGB}{1,1,1}
+\definecolor{thorkelBlue}{RGB}{0, 0, 60}
+
+\colorlet{ruleColor}{thorkelBlue}
+\colorlet{colorTitle}{thorkelBlue}
+
+% itemize personalization
+\setlist[itemize]{label=\textcolor{black}{\textbullet}}
+
+% Does not work on all Debian distributions
+\newcommand{\sectionbreak}{\clearpage} % New page for each section
+
+%-----------------------------------------------
+%   Settings for header and footer
+%-----------------------------------------------
+
+\makeatletter
+
+\pagestyle{fancy}
+\fancyhf{} % clear all fields
+
+% header
+\ifx\Parameter@imageHeaderLeft\empty
+\else
+\fancyhead[LO]{\includegraphics[height=15pt]{\Parameter@imageHeaderLeft}}
+\fi
+
+\renewcommand{\headrulewidth}{1pt}
+\fancyhead[CO]{\rightmark} % Current subsection
+\fancyhead[RO]{V2\_CONC\_A1}
+\def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
+            \color{ruleColor}\hrule\@height\headrulewidth\@width\headwidth \vskip-\headrulewidth}}
+
+% footer
+\ifx\Parameter@imageFooterLeft\empty
+\else
+    \fancyfoot[LO]{\begingroup
+    \setbox0=\hbox{\includegraphics[height=15pt]{\Parameter@imageFooterLeft}}
+    \parbox{\wd0}{\box0}\endgroup}
+\fi
+
+\renewcommand{\footrulewidth}{1pt}
+\fancyfoot[RO]{Page \thepage /\pageref*{LastPage}}
+\def\footrule{{\if@fancyplain\let\footrulewidth\plainfootrulewidth\fi
+            \vskip-\footruleskip\vskip-\footrulewidth
+            \color{ruleColor}\hrule\@width\headwidth\@height\footrulewidth\vskip\footruleskip}}
+
+\makeatother
+
+%-----------------------------------------------
+%   The titles of the parts
+%-----------------------------------------------
+
+\makeatletter
+% Adds a sub-subparagraph level
+\newcounter{subsubparagraph}[subparagraph]
+\renewcommand\thesubsubparagraph{%
+    \thesubparagraph.\@arabic\c@subsubparagraph}
+\newcommand\subsubparagraph{%
+    \@startsection{subsubparagraph}               % counter
+    {6}                                           % level
+    {0em}                                         % indentation
+    {1em}                                         % before the title
+    {1em}                                         % after the title
+    {\normalsize\hspace{6em}\color{colorTitle}} % style (overloaded by the title format)
+}
+\newcommand\l@subsubparagraph{\@dottedtocline{6}{13em}{6em}}
+\newcommand{\subsubparagraphmark}[1]{}
+\providecommand*{\toclevel@subsubparagraph}{6}
+
+\setcounter{tocdepth}{6}    % Allows the paragraph in the table of contents
+\setcounter{secnumdepth}{6} % Allows the numbering of the sub-paragraph
+
+% title format
+\titleformat{\section}[block]{\normalfont\bfseries\LARGE\color{colorTitle}}{{\thesection}}{1em}{}{}
+\titleformat{\subsection}[block]{\Large\hspace{2em}\Large\color{colorTitle}}{{\thesubsection}}{1em}{}{}
+\titleformat{\subsubsection}[block]{\hspace{3em}\large\color{colorTitle}}{{\thesubsubsection}}{1em}{}{}
+\titleformat{\paragraph}[block]{\normalsize\bfseries\hspace{4em}\color{colorTitle}}{{\theparagraph}}{1em}{}{}
+\titleformat{\subparagraph}[block]{\normalsize\hspace{5em}\color{colorTitle}}{{\thesubparagraph}}{1em}{}{}
+
+\makeatother
+
+%-----------------------------------------------
+%   Customization of the list of figures
+%-----------------------------------------------
+
+\renewcommand{\listoffigures}{\begingroup
+    \tocsection
+    \tocfile{\listfigurename}{lof}
+    \endgroup}
+
+\newcounter{@secnumdepth}
+\let\oldsection\section
+\RenewDocumentCommand{\section}{s o m}{%
+    \IfBooleanTF{#1}
+    {%
+        \setcounter{@secnumdepth}{\value{secnumdepth}}  % Stocke secnumdepth
+        \setcounter{secnumdepth}{-1}                    % Show only up to order numbers
+        \phantomsection%
+        \oldsection{#3}% \section*
+        \setcounter{secnumdepth}{\value{@secnumdepth}}  % Restore secnumdepth
+    }
+    {%
+        \IfValueTF{#2}% \section
+        {% \section[.]{..}
+            \oldsection[#2]{#3}%
+        }
+        {% \section{..}
+            \oldsection{#3}%
+        }
+    }
+}
+
+%-----------------------------------------------
+%   Glossary customization
+%-----------------------------------------------
+
+\usepackage[acronym, numberedsection, nonumberlist, automake]{glossaries-extra} % To make a glossary
+
+\glstocfalse
+\glsenablehyper
+\setglossarystyle{altlistgroup}
+\setabbreviationstyle{short-postfootnote}
+
+\ProvideDocumentCommand{\printglossdef}{o m}{\footnote{#1: #2}}
+\GlsXtrEnableEntryUnitCounting{general}{0}{page} % Count the number of occurrences per unit, per page of the general group
+\GlsXtrEnableEntryUnitCounting{abbreviation}{0}{page} % Count the number of occurrences per unit, per page of the general group
+
+% If this is the first occurrence of the label
+%   then delete the hyperlink to the glossary
+% otherwise
+\renewcommand{\glslinkcheckfirsthyperhook}{%
+    \glsxtrifwasfirstuse%
+    {\setkeys{glslink}{hyper=false}}%
+}
+
+% If this is the first occurrence of the label
+%   then a footnote is added with the description linked to the tag
+% otherwise do nothing
+\renewcommand{\glsxtrpostlink}{%
+    \glsxtrifwasfirstuse%
+    {\printglossdef[\glsentryname{\glslabel}]{\glsentrydesc{\glslabel}}}%
+    {}%
+}
+
+%-----------------------------------------------
+%   Minted personalization
+%-----------------------------------------------
+
+\definecolor{vs}{RGB}{255,250,250}
+\setminted{
+    linenos=true,
+    autogobble=true,            % Align with margin
+    numbers=left,               % Line number
+    fontsize=\footnotesize,     % Font size
+    % bgcolor=vs,                 % Background color
+    frame=single,               % Line section before and after the code
+    framesep=2mm,               % Before and after the line
+    tabsize=4,                  % Tab size
+    fontfamily=courier,         % Font size
+    breaklines,                 % Auto line break
+}
+% Environment to list the code
+\newenvironment{code}{\captionsetup{type=listing}}{\par\hspace{2em}}
+
+\SetupFloatingEnvironment{listing}{name=Source Code}      % Title in the legend
+\renewcommand*{\listlistingname}{Source code table}       % Title of the list
+
+%-----------------------------------------------
+% Customization of the bibliography
+%-----------------------------------------------
+
+\usepackage[
+    backend=biber,
+    citestyle=verbose-note,     % Citation style
+    style=reading,              % Style of the bibliography
+    entrykey = false,           % The key is not displayed
+    sorting = nty,              % Sort by name, title, year
+    hyperref = true,            % Link between the citation and the bibliography
+    backref = false,            % Do not display the citations page
+]{biblatex}
+
+\AtEveryCite{}
+\renewbibmacro*{prenote}{%
+    \iffieldundef{prenote}
+        {\itshape\bfseries}
+        {\printfield{prenote}}%
+    \setunit{\prenotedelim}%
+}
+
+%-----------------------------------------------
+% Quote personalization
+%-----------------------------------------------
+
+\usepackage[autostyle=true
+            ]{csquotes}
+
+\makeatletter
+%Take the original environment definition and change the font style to italic and bold
+\renewenvironment*{displayquote}
+    {\begingroup\csq@getcargs{\csq@bdquote{\itshape\color{darkgray}}{}}}
+    {\\\raggedleft\csq@edquote\endgroup}
+\makeatother

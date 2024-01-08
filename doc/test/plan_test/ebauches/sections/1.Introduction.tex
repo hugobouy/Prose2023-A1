@@ -1,0 +1,170 @@
+% Auteur : Camille Constant
+
+\section{Introduction}
+\label{sec:intro}
+
+\subsection{Contexte}
+\label{sec:intro:contexte}
+
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+      \hline
+    {\bf Produit à tester~:} & \projet~- version \versionProjet\\
+    \hline
+    {\bf Type de produit~:} & {\it Système embarqué commandé et supervisé par une application Android}\\
+    \hline
+    {\bf Commanditaire~:} & \client \\
+    \hline
+    {\bf Développeur~:} & \equipe \\
+    \hline
+    {\bf Testeur~:} & \equipe\\
+    \hline
+\end{tabularx}
+\end{table}
+
+\subsection{Objet}
+\label{sec:intro:objet}
+
+Ce document décrit l'activité de test système qui sera menée par \equipe~durant le projet \projet~dans le but de valider le produit \produit. 
+Il est rédigé sous la responsabilité du Responsable Qualité-Test (RQT), sous la direction du Chef de Projet (CdP), conformément au Plan d’Assurance Qualité Logicielle (PAQL) élaboré sous la responsabilité du RQT (cf. section~\ref{sec:eqTest}, Équipe de test).\\
+
+\subsection{Portée} 
+\label{sec:intro:portee}
+
+Sont concernés par ce document :
+\begin{itemize}
+  \item Les testeurs : afin que ceux-ci connaissent le périmètre des tests (ce qu'ils vont tester), l’environnement de test (comment les tests seront mis en {\oe}uvre) et le processus de test (comment s’y prendre et rendre compte des résultats lors de l’exécution des tests) ;
+  \item Les développeurs : à titre informatif, afin que ceux-ci sachent comment va être validée leur production ; à titre indicatif afin qu'ils sachent, par la description de la gestion des anomalies, comment ils s'interfaceront avec l'équipe de test ;
+  \item Le client : ce plan de test fait l'objet d'une contractualisation avec le client pour déterminer le périmètre des tests menés pour valider le produit livré et les niveaux d'acceptation de cette validation ;
+  \item Les auditeurs : ce plan de test, ainsi que son implication, feront l'objet d'audits par la société Formato.
+\end{itemize}
+
+%
+%\subsection{Copyright}
+%\label{sec:intro:copyright}
+%
+%Cf. PAQL.
+
+\subsection{Présentation du système} 
+\label{sec:intro:scope}
+
+%{\it Résumer ici quel est le système avec ses principales fonctionnalités et citer les spécifications.}\linebreak
+Le projet dénommé \projet , consiste à mettre en place les logiciels AOP (application Android), SoftSonnette et SoftPorte (applications C).
+L’objectif du projet est de concevoir un prototype pour une démonstration des capacités de la STM32MP15. 
+Le prototype est capable d'autoriser ou non l'accès aux Testeurs, de simuler l'ouverture d'une porte en fonction de leurs horaires et de permettre au Démonstrateur de lire le flux vidéo sur l’application Android.\\
+%Le prototype est capable de reconnaître le visage de testeurs à l’aide de reconnaissance faciale, de simuler l’ouverture de la porte en fonction de leurs horaires et de permettre au Démonstrateur de lire le flux vidéo sur l’application Android.\\
+
+
+\subsection{Références}
+\label{sec:intro:ref}
+
+\subsubsection{Documents de référence}
+
+\noindent\begin{tabularx}{\linewidth}{|p{3cm}|X|p{2cm}|p{2cm}|}
+\hline
+\textbf{Ref.} & \textbf{Nom et auteur} & \textbf{Version} & \textbf{Source} \\
+\hline
+\refSpec & Dossier de Spécifications - \equipe & \centering \verSpec~- 25/05/2023 & pdf sur le dépôt\\
+\hline
+% si client impliqué dans le PAQL
+\refPAQL & Plan d'Assurance Qualité Logiciel - \rqt & \centering \verPAQL~- 15/05/2023 & pdf sur le dépôt\\
+\hline
+\end{tabularx}
+
+\subsubsection{Documents de référence}
+%doc applicatifs
+\noindent\begin{tabularx}{\linewidth}{|p{3cm}|X|}
+\hline
+\textbf{Ref.} & \textbf{Nom} \\
+\hline
+[ISO-829-2008] & Documentation de test logiciel\\
+\hline
+\end{tabularx}
+
+
+\subsection{Glossaire et abréviations}
+\label{sec:intro:termes}
+
+Ce sont les termes et abréviations nécessaires à la compréhension de l'activité de test (les termes techniques propres au projet seront indiqués dans le dossier de spécification).\\ 
+%Prenez par défaut les définitions du CFTL (\href{https://www.cftl.fr/wp-content/uploads/2018/10/Glossaire-des-tests-logiciels-v3_2F-ISTQB-CFTL-1.pdf}{ici}).
+
+\subsubsection{Abréviations}
+
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+        \hline
+        IHM & Interface Homme-Machine\\
+        \hline
+        \appliLin~& voir \refSpec\\
+        \hline
+        \appliPo~& voir \refSpec\\
+        \hline
+        \appliA~& voir \refSpec\\
+        \hline
+        \projet~& voir \refSpec\\
+        \hline
+        TI & Tests d'intégration\\
+        \hline
+        TV ~& Tests de validation\\
+        \hline
+        TU & Tests unitaires\\
+        \hline
+        PdT &   Plan de Test : Document qui a pour but de piloter l'activité de test  \\
+        \hline
+        RDP & Référentiel Document Projet : Dépôt de tous les artefacts numériques du projet. 
+        Ce dépôt est mis à la disposition de l'équipe \equipe, ainsi qu'à l'équipe de consultant Formato.\\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\newpage
+\subsubsection{Glossaire}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|>{\hsize=.5\hsize}X|>{\hsize=1.5\hsize}X|}
+      \hline
+    {\bf Campagne de test} & Activité qui consiste à dérouler un ensemble de jeux de test. 
+    Un dossier de test est produit à l’issue d’une campagne.\\
+    \hline
+    {\bf Cas de test} & Déclinaison d’un test précisant les valeurs utilisées pour les variables du test ainsi que les résultats attendus.\\
+    \hline
+    {\bf Dossier de test} & Ensemble documentaire qui contient la description des scénarios et des cas de tests, ainsi que l’exécution des jeux de test. 
+    Le dossier de test est le reflet d’une campagne de test. \\
+    \hline
+    {\bf Jeux de test} & Ensemble des scénarios et cas de tests permettant de tester un produit logiciel. 
+    L’enchaînement des cas et scénarios de tests est relatif à une stratégie de test précisée dans le plan de test.\\
+    \hline
+    {\bf Plan de test} & Document décrivant le déroulement d’un jeu de test : stratégie de test, critères d’arrêt, planification.\\
+    \hline
+    {\bf Scénarios de test} & Ensemble de cas de tests cohérents permettant de traiter un objectif fonctionnel.\\
+    \hline
+    {\bf Test fonctionnel} & Test (vu de l’utilisateur) du bon fonctionnement d’un produit logiciel, d’une fonctionnalité ou d’une fonction de base. 
+    Vérification par rapport aux spécifications.\\
+    \hline
+    {\bf Test de non régression} & Vérification qu’une nouvelle version du produit fonctionne sans dégradation (technique, fonctionnelle, performance) par rapport à la version précédente.\\
+    \hline
+    {\bf Test de validation} & Vérification que le produit est cohérent et complet par rapport aux spécifications fonctionnelles.\\
+    \hline
+    {\bf Test système} & Vérification que le système dans son ensemble est cohérent et complet par rapport aux spécifications fonctionnelles et techniques.\\
+    \hline
+    {\bf Test d'intégration} & Vérification des interfaces et des interactions entre les composants intégrés.\\
+    \hline
+    {\bf Test unitaire} & Vérification de composants logiciels individuels.\\
+    \hline
+  \end{tabularx}
+\end{table}
+
+\subsection{Conformité}
+\label{sec:intro:conf}
+
+Ce plan de test est conforme aux normes~:
+\begin{itemize}
+\item IEEE Std. 1012-1986
+\item IEEE Std. 829-1983
+\item IEEE Std. 1008-1987
+\end{itemize}

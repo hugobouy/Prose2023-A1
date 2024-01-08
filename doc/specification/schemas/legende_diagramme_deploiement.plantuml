@@ -1,0 +1,14 @@
+@startuml
+skinparam componentStyle uml1
+
+[Logiciel]
+interface Interface
+node Dispositif_matériel
+artifact Données_Persistantes <<entity>>
+
+Dispositif_matériel -left- Interface
+Dispositif_matériel <.right. [Logiciel] : "<<deploy>>"
+Dispositif_matériel <.up. Données_Persistantes : "<<deploy>>"
+[Logiciel] .down.> Données_Persistantes : "<<call>>"
+
+@enduml

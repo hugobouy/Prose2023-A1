@@ -1,0 +1,39 @@
+@startuml
+
+actor Démonstrateur
+
+create StartAOP
+Démonstrateur -> StartAOP: launchAOP()
+create ConnectionManager
+StartAOP -> ConnectionManager : new()
+create Communication
+ConnectionManager -> Communication : new()
+create PostmanSoftSonnette
+Communication -> PostmanSoftSonnette : new()
+PostmanSoftSonnette --> Communication 
+Communication -->  ConnectionManager 
+ConnectionManager --> StartAOP 
+
+
+create CacheCameraman
+StartAOP -> CacheCameraman : new()
+create PostmanVideo
+CacheCameraman -> PostmanVideo : new()
+PostmanVideo --> CacheCameraman 
+CacheCameraman --> StartAOP
+
+
+StartAOP -> Communication : start()
+activate Communication
+
+Communication -> PostmanSoftSonnette : start()
+activate PostmanSoftSonnette
+PostmanSoftSonnette --> Communication :
+Communication --> StartAOP :
+
+StartAOP -> PostmanVideo : start()
+activate PostmanVideo
+PostmanVideo --> StartAOP 
+
+
+@enduml

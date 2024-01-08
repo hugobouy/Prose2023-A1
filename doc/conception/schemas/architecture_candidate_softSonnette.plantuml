@@ -1,0 +1,181 @@
+@startuml
+
+hide fields
+hide methods
+
+
+package SoftSonnette {
+
+    class Guard
+    {
+        -motDePasse : Password
+        +askCheckPass(pass : Password)
+    }
+
+    class Cameraman <<active>>
+    {
+        -cameraAlive : bool
+        -checkCameraConnected()
+        +takePicture() : Picture
+        +subscribeToVideoStream(enable : bool)
+        
+    }
+    class Streamer <<boundary>> <<medium>> <<active>>
+        {
+            +inforStream : CustomData
+            +initGstreamer()
+            +streamEcran()
+            +streamTel()
+            +cleanPipeline()
+            +stopPipeline()
+        }
+    class UISS <<active>>
+    {
+        +launchSS()
+        -quitSS()
+        -ring()
+        +updatecamState(state : bool)
+        +updateDoorState(state :bool)
+        +signalNotAllowed()
+        -display()
+    }
+    class EmployeeManager <<protected>>
+    {
+        -employeeList : Employee[*]
+        +addEmployee(name : String, picture : Picture, role : String workingHours : Hours[*])
+        +deleteEmployee(employeeID : EmployeeID)
+        +getEmployeeList() : Employee[*]
+        +getEmployee(employeeID : EmployeeID) : Employee
+        +load()
+        +save()
+    }
+    class DataEmployee <<entity>>
+    
+    class Clock <<protected>>
+    {
+        +getCurrentTime()
+        +setCurrentTime(time : Time)    
+    }
+    class Bouncer <<active>>
+    {
+        -picture : Picture
+        +checkEmployeeAllow(time : Time, employee : Employee)
+        +setRecognizeFace(employeeId : EmployeeID)
+        +askFaceRecognition ( employeeID : EmployeeID)
+    }
+    class RecognitionAI <<active>>
+    {
+        launch()
+    }
+
+    package Communication #A9D0F5 {
+        package AOP #ADD1B2{
+            class DispatcherAOP <<medium>> <<active>>
+            {
+                -dispatch()
+                +setConnected(state : bool)
+            }
+            class PostmanAOP <<medium>> <<active>>
+            {
+                -socketSoftSonnette : int
+                -socketAOP : int
+                +read(message : char*)
+                +askSendMessage(message : char*)
+                -setUpConnection() 
+            }
+        }
+        package SP#B4A7E5{
+            class PostmanSP <<medium>> <<active>>
+            class DispatcherSP <<medium>> <<active>>
+            {
+                +dispatcherUISS_dispatch()
+                +dispatcherGUI_dispatch()
+            }
+        }
+
+        ' class ProtocolSS{
+		' 	encode(cmd_id : int, nbargs : int, data : char) : char
+		' 	decode(frame : char) : Decoded_Frame 
+		' }
+
+        ' class ProtocolSP{
+        '     encode()
+		' 	decode()
+        ' }
+
+        class ProxyUISP <<medium>>
+        {
+            +launch()
+        }
+        class ProxyDoorManager <<medium>>
+        {
+            +askOpenDoor()
+            +askDoorState()
+        }
+
+        class ProxyConnectionManager <<medium>>
+        {
+            +validatePass(passValidated : bool)
+        }
+        class ProxyGUI <<medium>>
+        {
+            +updateDoorState()
+        }
+        ' Protocol SS
+        ' ProtocolSS <-- DispatcherAOP
+        ' ProtocolSS <-- ProxyGUI
+        ' ProtocolSS <-- ProxyConnectionManager
+
+        ' ' Protocol SP
+        ' ProtocolSP <-- ProxyUISP
+        ' ProtocolSP <-- ProxyDoorManager
+        ' ProtocolSP <-- DispatcherSP
+
+        ' SP objects to SS (or AOP) from Dispatcher
+        DispatcherSP --> ProxyGUI
+        DispatcherSP --> UISS
+
+        ' AOP objects to SS (or SP) from Dispatcher
+        DispatcherAOP --> Cameraman
+        DispatcherAOP --> EmployeeManager
+        DispatcherAOP --> ProxyDoorManager
+        DispatcherAOP -right-> Clock
+        DispatcherAOP -right-> Guard
+
+        ' Link betweeen Postmans and Dispatchers
+        DispatcherSP <--> PostmanSP
+        PostmanAOP <--> DispatcherAOP
+
+        ' Proxy to AOP
+        ProxyConnectionManager -right-> PostmanAOP
+        ProxyGUI --> PostmanAOP
+
+        ' Proxy to SP
+        ProxyUISP --> PostmanSP
+        ProxyDoorManager --> PostmanSP
+
+        ' SS objects to Proxy on AOP
+        Guard -up-> ProxyConnectionManager
+        EmployeeManager --> ProxyGUI
+
+        ' SS objects to Proxy on SP
+        Bouncer --> ProxyUISP
+        Bouncer --> ProxyDoorManager
+        UISS --> ProxyUISP
+        'Bouncer <-left- UISS
+
+        Cameraman <-up- Streamer
+
+        'UISS --> Bouncer
+        Cameraman <-down-> UISS
+        Cameraman <-down-> Bouncer
+
+        EmployeeManager <-down-> Bouncer
+        EmployeeManager -down-> DataEmployee
+        
+        Bouncer -down-> Clock 
+        Bouncer <-right-> RecognitionAI
+    }
+}
+
+@enduml

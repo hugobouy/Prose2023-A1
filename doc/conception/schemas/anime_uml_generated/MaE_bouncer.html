@@ -1,0 +1,63 @@
+<script>
+	const model =
+		{
+			name: "MàE accueil",
+			objects: [
+				{
+			
+					name: "GUI",
+					behavior: String.raw`
+					
+						state a <<choice>>
+
+						[*] -> WAIT_PICTURE as "wait"
+						WAIT_PICTURE -> STATE1 : setFacePicture(Picture)/ [Pictures == Pictures]; list=getEmployeeList()
+						STATE1 -> a : setRecognizeFace(EmployeeID);getEmployeeID(employeeID)
+						a -> STATE2 : time = getCurrentTime(); test = checkEmployeeAllow(time, employee)
+						a -> IDLE: [Id == unknown]; signalNotAllowed()
+						STATE2 -> IDLE : when(test==true); askOpenDoor()
+						STATE2 -> IDLE : when(test==false);signalNotAllowed()
+					`,
+				},
+			],	
+			
+			settings: {
+				interface: {
+					displayedObjects: [
+						"Bouncer",
+					],
+				},
+				display: {
+					hideClasses: false,
+					hidePackages: false,
+					hideMethods: false,
+					hideOperations: false,
+					hideStateMachines: false,
+					showPseudostateInvariants: false,
+					showPorts: false,
+					showTransitions: false,
+					showEndNames: false,
+					showMethodsAsActivities: true,
+					showActorsAsObjects: false,
+				},
+				semantics: {
+					fireInitialTransitions: true,
+					autoFireAfterChoice: true,
+					autoReceiveDisabled: false,
+					considerGuardsTrue: false,
+					checkEvents: false,
+					keepOneMessagePerTrigger: false,
+					enableEventPools: true,
+					matchFirst: true,
+					symbolicValues: false,
+					reactiveSystem: true,
+					synchronousCommunication: false,
+					withDBM: false,
+				},
+			},
+		}
+	;
+	document.write(`
+		<iframe width="100%" height="100%" src='http://172.24.2.1/AnimUML.html#${encodeURIComponent(JSON.stringify(model)).replace(/'/g, '%27')}'></iframe>
+	`);
+</script>

@@ -1,0 +1,54 @@
+@startuml
+participant Démonstrateur order 10
+participant GUI order 20
+participant CacheCameraman order 30
+participant PostmanVideo order 40
+participant PostmanSoftSonnette order 50
+participant Dispatcher order 60
+participant cameraman order 70
+participant streamer order 80
+
+
+Démonstrateur -> GUI : askScreen(VIDEO_ID)
+
+GUI -> GUI : displayScreen(VIDEO_ID)
+
+
+GUI -> PostmanVideo :cameraman_subscribeToVideoStream(1)
+
+GUI -> CacheCameraman :initializeMediaCodec()
+
+PostmanVideo -> PostmanSoftSonnette :sendMsg()
+
+PostmanSoftSonnette -> Dispatcher :dispatch()
+
+Dispatcher -> cameraman :cameraman_subscribeToVideoStream(1)
+
+cameraman -> streamer : streamer_streamTel()
+
+streamer -> PostmanVideo
+
+loop [runVideo()]
+CacheCameraman -> PostmanVideo : readData()
+PostmanVideo -> CacheCameraman
+
+
+end
+
+
+
+Démonstrateur -> GUI : return()
+
+GUI -> PostmanVideo :cameraman_subscribeToVideoStream(0)
+
+PostmanVideo -> PostmanSoftSonnette :sendMsg()
+
+PostmanSoftSonnette -> Dispatcher :dispatch()
+
+Dispatcher -> cameraman :cameraman_subscribeToVideoStream(0)
+
+cameraman -> streamer :streamer_streamEcran()
+
+GUI -> GUI :displayScreen(HOME_ID)
+
+@enduml

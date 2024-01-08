@@ -1,0 +1,573 @@
+<script>
+	// @ts-check
+	/**
+	 * @type {import("./Model.d.ts").Model<false>}
+	 */	
+	const model =
+		{
+			name: "AOP",
+			classes: String.raw`
+				class MainActivity <<active>>{
+					
+				}
+				class FragmentCalendar{
+
+				}
+				class FragmentDoor{
+
+				}
+				class FragmentVideo{
+
+				}
+				class FragmentListEmployee{
+
+				}
+				class FragmentAddEmployee{
+
+				}
+				class FragmentConnection{
+
+				}
+				class FragmentHome{
+
+				}
+				class Communication <<active>> <<medium>>{
+					-onConnectionEstablished(): void
+					-onConnectionLost(): void
+					-onConnectionFailed(): void
+					+run(): void
+					+setCurrentTime(time : Time): void
+					+askCheckPass(pass : Password): void
+					+subscribeToVideoStream(enable : bool): void
+					+askDoorState(): void
+					+askOpenDoor(): void
+					+askEmployeeList(): void
+					+addEmployee(name : String, firstName : String, picture : Picture, role : Role, workingHours : Hour[*]): void
+					+deleteEmployee(employeeID : EmployeeID): void
+					+beginConnection(): void
+					+endConnection(): void
+				}
+				class Protocol{
+					+ cmd_setCurrentTime: int
+					+ cmd_askCheckPass: int
+					+ cmd_subscribeToVideoStream: int
+					+ cmd_askDoorState: int
+					+ cmd_askOpenDoor: int
+					+ cmd_askEmployeeList: int
+					+ cmd_addEmployee: int
+					+ cmd_deleteEmployee: int
+					+encodeMessage(cmdId : int, nbArgs : int, data : String): byte[*]
+					+decodeMessage(size : byte, messageDecode : byte[*]) : byte[*]
+				}
+				class Dispatcher <<medium>>{
+					+disaptch(size : byte[*], msg : int[*]): void
+				}
+				class PostmanSoftSonnette <<active>> <<medium>>{
+					-mySocket : Socket
+					+connectToServeur(myIp : String, myPass : String) : void
+					+sendMsg(msg : byte[*]) : void
+					+readMsg(size : short[*]) : byte[*]
+					+disconnect() : void
+				}
+				class PostmanVideo <<active>> <<medium>> {
+					+ readData() : byte[*]
+				}
+				class CacheEmployeeManager <<medium>>{
+					+ askCalendarEmployee(name : String):int[*]
+					+ askEmployeeList(message : byte[*]):void
+					+ setDataEmployee(idEmployee : int, name : String, firstName : String, role : int, workingHours : byte[*]) : void
+					+ getDataEmployee(): Employee[*]
+					+ sendEmployee(name : String, firstName : String, picture : Picture, role : Role, workingHours : uint8_t[*]):void
+					+ deleteEmployee(employeeID : EmployeeID):void
+				}
+				class WeeklyCalendar{
+					+ drawCalendar(canvas : Canvas) : void
+					+ editCalendar(name : String) : void
+					+ onMeasure(widthMeasureSpec : int, heightMeasureSpec : int) : void
+				}
+				class ConnectionManager{
+					- checkIp(myIp : String) : boolean
+					+ getLocalTime() : Time
+					+ validatePass(valid : byte) : void
+					+ checkConnection():void
+					+ askConnection(myIp : String, myPass : String):void
+				}
+				class CacheCameraman <<active>> <<medium>>{
+					- initializeMediaCodec() : void
+					- callback(frameData : byte[*]) : void
+					- storeData(receivedData : byte[*]) : void
+					- stream(frameData : byte[*]) : void
+					- runVideo() : void
+					+ askSubscribeVideoStream(enable : bool) : void
+				}
+				class Door{
+					+ getDoorState(state : bool) : void
+				}
+				class StarterAOP{
+					+ launchAOP(): void
+					+ quitAOP(): void
+				}
+				Communication -up-> Protocol
+				Communication -down-> Dispatcher
+				Communication -right-> PostmanSoftSonnette
+				Communication <-right- CacheEmployeeManager
+				Communication <-right- Door
+				Communication <-right- ConnectionManager
+				CacheEmployeeManager <-left- Dispatcher
+				ConnectionManager <-right- Dispatcher
+				Door <-right- Dispatcher
+				WeeklyCalendar -down-> CacheEmployeeManager
+				CacheCameraman <-down- PostmanVideo
+				FragmentConnection -right-> ConnectionManager
+				FragmentCalendar -right-> WeeklyCalendar
+				FragmentListEmployee -right-> CacheEmployeeManager
+				FragmentAddEmployee -right-> CacheEmployeeManager
+				FragmentDoor -right-> Door
+				FragmentVideo -right-> CacheCameraman
+				FragmentListEmployee -down-> FragmentAddEmployee
+				FragmentHome -right-> FragmentConnection
+				FragmentHome -right-> FragmentCalendar
+				FragmentHome -right-> FragmentListEmployee
+				FragmentHome -right-> FragmentAddEmployee
+				FragmentHome -right-> FragmentDoor
+				FragmentHome -right-> FragmentVideo
+				MainActivity -down-> FragmentHome
+				ConnectionManager --> FragmentHome		
+			`,
+			objects: [
+				{
+					name: "gui",
+					class: "Gui",
+					behavior: String.raw`				
+					`
+					,
+					packagePath: [
+                        "AOP",
+					],
+                    
+				},
+				{
+					name: "protocol",
+					class: "Protocol",
+					behavior: String.raw`
+									
+					`
+					,
+					packagePath: [
+                        "Communication","AOP",
+					],
+                    
+				},
+                {
+					name: "dispatcher",
+					class: "Dispatcher",
+					behavior: String.raw`
+									
+					`
+					,
+					packagePath: [
+                        "Communication","AOP",
+					],
+				},
+                {
+					name: "postmanSoftSonnette",
+					class: "PostmanSoftSonnette",
+					behavior: String.raw`
+									
+					`
+					,
+					stereotypes: [
+						"active",
+					],
+					packagePath: [
+                        "Communication","AOP",
+					],
+				},
+		
+				{
+					name: "communication",
+					class: "Communication",
+					behavior: String.raw`						
+						
+					`,
+					stereotypes: [
+						"active",
+					],
+					packagePath: [
+                        "Communication","AOP",
+					],
+				},
+				{
+					name: "connectionManager",
+					class: "ConnectionManager",
+					behavior: String.raw`						
+						
+					`,
+
+					packagePath: [
+                        "ConnectionManager","Model","AOP",
+					],
+				},
+                {
+					name: "cacheCameraman",
+					class: "CacheCameraman",
+					behavior: String.raw`						
+						
+					`,
+                    stereotypes: [
+						"medium","protected",
+					],
+					packagePath: [
+                        "Video","Model","AOP",
+					],
+				},
+                {
+					name: "postmanVideo",
+					class: "PostmanVideo",
+					behavior: String.raw`						
+						
+					`,
+                    stereotypes: [
+						"active",
+						"medium",
+					],
+					packagePath: [
+						"Video","Model","AOP",
+					],
+				},
+
+				{
+					name: "mainActivity",
+					class: "MainActivity",	
+					behavior: String.raw`						
+						
+					`,
+					stereotypes: [
+						"active",
+					],
+                    
+					packagePath: [
+                        "activity","gui","AOP",
+					],
+				},
+				{
+					name: "fragmentDoor",
+					class: "FragmentDoor",
+					behavior: String.raw`						
+						
+					`,
+					packagePath: [
+						"fragments","gui","AOP",
+					],
+				},
+				{
+					name: "fragmentCalendar",
+					class: "FragmentCalendar",
+					behavior: String.raw`						
+						
+					`,
+					packagePath: [
+						"fragments","gui","AOP",
+					],
+				},
+				{
+					name: "fragmentVideo",
+					class: "Fragmentvideo",
+					behavior: String.raw`						
+						
+					`,
+					packagePath: [
+						"fragments","gui","AOP",
+					],
+				},
+				{
+					name: "fragmentListEmployee",
+					class: "FragmentListEmployee",
+					behavior: String.raw`						
+						
+					`,
+					packagePath: [
+						"fragments","gui","AOP",
+					],
+				},
+				{
+					name: "fragmentAddEmployee",
+					class: "FragmentAddEmployee",
+					behavior: String.raw`						
+						
+					`,
+					packagePath: [
+						"fragments","gui","AOP",
+					],
+				},
+
+				{
+					name: "cacheEmployeeManager",
+					class: "CacheEmployeeManager",
+					behavior: String.raw`						
+						
+					`,
+                    stereotypes: [
+						"medium",
+					],
+					packagePath: [
+						"EmployeeManager","Model","AOP",
+					],
+				},
+				{
+					name: "weeklyCalendar",
+					class: "WeeklyCalendar",
+					behavior: String.raw`						
+						
+					`,
+					packagePath: [
+						"EmployeeManager","Model","AOP",
+					],
+				},
+				{
+					name: "door",
+					class: "Door",
+					behavior: String.raw`						
+						
+					`,
+					packagePath: [
+						"Model","AOP",
+					],
+				},
+
+			],
+			connectorByName: {
+				C1: {
+					ends: [
+						"mainActivity",
+						"fragmentVideo",
+					],
+				},
+				C2: {
+					ends: [
+						"mainActivity",
+						"fragmentCalendar",
+					],					
+				},
+				C3: {
+					ends: [
+						"mainActivity",
+						"fragmentDoor",
+					],					
+				},
+				C4: {
+					ends: [
+						"mainActivity",
+						"fragmentAddEmployee",
+					],
+				},
+				C5: {
+					ends: [
+						"mainActivity",
+						"fragmentListEmployee",
+					],
+				},
+			
+				C7: {
+					ends: [
+						"connectionManager",
+						"communication",
+					],
+					possibleMessages: {
+						forward: [
+							"beginConnection()",
+							"askConnected(...)",
+						],
+						reverse: [
+						],
+					}
+					
+				},
+				C8: {
+					ends: [
+						"gui",
+						"connectionManager",
+					],
+					possibleMessages: {
+						forward: [
+							
+						],
+						reverse: [
+						],
+					}
+					
+				},
+				C9: {
+					ends: [
+						"communication",
+						"postmanSoftSonnette",
+					],
+					possibleMessages: {
+						forward: [
+							"connectToServeur(...)",
+							"readMsg(...)",
+							"sendMsg(...)",
+							"disconnect()",
+						],
+						reverse: [
+						],
+					}
+					
+				},
+				C10: {
+					ends: [
+						"communication",
+						"protocol",
+					],
+					possibleMessages: {
+						forward: [
+							"encodeMessage(...)", 
+							"decodeMessage(...)",
+						],
+						reverse: [
+						],
+					}
+					
+				},
+				C11: {
+					ends: [
+						"communication",
+						"dispatcher",
+					],
+					possibleMessages: {
+						forward: [
+							"dispatch(...)", 							
+						],
+						reverse: [
+						],
+					}
+					
+				},
+				C12: {
+					ends: [
+						"dispatcher",
+						"connectionManager",
+					],
+					possibleMessages: {
+						forward: [
+							"checkConnection()",
+							"validatePass(...)", 							
+						],
+						reverse: [
+						],
+					}
+					
+				},
+				C20: {
+					ends: [
+						"gui",
+						"cacheCameraman",
+					],
+				
+				},
+				C21: {
+					ends: [
+						"cacheCameraman",
+						"postmanVideo",
+					],
+				
+				},
+				C22: {
+					ends: [
+						"gui",
+						"cacheEmployeeManager",
+					],
+					possibleMessages: {
+						forward: [
+							"askEmployeeList()",
+						],
+						reverse: [
+						],
+					}
+				},
+				C25: {
+					ends: [
+						"cacheEmployeeManager",
+						"communication",
+					],
+					possibleMessages: {
+						forward: [
+							"askEmployee()",
+						],
+						reverse: [
+						],
+					}
+				},
+				C26: {
+					ends: [
+						"dispatcher",
+						"cacheEmployeeManager",
+					],
+					possibleMessages: {
+						forward: [
+							"setDataListEmployee(...)",
+						],
+						reverse: [
+						],
+					}
+				},
+				C27: {
+					ends: [
+						"communication",
+						"cacheCameraman",
+					],
+					possibleMessages: {
+						forward: [
+							"askSubcribeVideoStream(...)",
+						],
+						reverse: [
+						],
+					}
+				},
+				C28: {
+					ends: [
+						"door",
+						"communication",
+					],
+					possibleMessages: {
+						forward: [
+							"askOpenDoor()",
+							"askDoorState()",
+						],
+						reverse: [
+						
+						],
+					}
+				},
+				C29: {
+					ends: [
+						"dispatcher",
+						"door",
+					],
+					possibleMessages: {
+						forward: [
+							"doorState()",
+						],
+						reverse: [
+						
+						],
+					}
+				},
+
+
+			},
+
+			interactions: {
+            },
+			settings: {
+				semantics: {
+					checkEvents: false,
+					considerguardsTrue: true,
+				},
+			},
+		}
+	;
+	document.write(`
+		<iframe width="100%" height="100%" src='http://172.24.2.1/AnimUML.html#${encodeURIComponent(JSON.stringify(model)).replace(/'/g, '%27')}'></iframe>
+	`);
+</script>

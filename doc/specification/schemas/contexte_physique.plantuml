@@ -1,0 +1,11 @@
+@startuml
+
+/' Agents '/
+agent "<u>SàE</u>" as SaE
+agent "<u>E_Ecran</u>" as E_Ecran
+agent "<u>E_Camera</u>" as E_Camera
+
+/' Liens '/
+SaE -right- E_Camera
+E_Ecran -right- SaE
+@enduml

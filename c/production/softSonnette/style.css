@@ -1,0 +1,15 @@
+window
+{
+    background-color: rgb(255, 255, 255);
+}
+ring_button
+{
+    border-radius: 50%;
+}
+.grid-lines {
+    outline-style: solid;
+    outline-width: 1px;
+    outline-color: black;
+}
+
+

@@ -1,0 +1,118 @@
+@startuml
+
+actor Démonstrateur
+participant GUI
+participant ConnectionManager
+participant ProxyGuard
+participant ProxyClock
+participant Protocol
+participant Dispatcher
+participant PostmanSoftSonnette
+participant PostmanAOP
+participant DispatcherAOP
+participant ProxyConnectionManager
+participant Guard
+participant Clock
+
+Démonstrateur -> GUI : setIp(ip)
+activate GUI
+Démonstrateur -> GUI : setPass(pass)
+Démonstrateur -> GUI : connect()
+GUI -> GUI : displayPopUp(WAITING_ID)
+
+GUI -> ConnectionManager : askConnection(myIp, myPass)
+activate ConnectionManager
+
+ConnectionManager -> ProxyGuard : askCheckPass(myPass)
+activate ProxyGuard
+
+ProxyGuard -> Protocol : encodeMessage(cmd_id, nbargs, data)
+activate Protocol
+Protocol --> ProxyGuard : byte[*]
+
+ProxyGuard -> PostmanSoftSonnette : sendMsg(byte)
+activate PostmanSoftSonnette
+
+PostmanSoftSonnette -> PostmanAOP : write(msg)
+activate PostmanAOP
+
+DispatcherAOP -> PostmanAOP : read(header)
+activate PostmanAOP
+activate DispatcherAOP
+PostmanAOP --> DispatcherAOP : header
+deactivate PostmanAOP
+
+DispatcherAOP -> Protocol : decodeHeader(header)
+Protocol --> DispatcherAOP : decodedHeader
+
+DispatcherAOP -> PostmanAOP : read(decodedHeader.size)
+activate PostmanAOP
+PostmanAOP --> DispatcherAOP : msg
+deactivate PostmanAOP
+
+DispatcherAOP -> DispatcherAOP : dispatch(header, msg)
+
+DispatcherAOP -> Protocol : decode(msg)
+Protocol --> DispatcherAOP : decodedFrame
+
+DispatcherAOP -> Guard : askCheckPass(decodedFrame.args[0])
+activate Guard
+
+DispatcherAOP -> PostmanAOP : read(header)
+activate PostmanAOP
+
+Guard -> ProxyConnectionManager : validatePass(true)
+activate ProxyConnectionManager
+
+Guard -> DispatcherAOP : setConnected(true);
+
+ProxyConnectionManager -> Protocol : encode(cmd_id, nbargs, data)
+Protocol --> ProxyConnectionManager : char*
+
+ProxyConnectionManager -> PostmanAOP : sendMessage(frame)
+
+PostmanAOP -> PostmanSoftSonnette : write(msg)
+
+PostmanSoftSonnette -> Dispatcher : dispatch(msg)
+activate Dispatcher
+
+Dispatcher -> Protocol : decodeMessage(msg)
+Protocol --> Dispatcher : byte[*]
+
+Dispatcher -> ConnectionManager : validatePass(true)
+
+ConnectionManager -> ConnectionManager : getLocalTime()
+ConnectionManager -> ProxyClock : setCurrentTime(time)
+
+ConnectionManager -> GUI : setConnectionStatus(PASS_OK)
+
+loop Continuously
+ConnectionManager -> ConnectionManager : checkConnection()
+end
+
+ProxyClock -> Protocol : encodeMessage(cmd_id, nbargs, data)
+Protocol --> ProxyClock : byte[*]
+
+ProxyClock -> PostmanSoftSonnette : sendMsg(byte)
+
+PostmanSoftSonnette -> PostmanAOP : write(msg)
+
+PostmanAOP --> DispatcherAOP : header
+deactivate PostmanAOP
+
+DispatcherAOP -> Protocol : decodeHeader(header)
+Protocol --> DispatcherAOP : decodedHeader
+
+DispatcherAOP -> PostmanAOP : read(decodedHeader.size)
+activate PostmanAOP
+PostmanAOP --> DispatcherAOP : msg
+deactivate PostmanAOP
+
+DispatcherAOP -> DispatcherAOP : dispatch(header, msg)
+
+DispatcherAOP -> Protocol : decode(msg)
+Protocol --> DispatcherAOP : decodedFrame
+
+DispatcherAOP -> Clock : setCurrentTime(msg)
+
+@enduml

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutAccueil"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.FragmentHome"
+    tools:layout_editor_absoluteX="36dp"
+    tools:layout_editor_absoluteY="0dp">
+
+
+    <Button
+        android:id="@+id/buttonQuit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickQuit"
+        android:text="@string/homeButtonQuit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.053"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.021" />
+
+
+    <TextView
+        android:id="@+id/textHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        android:text="@string/homeTitle"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/buttonEmployee"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="190dp"
+        android:contentDescription="@string/homeSpeakableEmployee"
+        android:onClick="onClickEmployee"
+        android:src="@drawable/employe"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textEmployee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonEmployee"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/homeImageEmployee"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonEmployee" />
+
+    <ImageView
+        android:id="@+id/buttonVideo"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_below="@id/textEmployee"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="112dp"
+        android:contentDescription="@string/homeSpeakableVideo"
+        android:onClick="onClickVideo"
+        android:src="@drawable/video"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textEmployee" />
+
+    <TextView
+        android:id="@+id/textVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonVideo"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/homeImageVideo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonVideo" />
+
+
+    <ImageView
+        android:id="@+id/buttonCalendar"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="190dp"
+        android:layout_marginEnd="37dp"
+        android:contentDescription="@string/homeSpeakableCalendar"
+        android:onClick="onClickCalendar"
+        android:scaleType="fitCenter"
+        android:src="@drawable/calendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.966"
+        app:layout_constraintStart_toEndOf="@+id/buttonEmployee"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonCalendar"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="59dp"
+        android:text="@string/homeImageCalendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCalendar" />
+
+    <ImageView
+        android:id="@+id/buttonDoor"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_below="@id/textCalendar"
+        android:layout_marginTop="112dp"
+        android:layout_marginEnd="37dp"
+        android:contentDescription="@string/homeSpeakableDoor"
+        android:onClick="onClickDoor"
+        android:src="@drawable/porte"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.966"
+        app:layout_constraintStart_toEndOf="@+id/buttonVideo"
+        app:layout_constraintTop_toBottomOf="@+id/textCalendar" />
+
+    <TextView
+        android:id="@+id/TextPorte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonDoor"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="45dp"
+        android:text="@string/homeImageDoor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonDoor" />
+    
+</androidx.constraintlayout.widget.ConstraintLayout>

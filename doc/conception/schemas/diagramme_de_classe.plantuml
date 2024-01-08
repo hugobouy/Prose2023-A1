@@ -1,0 +1,164 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide fields
+hide methods
+
+    class GUI <<active>>{
+        -myPass : Password
+        -myIp : IP
+        -myName : String
+        -myFirstName : String
+        -myPicture : Picture
+        -myRole : Role
+        -myWorkingHours : Hour[*]
+        -employeeList : Employee[*]
+        -displayScreen(screenID : int)
+        -displayPopUp(popupID : int)
+        -displaySpecialEmployeeField(displaySpecial : bool)
+        -refreshVideoScreen()
+        -refreshCalendar(employeeID : EmployeeID)
+        -refreshDoorState(doorState : bool)
+        launchAOP()
+        updateDoorState(state : bool)
+        askScreen(screenID : int)
+        setIp(ip : IP)
+        setPass(pass : Password)
+        connect()
+        setConnectionStatus(status : ConnectionStatus)
+        setEmployeeList(employeeList : Employee[*])
+        askCalendar(employeeID : EmployeeID)
+        askOpenDoor()
+        askAddEmployee()
+        setEmployeeName(name : String)
+        setEmployeeFirstName(firstName : String)
+        setEmployeePicture(picture : Picture)
+        setEmployeeRole(role : Role)
+        setSpecialEmployeeAccess(day : Day, startHour : Hour, stopHour : Hour)
+        askDeleteEmployee(employeeID : EmployeeID)
+        confirm()
+        cancel()
+        return()
+        quitAOP()
+    }
+
+    class ConnectionManager <<active>>{
+        -connectionState : bool
+        -checkConnection()
+        -getLocalTime() : Time
+        askConnection(ip : IP, pass : Password)
+        validatePass(passValidated : bool)
+    }
+    
+    class UISS <<active>>{
+        -appState : SSState
+        -display(state : SSState)
+        -refreshDoorState(state : bool)
+        launchSS()
+        quitSS()
+        askStartCom()
+        ring()
+        updateCamState(bool)
+        updateDoorState(bool)
+    }
+    class Cameraman <<active>>{
+        -cameraAlive : bool
+        -streamToAOPandScreen()
+        -streamToScreenOnly()
+        -checkCameraConnected()
+        takePicture() : Picture
+        subscribeToVideoStream(enable : bool)
+        startStreaming()
+        stopStreaming()
+        suspendStreaming()
+        resumeStreaming()
+    }
+    class Guard {	
+        askCheckPass(pass : Password)
+    }
+    class Clock <<protected>>{
+        -currentTime : Time
+        getCurrentTime() : Time
+        setCurrentTime(time : Time)
+    }
+    class Bouncer <<active>>{
+        -picture : Picture
+        -employeeList : Employee[*]
+        -recognizedEmployee : Employee
+        -currentTime : Time
+        -checkEmployeeAllow(time : Time, employeeID : EmployeeID) : bool
+        setRecognizeFace(employeeID : EmployeeID)
+        askFaceRecognition()
+    }
+    class EmployeeManager <<entity>> <<protected>>{
+        -employeeList : Employee[*]
+        addEmployee(name : String, firstName : String, picture : Picture, role : Role, workingHours : Hour[*])
+        deleteEmployee(employeeID : EmployeeID)
+        getEmployeeList() : Employee[*]
+        getEmployee(employeeID : EmployeeID) : Employee
+        +askEmployeeList()
+        +load()
+        +save()
+    }
+    class RecognitionAI <<active>>{
+        launchAI(picture : Picture, employeeList : Employee[*])
+    }
+    class UISP {
+        -signalAppState()
+        launchSP()
+        quitSP()
+        ackStartCom()
+        signalNotAllowed() 
+    }
+    class DoorManager <<active>>{
+        -doorState : bool
+        -unlockDoor()
+        askOpenDoor()
+        askDoorState() : bool 
+    }
+    GUI "1" -- "1" DoorManager
+    Cameraman "1" <-- "1" GUI
+    Cameraman "1" -- "1" UISS
+    Cameraman "1" <-- "1" Bouncer
+    UISS "1" -- "1" UISP
+    UISS "1" <-- "1"  DoorManager
+    UISS "1" --> "1" EmployeeManager
+    Bouncer "1" <-right- "1" UISS
+    Bouncer "1" -- "1" RecognitionAI
+    Bouncer "1" --> "1" UISP
+    Bouncer "1" --> "1" DoorManager
+    Clock "1" <-- "1" Bouncer
+    ConnectionManager "1" -- "1" GUI
+    ConnectionManager "1" --> "1" Clock
+    ConnectionManager "1" -- "1" Guard
+    EmployeeManager "1" <-- "1" Bouncer
+    EmployeeManager "1" -right- "1" GUI
+
+    'GUI link
+    ' GUI "1" -- "1" DoorManager
+    ' GUI "1" -- "1" ConnectionManager
+    ' GUI "1" --> "1" Cameraman
+
+    ' 'Bouncer link
+    ' Bouncer "1" --> "1"  EmployeeManager
+    ' Bouncer "1" --> "1" Cameraman
+    ' Bouncer "1" --> "1" Clock
+    ' Bouncer "1" -- "1" UISS
+    ' Bouncer "1" -- "1" RecognitionAI
+    ' Bouncer "1" --> "1" DoorManager
+    ' Bouncer "1" --> "1" UISP
+
+    ' 'UISS link
+    ' UISS "1" -- "1" Cameraman
+    ' UISS "1" -- "1" UISP
+
+    ' 'ConnectionManager link
+    ' ConnectionManager "1" --> "1" Clock
+    ' ConnectionManager "1" -- "1" Guard
+
+    ' 'EmployeeManager link
+    ' EmployeeManager "1" -- "1" GUI
+
+    ' 'DoorManager link
+    ' DoorManager "1" --> "1" UISS
+ 
+@enduml
